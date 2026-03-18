@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RythuLab — Crop Selection & Layout Design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-dark:#2d6a2d; --green-mid:#4a8c3f; --green-light:#7ab648;
+            --green-pale:#c8e6c0; --green-bg:#e8f5e2;
+            --red-accent:#c0392b; --gold:#e8a020;
+            --border:#8ab87a; --text-dark:#1a2a10; --text-mid:#2d3d1a; --white:#ffffff;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Source Sans 3',sans-serif;background:#eef5e8;min-height:100vh;color:var(--text-dark);}
+
+        /* NAVBAR */
+        .navbar{background:var(--green-dark);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+        .nav-brand{display:flex;align-items:center;gap:10px;color:white;font-family:'Merriweather',serif;font-size:18px;text-decoration:none;}
+        .nav-brand span{font-size:26px;}
+        .nav-right{display:flex;align-items:center;gap:14px;}
+        .nav-user{color:#c8e6c0;font-size:13px;}
+        .nav-back{background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.25);padding:5px 14px;border-radius:16px;cursor:pointer;font-size:12px;font-family:inherit;text-decoration:none;display:flex;align-items:center;gap:5px;}
+        .nav-back:hover{background:rgba(255,255,255,0.22);}
+        .btn-logout{background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.25);padding:5px 14px;border-radius:16px;cursor:pointer;font-size:12px;font-family:inherit;}
+        .btn-logout:hover{background:rgba(255,255,255,0.22);}
+
+        /* PAGE HEADER */
+        .page-hd{background:white;border-bottom:1.5px solid var(--green-pale);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+        .page-hd-l h1{font-family:'Merriweather',serif;font-size:20px;color:var(--green-dark);margin-bottom:3px;}
+        .page-hd-l p{font-size:13px;color:#3d5a2a;}
+        .phase-pills{display:flex;gap:6px;}
+        .pp{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;border:1.5px solid var(--green-pale);background:white;color:var(--text-dark);}
+        .pp.active{background:var(--green-dark);color:white;border-color:var(--green-dark);}
+        .pp.done{background:var(--green-bg);color:var(--green-dark);border-color:var(--green-mid);}
+
+        /* MAIN */
+        .main{padding:20px 28px;max-width:1400px;margin:0 auto;}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:22px;right:22px;background:var(--green-dark);color:white;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,0.3);z-index:9999;display:none;font-family:inherit;}
+    </style>
+    <link rel="stylesheet" href="/assets/rythulab/css/cs-styles.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="nav-brand" href="/farmer-dashboard"><span>🌾</span> RythuLab</a>
+    <div class="nav-right">
+        <span class="nav-user" id="nav_user"></span>
+        <a class="nav-back" href="/farmer-dashboard">← Dashboard</a>
+        <button class="btn-logout" onclick="doLogout()">Logout</button>
+    </div>
+</nav>
+
+<div class="page-hd">
+    <div class="page-hd-l">
+        <h1>🌿 Crop Selection &amp; Layout Design</h1>
+        <p>Phases of crop selection and designing the layouts</p>
+    </div>
+    <div class="phase-pills" id="phase-pills">
+        <span class="pp active" id="pp1">Phase 1: Main crops</span>
+        <span class="pp" id="pp2">Phase 2: Associate crops</span>
+        <span class="pp" id="pp3">Phase 3: Biodiversity</span>
+        <span class="pp" id="pp4">Phase 4: Evaluation</span>
+    </div>
+</div>
+
+<div class="main">
+    <div id="cs-root"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Auth ─────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function(){
+    fetch("/api/method/frappe.auth.get_logged_user")
+    .then(function(r){return r.json();})
+    .then(function(res){
+        if(!res.message||res.message==="Guest"){ window.location.href="/login"; return; }
+        document.getElementById("nav_user").textContent = res.message;
+        // init crop selection after auth confirmed
+        initCropSelection();
+    });
+});
+
+function doLogout(){
+    fetch("/api/method/logout",{method:"POST"}).then(function(){ window.location.href="/login"; });
+}
+
+function showToast(msg){
+    var t=document.getElementById("toast");
+    t.textContent=msg;
+    t.style.background=msg.startsWith("❌")?"#c0392b":msg.startsWith("✅")?"#2d6a2d":"#3d2b1f";
+    t.style.display="block"; clearTimeout(t._timer);
+    t._timer=setTimeout(function(){t.style.display="none";},3500);
+}
+</script>
+
+<!-- Crop selection scripts -->
+<script src="/assets/rythulab/js/cs-data.js"></script>
+<script src="/assets/rythulab/js/cs-phase1.js"></script>
+<script src="/assets/rythulab/js/cs-phase2.js"></script>
+<script src="/assets/rythulab/js/cs-phase3.js"></script>
+<script src="/assets/rythulab/js/cs-phase4.js"></script>
+<script src="/assets/rythulab/js/cs-main.js"></script>
+
+</body>
+</html>

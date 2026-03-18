@@ -1,0 +1,44 @@
+{
+ "app": "rythulab",
+ "charts": [],
+ "content": "[]",
+ "creation": "2026-03-05 19:08:25.830083",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "RythuLab Admin",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-03-06 16:37:30.834531",
+ "modified_by": "Administrator",
+ "module": "Rythulab",
+ "name": "RythuLab Admin",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 0.0,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "",
+   "label": "Crop",
+   "link_to": "Crop",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "",
+   "label": "Crop Model",
+   "link_to": "Crop Model",
+   "type": "DocType"
+  }
+ ],
+ "title": "RythuLab Admin",
+ "type": "Workspace"
+}

@@ -1,9 +1,22 @@
 app_name = "rythulab"
 app_title = "Rythulab"
 app_publisher = "Prachi Tiwari"
-app_description = "RythuLab is a web-based agricultural modeling platform developed to support the creation and customization of crop models. It allows researchers and farmer scientists to design new crop patterns, edit pre-existing crop classification models, and manage structured agricultural data. The platform aims to enhance crop analysis, improve yield prediction, and promote data-driven farming practices through an intuitive digital modeling environment."
+app_description = "RythuLab is a web-based agricultural platform to design and edit crop models"
 app_email = "prachi.tiwari.main@gmail.com"
 app_license = "mit"
+
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["name", "in", [
+                "User-phone_number",
+                "User-land_name",
+                "User-land_area"
+            ]]
+        ]
+    }
+]
 
 # Apps
 # ------------------
@@ -253,3 +266,14 @@ require_type_annotated_api_methods = True
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Redirect default login to custom login
+login_redirect = "/rythulab-login"
+
+# After logout, go to custom login page
+logout_redirect = "/rythulab-login"
+
+# Redirect Frappe's default login page to our custom one
+website_redirects = [
+    {"source": "/login", "target": "/rythulab-login"},
+]

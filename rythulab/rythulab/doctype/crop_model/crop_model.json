@@ -1,0 +1,136 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-04 23:34:40.286092",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "model_name",
+  "farmer",
+  "version",
+  "season",
+  "date",
+  "comment",
+  "model_data",
+  "section_reasons",
+  "main_crop_reason",
+  "associated_crop_reason",
+  "trap_crop_reason",
+  "spacing_reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "model_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Model Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "farmer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Farmer",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "version",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Version",
+   "reqd": 1
+  },
+  {
+   "fieldname": "season",
+   "fieldtype": "Select",
+   "label": "Season",
+   "options": "Kharif\nRabi\nZaid\nAll Season",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "comment",
+   "fieldtype": "Small Text",
+   "label": "Why this model?"
+  },
+  {
+   "fieldname": "model_data",
+   "fieldtype": "Long Text",
+   "hidden": 1,
+   "label": "Model Layout (JSON)",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "section_reasons",
+   "fieldtype": "Section Break",
+   "label": "Crop Reasons"
+  },
+  {
+   "fieldname": "main_crop_reason",
+   "fieldtype": "Small Text",
+   "label": "Why this Main Crop?"
+  },
+  {
+   "fieldname": "associated_crop_reason",
+   "fieldtype": "Small Text",
+   "label": "Why Associated Crop?"
+  },
+  {
+   "fieldname": "trap_crop_reason",
+   "fieldtype": "Small Text",
+   "label": "Why Trap Crop?"
+  },
+  {
+   "fieldname": "spacing_reason",
+   "fieldtype": "Small Text",
+   "label": "Why this Spacing?"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-05 19:14:46.454844",
+ "modified_by": "Administrator",
+ "module": "Rythulab",
+ "name": "Crop Model",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Farmer Scientist",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "model_name"
+}

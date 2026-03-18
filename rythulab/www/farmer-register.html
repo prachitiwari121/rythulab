@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RythuLab - Create Account</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a3a1a 0%, #2d5a27 40%, #4a7c3f 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .card {
+            background: rgba(255,255,255,0.97); border-radius: 20px;
+            padding: 48px 40px; width: 100%; max-width: 420px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+        }
+        .logo-area { text-align: center; margin-bottom: 32px; }
+        .logo-icon { font-size: 48px; margin-bottom: 10px; }
+        .logo-area h1 { font-size: 28px; font-weight: 700; color: #1a3a1a; }
+        .logo-area p  { color: #6b7c6b; font-size: 13px; margin-top: 4px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #2d4a2d; margin-bottom: 6px; }
+        input {
+            width: 100%; padding: 12px 16px; border: 2px solid #e0e8e0;
+            border-radius: 10px; font-size: 15px; color: #1a3a1a;
+            outline: none; transition: border-color 0.2s; background: #f8faf8;
+        }
+        input:focus { border-color: #4a7c3f; background: #fff; }
+        .btn {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #2d5a27, #4a7c3f);
+            color: white; border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            margin-top: 8px; transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-link { text-align: center; margin-top: 20px; font-size: 13px; color: #6b7c6b; }
+        .login-link a { color: #2d5a27; font-weight: 600; text-decoration: none; }
+        .login-link a:hover { text-decoration: underline; }
+        .error-msg {
+            background: #fff0f0; border: 1px solid #ffcccc; color: #c0392b;
+            border-radius: 8px; padding: 10px 14px; font-size: 13px;
+            margin-bottom: 16px; display: none;
+        }
+        .success-msg {
+            background: #f0fff4; border: 1px solid #9ae6b4; color: #276749;
+            border-radius: 8px; padding: 10px 14px; font-size: 13px;
+            margin-bottom: 16px; display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="logo-area">
+        <div class="logo-icon">🌾</div>
+        <h1>RythuLab</h1>
+        <p>Create your Farmer Scientist account</p>
+    </div>
+
+    <div class="error-msg"   id="error_msg"></div>
+    <div class="success-msg" id="success_msg"></div>
+
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="reg_name" placeholder="Enter your full name" />
+    </div>
+    <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="reg_email" placeholder="Enter your email" />
+    </div>
+    <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="reg_phone" placeholder="Enter your phone number" />
+    </div>
+    <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg_pass" placeholder="Create a password" />
+    </div>
+    <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="reg_pass2" placeholder="Repeat your password"
+               onkeydown="if(event.key==='Enter') doRegister()" />
+    </div>
+
+    <button class="btn" id="reg_btn" onclick="doRegister()">Create Account</button>
+
+    <div class="login-link">
+        Already have an account? <a href="/login">Login</a>
+    </div>
+</div>
+
+<script>
+function showError(msg){
+    document.getElementById("error_msg").textContent = msg;
+    document.getElementById("error_msg").style.display = "block";
+    document.getElementById("success_msg").style.display = "none";
+}
+function showSuccess(msg){
+    document.getElementById("success_msg").textContent = msg;
+    document.getElementById("success_msg").style.display = "block";
+    document.getElementById("error_msg").style.display = "none";
+}
+
+function doRegister(){
+    var name  = document.getElementById("reg_name").value.trim();
+    var email = document.getElementById("reg_email").value.trim();
+    var pass  = document.getElementById("reg_pass").value;
+    var pass2 = document.getElementById("reg_pass2").value;
+    var btn   = document.getElementById("reg_btn");
+
+    document.getElementById("error_msg").style.display = "none";
+
+    if(!name)            { showError("Please enter your full name.");       return; }
+    if(!email)           { showError("Please enter your email.");           return; }
+    if(!pass)            { showError("Please enter a password.");           return; }
+    if(pass.length < 6)  { showError("Password must be at least 6 characters."); return; }
+    if(pass !== pass2)   { showError("Passwords do not match.");            return; }
+    if(!document.getElementById("reg_phone").value.trim()) { showError("Please enter your phone number."); return; }
+
+    btn.disabled = true; btn.textContent = "Creating account...";
+
+    var params = new URLSearchParams();
+    params.append("full_name", name);
+    params.append("email",     email);
+    params.append("password",  pass);
+    params.append("phone",     document.getElementById("reg_phone").value.trim());
+
+    fetch("/api/method/rythulab.api.register_farmer", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        if(res.message && res.message.ok){
+            showSuccess("✅ Account created! Redirecting to login...");
+            setTimeout(function(){ window.location.href = "/login"; }, 2000);
+        } else {
+            var msg = "Registration failed.";
+            try {
+                if(res._server_messages){
+                    msg = JSON.parse(JSON.parse(res._server_messages)[0]).message;
+                }
+            } catch(e){}
+            showError(msg);
+            btn.disabled = false; btn.textContent = "Create Account";
+        }
+    })
+    .catch(function(){
+        showError("Server error. Please try again.");
+        btn.disabled = false; btn.textContent = "Create Account";
+    });
+}
+</script>
+</body>
+</html>

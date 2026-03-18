@@ -1,0 +1,413 @@
+/* ═══ Phase 3: Biodiversity Crop Selection ════════════════════ */
+
+var P3_CROPS = [
+    {id:"moth_bean",  name:"Moth Bean",         family:"Fabaceae",   group:"Legume",
+     rootD:"Shallow", canopy:"Low",  h:0.3,
+     mfp:["nitrogen_fixation","ground_cover","pollinator_habitat"],
+     cfImprove:["N","SOC","ER"],
+     desc:"Drought-hardy low-growing legume; excellent ground cover; N fixation"},
+    {id:"horse_gram", name:"Horse Gram",         family:"Fabaceae",   group:"Legume",
+     rootD:"Medium",  canopy:"Low",  h:0.4,
+     mfp:["nitrogen_fixation","ground_cover","beneficial_insects"],
+     cfImprove:["N","SOC"],
+     desc:"Hardy pulse for poor soils; N fixation; improves soil structure"},
+    {id:"lablab",     name:"Lablab (Field bean)", family:"Fabaceae",   group:"Legume",
+     rootD:"Medium",  canopy:"Mid",  h:1.5,
+     mfp:["nitrogen_fixation","pollinator_habitat","ground_cover"],
+     cfImprove:["N","SOC","PA"],
+     desc:"Climbing/spreading legume; excellent pollinator plant; N fixation"},
+    {id:"amaranth",   name:"Amaranth (grain)",    family:"Amaranthaceae",group:"Broad-leaf",
+     rootD:"Deep",    canopy:"Mid",  h:1.8,
+     mfp:["deep_root_aeration","biomass_mulch","beneficial_insects"],
+     cfImprove:["SOC","BD","ESD"],
+     desc:"Deep-rooted broad-leaf; loosens subsoil; high biomass mulch producer"},
+    {id:"soybean",    name:"Soybean",             family:"Fabaceae",   group:"Legume",
+     rootD:"Medium",  canopy:"Mid",  h:0.8,
+     mfp:["nitrogen_fixation","ground_cover","pollinator_habitat"],
+     cfImprove:["N","SOC","PA"],
+     desc:"High-value N-fixing legume; improves soil N for following crops"},
+    {id:"winged_bean",name:"Winged Bean",         family:"Fabaceae",   group:"Legume",
+     rootD:"Deep",    canopy:"Climbing",h:2.0,
+     mfp:["nitrogen_fixation","deep_root_aeration","pollinator_habitat"],
+     cfImprove:["N","ESD","BD"],
+     desc:"Climbing legume with deep roots; unique canopy layer; N fixation"},
+    {id:"sweet_potato",name:"Sweet Potato",       family:"Convolvulaceae",group:"Root/Tuber",
+     rootD:"Shallow", canopy:"Creeping",h:0.3,
+     mfp:["ground_cover","erosion_control","pollinator_habitat"],
+     cfImprove:["ER","SOC","PA"],
+     desc:"Excellent creeping ground cover; suppresses weeds; prevents erosion"},
+    {id:"tapioca",    name:"Tapioca (Cassava)",   family:"Euphorbiaceae",group:"Root/Tuber",
+     rootD:"Deep",    canopy:"Mid",  h:2.0,
+     mfp:["deep_root_aeration","canopy_shade","biomass_mulch"],
+     cfImprove:["ESD","BD","SOC"],
+     desc:"Deep roots break hardpan; canopy shade; high biomass from prunings"},
+    {id:"buckwheat",  name:"Buckwheat",           family:"Polygonaceae",group:"Broad-leaf",
+     rootD:"Shallow", canopy:"Low",  h:0.8,
+     mfp:["pollinator_habitat","beneficial_insects","ground_cover","p_cycling"],
+     cfImprove:["PA","PP","P","SOC"],
+     desc:"Fast growing; exceptional pollinator habitat; solubilises soil phosphorus"},
+    {id:"phacelia",   name:"Phacelia (cover)",    family:"Boraginaceae",group:"Cover crop",
+     rootD:"Shallow", canopy:"Low",  h:0.5,
+     mfp:["pollinator_habitat","beneficial_insects","ground_cover"],
+     cfImprove:["PA","PP","ER"],
+     desc:"Outstanding pollinator plant; attracts hoverflies and parasitic wasps"},
+    {id:"sudan_grass",name:"Sudan Grass",         family:"Poaceae",    group:"Grass",
+     rootD:"Deep",    canopy:"Tall", h:2.5,
+     mfp:["deep_root_aeration","biomass_mulch","wind_break","ground_cover"],
+     cfImprove:["BD","SOC","ER","ESD"],
+     desc:"Deep fibrous roots; massive biomass; breaks soil compaction"},
+    {id:"pearl_millet_cover",name:"Pearl Millet (cover)",family:"Poaceae",group:"Grass",
+     rootD:"Deep",    canopy:"Tall", h:2.0,
+     mfp:["wind_break","biomass_mulch","deep_root_aeration"],
+     cfImprove:["WP","SOC","BD"],
+     desc:"Dense tall grass; wind break; high biomass cover crop"},
+    {id:"radish_daikon",name:"Radish (tillage)",  family:"Brassicaceae",group:"Root/Tuber",
+     rootD:"Deep",    canopy:"Low",  h:0.4,
+     mfp:["deep_root_aeration","biomass_mulch","beneficial_insects","p_cycling"],
+     cfImprove:["BD","ESD","SOC","P"],
+     desc:"Large taproot physically breaks compaction; winter-killed mulch; P cycling"},
+    {id:"vetiver_bd",  name:"Vetiver (biodiversity)",family:"Poaceae",  group:"Grass",
+     rootD:"Very Deep",canopy:"Mid", h:1.5,
+     mfp:["erosion_control","deep_root_aeration","ground_cover","water_retention"],
+     cfImprove:["ER","BD","ESD","WHC"],
+     desc:"Exceptionally deep roots (3m+); permanent erosion barrier; water retention"},
+    {id:"lentil",      name:"Lentil",              family:"Fabaceae",   group:"Legume",
+     rootD:"Shallow",  canopy:"Low", h:0.4,
+     mfp:["nitrogen_fixation","ground_cover","beneficial_insects"],
+     cfImprove:["N","SOC"],
+     desc:"Cool season N-fixing legume; improves biodiversity in cereal-dominated systems"}
+];
+
+var P3_GROUPS = ["Legume","Grass","Broad-leaf","Root/Tuber","Cover crop"];
+var P3_MF_BIODIVERSITY = ["pollinator_habitat","beneficial_insects","p_cycling","ground_cover","nitrogen_fixation","biomass_mulch","deep_root_aeration","erosion_control","water_retention"];
+
+var CS3 = {
+    step: 1,
+    selected: [],
+    gaps: {},
+    recommendations: []
+};
+
+/* ── Entry point ─────────────────────────────────────────────── */
+function cs_phase3_init(){
+    var root=document.getElementById("cs-root"); if(!root) return;
+    p3_computeGaps();
+    root.innerHTML="";
+    root.appendChild(_p3_phaseTabs());
+    var lay=document.createElement("div"); lay.className="cs-lay";
+    lay.innerHTML='<div class="cs-sbar" id="cs-sbar"></div><div class="cs-sc" id="cs-content"></div>';
+    root.appendChild(lay);
+    p3_renderSidebar(); p3_renderStep(CS3.step);
+}
+
+/* ── Compute gaps ────────────────────────────────────────────── */
+function p3_computeGaps(){
+    var mc = cs_full ? cs_full() : [];
+    var assocCrops = CS2.selectedAssoc.concat(CS2.selectedBorder).concat(CS2.selectedTrap).map(function(id){
+        var e=CS2.associateList.concat(CS2.borderList).concat(CS2.trapList).find(function(x){return x.crop.id===id;});
+        return e?e.crop:null;
+    }).filter(Boolean);
+    var allCrops = mc.concat(assocCrops);
+
+    var coveredGroups={};
+    allCrops.forEach(function(c){
+        var g=c.type||c.group||"";
+        var grp=g.indexOf("Cereal")>=0?"Grass":g.indexOf("Pulse")>=0||g.indexOf("Legume")>=0?"Legume":
+                g.indexOf("Oilseed")>=0?"Broad-leaf":g.indexOf("Root")>=0?"Root/Tuber":"Broad-leaf";
+        coveredGroups[grp]=true;
+    });
+    var missingGroups=P3_GROUPS.filter(function(g){return!coveredGroups[g];});
+
+    var families={};
+    allCrops.forEach(function(c){if(c.family)families[c.family]=true;});
+
+    var layers={Low:false,Mid:false,Tall:false};
+    allCrops.forEach(function(c){
+        var h=parseFloat(c.h||0);
+        if(h<0.6)layers.Low=true; else if(h<1.8)layers.Mid=true; else layers.Tall=true;
+    });
+    var missingLayers=Object.keys(layers).filter(function(l){return!layers[l];});
+
+    var roots={Shallow:false,Medium:false,Deep:false};
+    allCrops.forEach(function(c){if(c.rd||c.rootD){var r=c.rd||c.rootD;if(r.indexOf("Shallow")>=0)roots.Shallow=true;else if(r.indexOf("Deep")>=0)roots.Deep=true;else roots.Medium=true;}});
+    var missingRoots=Object.keys(roots).filter(function(r){return!roots[r];});
+
+    CS3.gaps={missingGroups:missingGroups,families:families,missingLayers:missingLayers,missingRoots:missingRoots,coveredGroups:coveredGroups};
+
+    var recs=[];
+    P3_CROPS.forEach(function(bc){
+        var reasons=[];
+        CS3.gaps.missingGroups.forEach(function(g){
+            if(bc.group===g) reasons.push('Fills missing functional group: '+g);
+        });
+        CS3.gaps.missingLayers.forEach(function(l){
+            var h=parseFloat(bc.h||0);
+            var bcLayer=h<0.6?"Low":h<1.8?"Mid":"Tall";
+            if(bcLayer===l) reasons.push('Fills missing canopy layer: '+l+' ('+h+'m)');
+        });
+        CS3.gaps.missingRoots.forEach(function(rd){
+            var r=bc.rootD||"";
+            if(r.indexOf(rd)>=0) reasons.push('Fills missing root depth: '+rd);
+        });
+        P3_MF_BIODIVERSITY.forEach(function(mf){
+            if((bc.mfp||[]).indexOf(mf)>=0){
+                var ml=mf==="pollinator_habitat"?"Pollinator support":
+                        mf==="beneficial_insects"?"Beneficial insect habitat":
+                        mf==="p_cycling"?"Phosphorus cycling":
+                        mf==="ground_cover"?"Ground cover / leaf litter":
+                        cs_mfl(mf);
+                var r='Produces MF "'+ml+'" — supports system biodiversity';
+                if(reasons.indexOf(r)<0) reasons.push(r);
+            }
+        });
+        (bc.cfImprove||[]).forEach(function(cfk){
+            var cf=CS_FARM.cf[cfk]; if(!cf||cf.s>3) return;
+            reasons.push('Improves weak CF "'+cf.l+'" ('+cf.slab+') via MF');
+        });
+        if(reasons.length>0) recs.push({crop:bc, reasons:reasons});
+    });
+    CS3.recommendations=recs;
+    // Start with empty selection — user picks manually
+    CS3.selected=[];
+}
+
+/* ── Phase tabs ──────────────────────────────────────────────── */
+function _p3_phaseTabs(){
+    var phases=[
+        {n:1,l:"Main crop selection",a:false},
+        {n:2,l:"Associate crops",a:false},
+        {n:3,l:"Biodiversity crops",a:true},
+        {n:4,l:"System evaluation",a:false}
+    ];
+    var d=document.createElement("div"); d.className="cs-ptabs";
+    d.innerHTML=phases.map(function(p){
+        return'<button class="cs-ptab '+(p.a?"active":"")+(p.n===4?" off":"")+'" onclick="'+(p.n<4?"cs_switchPhase("+p.n+")":"")+'">'+
+            '<span class="cs-pnum">'+p.n+'</span>Phase '+p.n+': '+p.l+'</button>';
+    }).join("");
+    return d;
+}
+
+/* ── Sidebar & routing ───────────────────────────────────────── */
+var CS3_STEPS=[
+    {n:1,name:"Biodiversity gap analysis"},
+    {n:2,name:"Functional group coverage"},
+    {n:3,name:"MF biodiversity crops"},
+    {n:4,name:"CF improvement crops"},
+    {n:5,name:"Select & confirm"}
+];
+
+function p3_renderSidebar(){
+    var sb=document.getElementById("cs-sbar"); if(!sb)return;
+    var h='<div class="cs-sbar-hd">Phase 3 — steps</div>';
+    CS3_STEPS.forEach(function(s){
+        var done=s.n<CS3.step,cur=s.n===CS3.step;
+        h+='<div class="cs-si '+(done?"done":cur?"cur":"")+'" '+(done?'onclick="p3_goto('+s.n+')"':'')+'>'+
+           '<div class="cs-si-n">'+(done?"✓":s.n)+'</div>'+
+           '<div class="cs-si-nm">'+s.name+'</div></div>';
+    });
+    // Selected crops box — below steps
+    var selHtml=(typeof cs_selBoxSidebarHtml==="function")?cs_selBoxSidebarHtml():"";
+    h+='<div style="margin-top:16px;padding-top:12px;border-top:2px solid var(--green-pale)">'+
+       '<div style="font-size:9px;font-weight:700;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;padding:0 2px">✔ Selected Crops</div>'+
+       '<div id="cs-selbox">'+selHtml+'</div>'+
+       '</div>';
+    sb.innerHTML=h;
+}
+
+function p3_renderStep(n){
+    var el=document.getElementById("cs-content");if(!el)return;
+    el.innerHTML=p3_buildStep(n);
+    p3_renderSidebar();
+    if(typeof cs_updateSelBox==="function") cs_updateSelBox();
+}
+function p3_goto(n){if(n<=CS3.step){CS3.step=n;p3_renderStep(n);}}
+function p3_next(){CS3.step++;p3_renderStep(CS3.step);}
+
+function p3_hd(n,title,desc){
+    return'<div class="cs-bdg"><span class="cs-bdg-n">Step '+n+'</span><span class="cs-bdg-t">Phase 3 — biodiversity crop selection</span></div>'+
+        '<div class="cs-ttl">'+title+'</div>'+
+        (desc?'<div class="cs-dsc">'+desc+'</div>':'')+
+        '<hr class="cs-hr">';
+}
+function p3_buildStep(n){
+    var fns=[p3_s1,p3_s2,p3_s3,p3_s4,p3_s5];
+    return fns[n-1]?fns[n-1]():"";
+}
+
+/* ── Crop card for P3 ────────────────────────────────────────── */
+function p3_cropCard(entry){
+    var bc=entry.crop, sel=CS3.selected.indexOf(bc.id)>=0;
+    var tags=(bc.mfp||[]).slice(0,4).map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join("");
+    var reasons=entry.reasons.map(function(r){return'<li style="margin-bottom:3px">'+r+'</li>';}).join("");
+    return'<div style="background:var(--green-bg);border:1.5px solid '+(sel?"var(--green-mid)":"var(--border)")+';border-radius:10px;padding:12px;margin-bottom:8px">'+
+        '<div style="display:flex;align-items:flex-start;gap:10px">'+
+        '<input type="checkbox" id="p3_'+bc.id+'" '+(sel?"checked":"")+
+            ' style="margin-top:3px;width:16px;height:16px;flex-shrink:0"'+
+            ' onchange="p3_toggleSel(\''+bc.id+'\',this.checked)">'+
+        '<div style="flex:1">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px">'+bc.name+'</div>'+
+        '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.family+' · '+bc.group+' · Height: '+bc.h+'m · Root: '+(bc.rootD||bc.rd||"N/A")+'</div>'+
+        '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.desc+'</div>'+
+        '<div style="margin-bottom:6px">'+tags+'</div>'+
+        '<div style="background:white;border-radius:6px;padding:7px 10px">'+
+        '<div style="font-size:10px;font-weight:700;color:#2a3a1a;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px">Why recommended:</div>'+
+        '<ul style="font-size:11px;color:#2a3a1a;padding-left:16px;margin:0">'+reasons+'</ul>'+
+        '</div></div></div></div>';
+}
+
+function p3_toggleSel(id,checked){
+    if(checked){if(CS3.selected.indexOf(id)<0)CS3.selected.push(id);}
+    else{var i=CS3.selected.indexOf(id);if(i>=0)CS3.selected.splice(i,1);}
+    // Update sidebar live
+    if(typeof cs_updateSelBox==="function") cs_updateSelBox();
+}
+
+/* ── Step 1: Gap Analysis ────────────────────────────────────── */
+function p3_s1(){
+    var g=CS3.gaps;
+    function statusBadge(ok){
+        return ok?'<span style="background:var(--csg100);color:var(--csg800);font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px">Covered ✓</span>':
+                  '<span style="background:var(--csr50);color:var(--csr600);font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px">Gap ✗</span>';
+    }
+    var groupRows=P3_GROUPS.map(function(grp){
+        var covered=!!g.coveredGroups[grp];
+        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+grp+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    }).join("");
+    var layerRows=["Low (<0.6m)","Mid (0.6–1.8m)","Tall (>1.8m)"].map(function(l,i){
+        var lk=["Low","Mid","Tall"][i];
+        var covered=g.missingLayers.indexOf(lk)<0;
+        return'<tr><td style="color:var(--text-dark)">'+l+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    }).join("");
+    var rootRows=["Shallow","Medium","Deep"].map(function(r){
+        var covered=g.missingRoots.indexOf(r)<0;
+        return'<tr><td style="color:var(--text-dark)">'+r+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    }).join("");
+    var famCount=Object.keys(g.families||{}).length;
+    return p3_hd(1,"Biodiversity gap analysis",
+        "Checking the current crop system (main crops + associate crops from Phase 2) for gaps in functional group diversity, crop family diversity, canopy layers, and root depths.")+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">'+
+        '<div class="cs-fcrd"><div class="cs-fcht">Functional groups</div>'+
+        '<table class="cs-dtbl"><thead><tr><th>Group</th><th>Status</th></tr></thead><tbody>'+groupRows+'</tbody></table>'+
+        '<div style="font-size:11px;color:var(--csr600);margin-top:6px">Missing: '+(g.missingGroups.length?g.missingGroups.join(", "):"None ✓")+'</div></div>'+
+        '<div class="cs-fcrd"><div class="cs-fcht">Canopy layers</div>'+
+        '<table class="cs-dtbl"><thead><tr><th>Layer</th><th>Status</th></tr></thead><tbody>'+layerRows+'</tbody></table>'+
+        '<div style="font-size:11px;color:var(--csr600);margin-top:6px">Missing: '+(g.missingLayers.length?g.missingLayers.join(", "):"None ✓")+'</div></div>'+
+        '<div class="cs-fcrd"><div class="cs-fcht">Root depths</div>'+
+        '<table class="cs-dtbl"><thead><tr><th>Depth</th><th>Status</th></tr></thead><tbody>'+rootRows+'</tbody></table>'+
+        '<div style="font-size:11px;color:var(--csg600);margin-top:6px">Crop families covered: '+famCount+'</div></div></div>'+
+        '<div class="cs-sf"><span class="cs-fn">'+(g.missingGroups.length+g.missingLayers.length+g.missingRoots.length)+' gap(s) detected in biodiversity coverage.</span>'+
+        '<button class="cs-btn pri" onclick="p3_next()">Functional group coverage →</button></div>';
+}
+
+/* ── Step 2: Functional Group Coverage ──────────────────────── */
+function p3_s2(){
+    var g=CS3.gaps;
+    var recs=CS3.recommendations.filter(function(r){
+        return r.reasons.some(function(x){return x.indexOf("functional group")>=0;});
+    });
+    var html=recs.length?recs.map(p3_cropCard).join(""):
+        '<div class="cs-empty">All functional groups are already covered by your current crop system. ✓</div>';
+    return p3_hd(2,"Functional group coverage",
+        "Ensuring at least one species is represented from each functional group — Legume, Grass, Broad-leaf, Root/Tuber, Cover crop. Gaps identified in Step 1 are filled here.")+
+        (g.missingGroups.length?
+            '<div class="cs-vcrd cs-vc-warn"><div class="cs-vci cs-vci-warn">!</div><div>'+
+            '<div class="cs-vttl">Missing functional groups: '+g.missingGroups.join(", ")+'</div>'+
+            '<div class="cs-vmsg">Select at least one crop from each missing group below to improve functional biodiversity.</div>'+
+            '</div></div>':'<div class="cs-vcrd cs-vc-ok"><div class="cs-vci cs-vci-ok">✓</div><div><div class="cs-vttl">All functional groups covered</div></div></div>')+
+        html+
+        '<div class="cs-sf"><span class="cs-fn">'+recs.length+' crop(s) suggested.</span>'+
+        '<button class="cs-btn sec" onclick="p3_goto(1)">← Back</button>'+
+        '<button class="cs-btn pri" onclick="p3_next()">MF biodiversity crops →</button></div>';
+}
+
+/* ── Step 3: MF Biodiversity Crops ──────────────────────────── */
+function p3_s3(){
+    var recs=CS3.recommendations.filter(function(r){
+        return r.reasons.some(function(x){return x.indexOf("biodiversity")>=0||x.indexOf("Pollinator")>=0||x.indexOf("Phosphorus")>=0||x.indexOf("leaf litter")>=0;});
+    });
+    var mfList=[
+        {mf:"pollinator_habitat",  label:"Pollinator support"},
+        {mf:"beneficial_insects",  label:"Beneficial insect habitat"},
+        {mf:"p_cycling",           label:"Phosphorus (P) cycling"},
+        {mf:"ground_cover",        label:"Ground cover / leaf litter"},
+        {mf:"nitrogen_fixation",   label:"Soil nutrient cycling (N fixation)"},
+        {mf:"biomass_mulch",       label:"Biomass mulch"}
+    ];
+    var mfCoverage=mfList.map(function(m){
+        var hasMF=CS3.recommendations.some(function(r){return(r.crop.mfp||[]).indexOf(m.mf)>=0&&CS3.selected.indexOf(r.crop.id)>=0;});
+        return'<div class="cs-fcr"><span class="cs-fcrl">'+m.label+'</span>'+
+            '<span style="font-size:11px;font-weight:700;color:'+(hasMF?"var(--csg600)":"var(--csr600)")+'">'+( hasMF?"Covered ✓":"Not covered ✗")+'</span></div>';
+    }).join("");
+    var html=recs.length?recs.map(p3_cropCard).join(""):
+        '<div class="cs-empty">All key biodiversity MFs are covered by current selection.</div>';
+    return p3_hd(3,"MF biodiversity crops",
+        "Adding crops that produce key microfeatures: pollinator support, beneficial insect habitat, soil nutrient cycling, phosphorus cycling, ground cover / leaf litter.")+
+        '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Biodiversity MF coverage in current selection</div>'+mfCoverage+'</div>'+
+        html+
+        '<div class="cs-sf"><span class="cs-fn">'+recs.length+' crop(s) suggested.</span>'+
+        '<button class="cs-btn sec" onclick="p3_goto(2)">← Back</button>'+
+        '<button class="cs-btn pri" onclick="p3_next()">CF improvement crops →</button></div>';
+}
+
+/* ── Step 4: CF Improvement Crops ────────────────────────────── */
+function p3_s4(){
+    var recs=CS3.recommendations.filter(function(r){
+        return r.reasons.some(function(x){return x.indexOf("weak CF")>=0;});
+    });
+    var weakCFs=CS_CF_ORDER.filter(function(k){return CS_FARM.cf[k]&&CS_FARM.cf[k].s<=3;});
+    var cfRows=weakCFs.map(function(k){
+        var cf=CS_FARM.cf[k];
+        var helping=CS3.recommendations.filter(function(r){
+            return CS3.selected.indexOf(r.crop.id)>=0&&(r.crop.cfImprove||[]).indexOf(k)>=0;
+        }).map(function(r){return r.crop.name;});
+        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+cf.l+'</td>'+
+            '<td><span style="font-size:11px;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+cf.slab+'</span></td>'+
+            '<td style="font-size:11px;color:'+(helping.length?"var(--csg600)":"var(--csr600)")+'">'+( helping.length?helping.join(", "):"None selected yet")+'</td></tr>';
+    }).join("");
+    var html=recs.length?recs.map(p3_cropCard).join(""):
+        '<div class="cs-empty">No additional CF-improvement crops found for current farm profile.</div>';
+    return p3_hd(4,"CF improvement crops",
+        "Adding crops with microfeatures that support or improve the farm's poor to moderate context features.")+
+        '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Weak / moderate CFs and which selected biodiversity crops help them</div>'+
+        '<table class="cs-dtbl"><thead><tr><th>Context Feature</th><th>Status</th><th>Helped by</th></tr></thead><tbody>'+cfRows+'</tbody></table></div>'+
+        html+
+        '<div class="cs-sf"><span class="cs-fn">'+recs.length+' crop(s) suggested.</span>'+
+        '<button class="cs-btn sec" onclick="p3_goto(3)">← Back</button>'+
+        '<button class="cs-btn pri" onclick="p3_next()">Review & confirm →</button></div>';
+}
+
+/* ── Step 5: Final Selection ─────────────────────────────────── */
+function p3_s5(){
+    var selRecs=CS3.recommendations.filter(function(r){return CS3.selected.indexOf(r.crop.id)>=0;});
+    var rows=selRecs.map(function(r){
+        var bc=r.crop;
+        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+bc.name+'</td>'+
+            '<td style="color:#3a4a2a">'+bc.group+'</td>'+
+            '<td>'+bc.family+'</td>'+
+            '<td>'+bc.h+'m</td>'+
+            '<td>'+(bc.rootD||bc.rd||"—")+'</td>'+
+            '<td style="font-size:10px">'+(bc.mfp||[]).map(cs_mfl).join(", ")+'</td></tr>';
+    }).join("");
+    return p3_hd(5,"Review & confirm — biodiversity crop selection",
+        "Your selected biodiversity crops. Review and confirm, then proceed to Phase 4: System Evaluation.")+
+        (selRecs.length?
+            '<div style="overflow-x:auto;margin-bottom:12px"><table class="cs-dtbl"><thead><tr>'+
+            '<th>Crop</th><th>Group</th><th>Family</th><th>Height</th><th>Root depth</th><th>Key MFs</th>'+
+            '</tr></thead><tbody>'+rows+'</tbody></table></div>':
+            '<div class="cs-empty" style="margin-bottom:12px">No biodiversity crops selected yet. Go back to select crops.</div>')+
+        '<div class="cs-scards">'+
+        '<div class="cs-sc2"><div class="cs-sc2-n sn-g">'+selRecs.length+'</div><div class="cs-sc2-l">biodiversity crops</div></div>'+
+        '<div class="cs-sc2"><div class="cs-sc2-n '+(CS3.gaps.missingGroups.filter(function(g){return!selRecs.some(function(r){return r.crop.group===g;});}).length===0?"sn-g":"sn-r")+'">'+
+        (CS3.gaps.missingGroups.filter(function(g){return!selRecs.some(function(r){return r.crop.group===g;});}).length===0?"All":"Some")+'</div>'+
+        '<div class="cs-sc2-l">functional groups</div></div>'+
+        '<div class="cs-sc2"><div class="cs-sc2-n sn-g">'+selRecs.reduce(function(t,r){return t+(r.crop.mfp||[]).length;},0)+'</div><div class="cs-sc2-l">total MFs added</div></div>'+
+        '</div>'+
+        '<div class="cs-vcrd cs-vc-ok" style="margin-bottom:12px"><div class="cs-vci cs-vci-ok">✓</div>'+
+        '<div><div class="cs-vttl">Biodiversity crop selection complete</div>'+
+        '<div class="cs-vmsg">Proceed to Phase 4 for system evaluation scores and layout transfer.</div>'+
+        '</div></div>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+        '<button class="cs-btn sec" onclick="p3_goto(1)">← Revisit selections</button>'+
+        '<button class="cs-btn pri" onclick="cs_switchPhase(4)">Proceed to Phase 4 →</button>'+
+        '</div>';
+}

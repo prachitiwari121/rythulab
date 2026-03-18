@@ -1,0 +1,23 @@
+{
+ "content": null,
+ "creation": "2026-02-23 16:50:02.870592",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-02-23 16:50:02.870592",
+ "modified_by": "Administrator",
+ "module": "Rythulab",
+ "name": "farmer-dashboard",
+ "owner": "Administrator",
+ "page_name": "farmer-dashboard",
+ "roles": [
+  {
+   "role": "Farmer Scientist"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Farmer Dashboard"
+}
