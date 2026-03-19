@@ -1,6 +1,6 @@
 var CS = {
     step:1, farmOpen:true,
-    sel:[{id:"sorghum",a:2.0},{id:"groundnut",a:1.5},{id:"pigeon_pea",a:1.0},{id:"sesame",a:0.5}],
+    sel:[{id:"CRP0003",a:2.0},{id:"CRP0004",a:1.5},{id:"CRP0005",a:1.0},{id:"CRP0006",a:0.5}],
     wc:null, an:null
 };
 var CS_STEPS=[
@@ -221,7 +221,7 @@ function cs_buildStep(n){
     return fns[n-1]?fns[n-1]():"";
 }
 
-TEMP_CROPS = [];
+//TEMP_CROPS = [];
 
 /* ── STEP 1 ───────────────────────────────────────────────────── */
 function cs_s1(){
@@ -249,12 +249,12 @@ function cs_s1(){
             var msg=res&&res.message?res.message:{};
             var crops=Array.isArray(msg)?msg:(Array.isArray(msg.crops)?msg.crops:[]);
             if(crops.length){
-                TEMP_CROPS=crops;
+                CS_CROPS=crops;
                 CS.phase1Loaded=true;
                 if(CS.step===1) cs_renderStep(1);
             }
             else{
-                TEMP_CROPS=CS_CROPS;
+                CS_CROPS=CS_CROPS;
             }
         })
         .catch(function(err){
@@ -289,7 +289,7 @@ function cs_s1(){
         })[level]||"background:#f3f6d9;color:#5b6d1f;border:1px solid #dce775;";
     }
 
-    var cards=TEMP_CROPS.map(function(c){
+    var cards=CS_CROPS.map(function(c){
         var hi=c.sc>=85,lo=c.sc<70;
         var pc=hi?"cs-p-hi":lo?"cs-p-lo":"cs-p-md";
         var fc=hi?"cs-sf-hi":lo?"cs-sf-lo":"cs-sf-md";
@@ -315,7 +315,7 @@ function cs_s1(){
     }).join("");
     return cs_hd(1,"Feasibility screening",
         "Based on your farm's agro-climatic zone, season, soil type, temperature range, and water availability, crops are ranked by suitability score (0–100). Parameter chips show 5-level satisfaction (1=lowest, 5=highest). Your agronomic knowledge matters — you may select any crop regardless of score.")+
-        '<div style="font-size:12px;color:#2a3a1a;margin-bottom:9px">'+TEMP_CROPS.length+' crops found — ranked by suitability score</div>'+
+        '<div style="font-size:12px;color:#2a3a1a;margin-bottom:9px">'+CS_CROPS.length+' crops found — ranked by suitability score</div>'+
         '<div class="cs-cgrid">'+cards+'</div>'+
         '<div class="cs-sf"><span class="cs-fn"></span>'+
         '<button class="cs-btn pri" onclick="cs_next()">Proceed to crop selection →</button></div>';
