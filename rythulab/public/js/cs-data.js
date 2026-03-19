@@ -1,10 +1,16 @@
 var CS_FARM = {
     area:      5.0,
     zone:      "Semi-Arid Tropics (SAT)",
+    zone_code: "North Coastal",
     season:    "Kharif (Jun–Oct)",
+    season_code: "kharif",
     soil:      "Red Sandy Loam",
+    soil_code: "RedAndYellow/SandyLoam",
     waterAvail:"Moderate",
+    water_supply:  "Copious-Irrigation",
     wind:      "Low–Moderate",
+    minTemp:   "20°C",
+    maxTemp:   "35°C",
     rain:520, re:0.65, irr:100, sw:30,
     cf:{
         N:  {l:"Available Nitrogen",

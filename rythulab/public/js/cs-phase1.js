@@ -221,23 +221,101 @@ function cs_buildStep(n){
     return fns[n-1]?fns[n-1]():"";
 }
 
+TEMP_CROPS = [];
+
 /* ── STEP 1 ───────────────────────────────────────────────────── */
 function cs_s1(){
-    var cards=CS_CROPS.map(function(c){
+    if(!CS.phase1Loaded && !CS.phase1Loading){
+        CS.phase1Loading=true;
+        var farmPayload={
+            area:CS_FARM.area,
+            zone:CS_FARM.zone_code,
+            season:CS_FARM.season_code,
+            soil:CS_FARM.soil_code,
+            waterAvail:CS_FARM.waterAvail,
+            water_supply:CS_FARM.water_supply,
+            wind:CS_FARM.wind,
+            minTemp:CS_FARM.minTemp,
+            maxTemp:CS_FARM.maxTemp
+        };
+
+        fetch("/api/method/rythulab.api.get_feasible_crops",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(farmPayload)
+        })
+        .then(function(r){return r.json();})
+        .then(function(res){
+            var msg=res&&res.message?res.message:{};
+            var crops=Array.isArray(msg)?msg:(Array.isArray(msg.crops)?msg.crops:[]);
+            if(crops.length){
+                TEMP_CROPS=crops;
+                CS.phase1Loaded=true;
+                if(CS.step===1) cs_renderStep(1);
+            }
+            else{
+                TEMP_CROPS=CS_CROPS;
+            }
+        })
+        .catch(function(err){
+            console.warn("Feasible crops API failed, using local CS_CROPS.",err);
+        })
+        .finally(function(){
+            CS.phase1Loading=false;
+        });
+    }
+
+    function _cs_levelFromScore(score,fallbackBool){
+        if(typeof score==="number" && !isNaN(score)){
+            var lv=Math.round(score);
+            if(lv<1) lv=1;
+            if(lv>5) lv=5;
+            return lv;
+        }
+        return fallbackBool?5:1;
+    }
+
+    function _cs_symbolForLevel(level){
+        return ({1:"✕",2:"◔",3:"◑",4:"◕",5:"⬤"})[level]||"◑";
+    }
+
+    function _cs_styleForLevel(level){
+        return ({
+            1:"background:#fdecea;color:#8b0000;border:1px solid #f5c6cb;",
+            2:"background:#fff3cd;color:#7a4400;border:1px solid #ffe082;",
+            3:"background:#f3f6d9;color:#5b6d1f;border:1px solid #dce775;",
+            4:"background:#e8f5e2;color:#2d6a2d;border:1px solid #c8e6c0;",
+            5:"background:#dff3d3;color:#1f5b1f;border:1px solid #b5deb0;"
+        })[level]||"background:#f3f6d9;color:#5b6d1f;border:1px solid #dce775;";
+    }
+
+    var cards=TEMP_CROPS.map(function(c){
         var hi=c.sc>=85,lo=c.sc<70;
         var pc=hi?"cs-p-hi":lo?"cs-p-lo":"cs-p-md";
         var fc=hi?"cs-sf-hi":lo?"cs-sf-lo":"cs-sf-md";
-        var cks=[{k:"Season",v:c.sm},{k:"Zone",v:c.zm},{k:"Water",v:c.wm},{k:"Soil",v:c.som},{k:"Temp",v:c.tm}];
+        var cks=[
+            {k:"Season",score:c.season_score,fallback:c.sm},
+            {k:"Zone",score:c.season_score,fallback:c.zm},
+            {k:"Water",score:c.water_score,fallback:c.wm},
+            {k:"Soil",score:c.soil_score,fallback:c.som},
+            {k:"Temp",score:c.temperature_score,fallback:c.tm}
+        ];
         return'<div class="cs-cc">'+
             '<div class="cs-cc-top"><div class="cs-cc-nm">'+c.name+'</div><span class="cs-pill '+pc+'">'+c.sc+'%</span></div>'+
             '<div class="cs-cc-tp">'+c.type+'</div>'+
             '<div class="cs-sbar2"><div class="'+fc+'" style="width:'+c.sc+'%"></div></div>'+
-            '<div class="cs-tags">'+cks.map(function(k){return'<span class="cs-t '+(k.v?"cs-t-p":"cs-t-f")+'">'+(k.v?"✓":"✗")+' '+k.k+'</span>';}).join("")+'</div>'+
+            '<div class="cs-tags">'+cks.map(function(k){
+                var lvl=_cs_levelFromScore(k.score,k.fallback);
+                return'<span class="cs-t" title="'+k.k+' satisfaction: '+lvl+'/5" style="'+_cs_styleForLevel(lvl)+'">'+
+                    '<span style="display:inline-flex;align-items:center;justify-content:center;width:10px;min-width:10px;font-size:10px;line-height:1;margin-right:4px;">'+_cs_symbolForLevel(lvl)+'</span>'+
+                    k.k+
+                '</span>';
+            }).join('')+'</div>'+
         '</div>';
     }).join("");
     return cs_hd(1,"Feasibility screening",
-        "Based on your farm's agro-climatic zone, season, soil type, temperature range, and water availability, crops are ranked by suitability score (0–100). ✓ = parameter met, ✗ = not met. Your agronomic knowledge matters — you may select any crop regardless of score.")+
-        '<div style="font-size:12px;color:#2a3a1a;margin-bottom:9px">'+CS_CROPS.length+' crops found — ranked by suitability score</div>'+
+        "Based on your farm's agro-climatic zone, season, soil type, temperature range, and water availability, crops are ranked by suitability score (0–100). Parameter chips show 5-level satisfaction (1=lowest, 5=highest). Your agronomic knowledge matters — you may select any crop regardless of score.")+
+        '<div style="font-size:12px;color:#2a3a1a;margin-bottom:9px">'+TEMP_CROPS.length+' crops found — ranked by suitability score</div>'+
         '<div class="cs-cgrid">'+cards+'</div>'+
         '<div class="cs-sf"><span class="cs-fn"></span>'+
         '<button class="cs-btn pri" onclick="cs_next()">Proceed to crop selection →</button></div>';
