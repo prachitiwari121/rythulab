@@ -1,0 +1,109 @@
+Parameter,Arecanut,Cocoa,Coffee,Tea,Pepper,Cloves,Betel Leaf,Cardamom
+Crop Common Name,Arecanut,Cocoa,Coffee,Tea,Pepper,Cloves,Betel Leaf,Cardamom
+Crop Scientific Name,Areca catechu,Theobroma cacao,Coffea spp.,Camellia sinensis,Piper nigrum,Syzygium aromaticum,Piper betle,Elettaria cardamomum
+Crop Family Name,Arecaceae,Malvaceae,Rubiaceae,Theaceae,Piperaceae,Myrtaceae,Piperaceae,Zingiberaceae
+Crop Functional Group,Plantation / Perennial C3,Plantation / Perennial C3,Plantation / Perennial C3,Plantation / Perennial C3,Spice / Perennial C3,Spice / Perennial C3,Spice / Climber C3,Spice / Perennial C3
+Crop Height Meters (Value),15.0 - 25.0 m,4.0 - 8.0 m,3.0 - 6.0 m,1.0 - 1.5 m (Pruned),3.0 - 10.0 m (Climber),8.0 - 12.0 m,2.0 - 5.0 m (Climber),2.0 - 4.0 m
+"Crop Height Class (Extra Low: <0.3 m (groundcover, herbs)
+Low: 0.3–1.0 m (annuals, small shrubs)
+Medium Low: 1.0–3.0 m (bushes, small trees)
+Medium: 3.0–8.0 m (medium trees like mango, guava)
+Tall: 8.0–20 m (large trees: neem, teak)
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Very Tall,Medium,Medium,Medium Low,Medium to Tall,Tall,Medium Low,Medium Low to Medium
+"Canopy density (Very Sparse: <20% cover
+Sparse: 20-40%
+Medium: 40-70%
+Dense: 70-90%
+Very Dense: >90%)",Sparse,Dense,Dense,Very Dense,Dense,Very Dense,Dense,Dense
+Canopy Spread  Meters (Value),2.0 - 3.5 m,4.0 - 6.0 m,3.0 - 4.5 m,1.0 - 2.0 m,1.0 - 2.0 m,4.0 - 6.0 m,0.5 - 1.5 m,1.5 - 3.0 m
+"Canopy Spread (Very Narrow: <1 m
+Narrow: 1-3 m
+Medium: 3-6 m
+Wide: 6-10 m
+Very Wide: >10 m)",Narrow,Medium,Medium,Narrow,Narrow,Medium,Narrow,Narrow
+"Growth Habit (Erect, semi-erect, bushy, prostrate, climbing, Trees: Spreading, Weeping, Columnar, Round-headed, Umbrella-shaped)",Columnar / Palm,Erect / Branching,Erect / Shrubby,Bushy,Climbing,Erect / Pyramidal,Climbing,Erect / Tufted
+"Root Depth Class (Very Shallow: <20 cm
+Shallow: 20–50 cm
+Medium: 50–100 cm
+Deep: 1–3 m
+Very Deep: >3 m (deep taproots: teak))",Medium to Deep,Medium to Deep,Deep,Deep,Medium to Deep,Deep,Shallow to Medium,Medium
+"Root Spread (Narrow: <2 m
+Medium: 2–5 m
+Wide: 5–10 m
+Very Wide: >10 m)",Narrow,Medium,Medium,Medium,Narrow,Medium,Narrow,Narrow
+Growth Duration Days,Perennial,Perennial,Perennial,Perennial,Perennial,Perennial,Perennial,Perennial
+"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Long,Long,Long,Long,Long,Long,Medium,Long
+Water Demand Value (Numeric (mm/Season/Hectare)),1500 - 3000,1200 - 2500,1500 - 2500,1500 - 3000,2000 - 3500,1500 - 2500,1500 - 2500,1500 - 3500
+"Water Demand class (Low (<400 mm), Medium (400–800 mm), High (800–1200 mm), Very High (>1200 mm))",High,High,High,Very High,Very High,High,High,Very High
+Nitrogen Demand Value (Numeric (kg/ha)),100 - 150,100 - 150,120 - 160,150 - 300,100 - 150,100 - 150,150 - 200,75 - 125
+"Nitrogen Demand Class (Low, Medium, High)",High,High,High,High,High,High,High,Medium
+Phosphorus Demand Value (Numeric (kg/ha)),40 - 60,40 - 60,60 - 90,40 - 80,40 - 60,40 - 60,80 - 120,50 - 75
+"Phosphorus Demand Class (Low, Medium, High)",Medium,Medium,High,Medium,Medium,Medium,High,Medium
+Potasium Demand Value (Numeric (kg/ha)),140 - 200,100 - 150,120 - 160,100 - 150,140 - 200,100 - 150,100 - 150,150 - 250
+"Potasium Demand Class (Low, Medium, High)",High,High,High,High,High,High,High,High
+"Calcium Demand Class (Low, Medium, High)",High,High,High,High,High,High,High,High
+Min pH (Numeric),5.0,6.0,5.0,4.5,5.0,4.5,6.0,5.0
+Max pH (Numeric),7.5,7.5,6.5,5.5,6.5,6.0,7.5,6.5
+"Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam, Lateritic","Loam, Alluvial","Loam, Sandy Loam","Loam, Sandy Loam","Loam, Red Soil","Loam, Red Soil","Loam, Alluvial","Loam, Red Soil"
+Min Soil Depth (Numeric (cm)),60,60,60,60,60,60,60,60
+Max Slope (Numeric (%)),15,20,15,15,15,20,10,15
+"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat,Moderate to Steep,Moderate to Steep,Moderate to Steep,Moderate to Steep,Flat,Moderate to Steep
+All Critical Mineral Names and Their Min Required Conc,"N, P, K, Mg, Zn, B","N, P, K, Mg, Zn","N, P, K, Mg, Zn, B","N, P, K, Mg, S, Zn","N, P, K, Mg, Zn","N, P, K, Mg","N, P, K, Mg","N, P, K, Mg, Zn, B"
+Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No
+"Sensitivity to Nitrogen (Low, Medium, High)",High,Medium,Medium,Low,High,Low,High,Medium
+"Sensitivity to Phosphorus (Low, Medium, High)",High,Medium,Medium,Low,High,Low,High,Medium
+"Sensitivity to Potassium (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Low,Low,High
+"Sensitivity to Organic Carbon (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Low,Medium,High
+"Sensitivity to pH (Low, Medium, High)",Low,Medium,Medium,Medium,Low,Low,Medium,Medium
+"Sensitivity to EC (Low, Medium, High)",Low,Low,Low,Low,Low,Low,Medium,Medium
+"Sensitivity to Texture (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Low,Medium,High
+"Sensitivity to Depth (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Low,Medium,High
+"Sensitivity to Water Holding Capacity (Low, Medium, High)",High,High,High,High,High,High,High,High
+"Sensitivity to Compaction (Low, Medium, High)",High,High,High,High,High,High,High,High
+"Sensitivity to Drainage (Low, Medium, High)",Good,Good,Good,Good,Good,Good,Good,Good
+"Sensitivity to Erosion (Low, Medium, High)",Medium,High,High,High,High,High,High,High
+"Sensitivity to Groundwater Depth (Low, Medium, High)",Medium,High,High,High,High,High,High,High
+"Sensitivity to Irrigation (Low, Medium, High)",Assured,Assured,Assured,Assured,Assured,Assured,Assured,Assured
+"Sensitivity to Rain Relaibility (Low, Medium, High)",High,High,High,High,High,High,High,High
+"Sensitivity to Temperature (Low, Medium, High)",Medium,Low,Medium,Medium,Medium,Medium,Low,Medium
+"Sensitivity to Heat Days (Low, Medium, High)",High,Low,High,High,High,High,Low,High
+"Sensitivity to Frost (Low, Medium, High)",Medium,Low,Medium,High,Low,Medium,Low,Low
+"Sensitivity to Wind (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Medium,High,Medium
+"Sensitivity to Bio Index (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Medium,Medium,Medium
+"Sensitivity to Pest Pressure (Low, Medium, High)",High,High,High,High,High,High,Medium,High
+"Sensitivity to Earthworms Count (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Medium,Medium,Medium
+"Sensitivity to Slope (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Medium,Medium,Medium
+"Sensitivity to Flood Risk (Low, Medium, High)",High,High,High,High,High,High,Medium,High
+"Sensitivity to Drought Risk (Low, Medium, High)",High,Low,Low,Low,High,Low,Low,High
+"Sensitivity to Calcium (Low, Medium, High)",Low,High,High,Very High,Low,High,Medium,Low
+"Sensitivity to Bulk Density (Low, Medium, High)",High,Low,Low,Low,High,Low,Low,High
+Threshold Level of Nitrogen Kg/ha (Range),100-150,100-150,120-160,150-300,100-150,100-150,150-200,75-125
+Threshold Level of Phosphorus Kg/ha (Range),40-60,40-60,60-90,40-80,40-60,40-60,80-120,50-75
+Threshold Level of Potassium Kg/ha (Range),140-200,100-150,120-160,100-150,140-200,100-150,100-150,150-250
+Threshold Level of Organic Carbon % (Range),0.8 - 1.5%,1.0 - 2.0%,1.0 - 2.5%,1.5 - 3.0%,1.0 - 2.0%,1.0 - 2.5%,1.0 - 2.0%,1.5 - 3.5%
+Threshold Level of pH (Range),5.0 - 7.5,6.0 - 7.5,5.0 - 6.5,4.5 - 5.5,5.0 - 6.5,4.5 - 6.0,6.0 - 7.5,5.0 - 6.5
+Threshold Level of Electrical Conductivity ds/m (Range),< 1.5 ds/m,< 1.2 ds/m,< 1.2 ds/m,< 1.0 ds/m,< 1.2 ds/m,< 1.5 ds/m,< 1.2 ds/m,< 1.0 ds/m
+"Soil Texture (Clay,Loam,SandyLoam,Sandy,RedSoil,BlackCotton)","Loam, RedSoil, Lateritic","Loam, Alluvial, RedSoil","Loam, RedSoil, Lateritic","Loam, RedSoil, Lateritic, SiltLoam","Loam, RedSoil, Lateritic","Loam, RedSoil, Lateritic, SiltLoam","Loam, Alluvial, RedSoil","Loam, RedSoil, Lateritic, SiltLoam"
+Effective rooting depth,60 - 150 cm,60 - 120 cm,1.0 - 2.0 m,1.5 - 3.0 m,60 - 150 cm,1.0 - 2.5 m,30 - 60 cm,45 - 90 cm
+Threshold Level of Water Holding Capacity % (Range),45 - 65%,50 - 70%,50 - 70%,55 - 75%,50 - 70%,45 - 65%,55 - 75%,60 - 80%
+"Suitability to Compact soils (Low, Moderate, High)",Low,Low,Low,Low,Low,Low,Low,Low
+"Preferred drainage situation (Poor, Moderate, Good, Excessive)",Good,Good,Good,Good,Good,Good,Good,Good
+"Crop suitability under erosion-risk soils (low, moderate, high)",low,low,low,low,low,low,low,low
+Threshold level of Groundwater Depth meters (Range),> 2.0 m,> 1.5 m,> 2.0 m,> 2.5 m,> 1.5 m,> 2.5 m,> 1.0 m,> 1.5 m
+"Irrigation requirement (None, Protective, Assured)",Assured,Assured,Assured,Assured,Assured,Assured,Assured,Assured
+"Rain Reliability (Low, Medium, High)",High,High,High,High,High,High,High,High
+Threshold Level of Temperature °C (Range),20 - 35 °C,20 - 32 °C,15 - 28 °C,15 - 30 °C,20 - 32 °C,20 - 32 °C,15 - 30 °C,15 - 28 °C
+"Number of consecutive heat days crop can tolerate (i.e., temp >40°C)",5+ days,3 - 5 days,3+ days,3+ days,5+ days,5+ days,3+ days,3+ days
+"Crop suitability under frost risk (Low, Moderate, High)",Low,Low,Medium,Low,Low,Low,Low,Low
+Threshold level of wind speed kmph (Range),< 35 kmph,< 20 kmph,< 25 kmph,< 30 kmph,< 25 kmph,< 25 kmph,< 20 kmph,< 20 kmph
+"Required Biological Index i.e.,Soil microbiome activity (Low,Medium,High)",High,Medium,High,High,High,High,Medium,High
+"Pest Pressure Tolerance (Low,Medium,High,VeryHigh)",High,Medium,High,High,High,High,Medium,High
+Preferred slope % (Range),0 - 10%,0 - 5%,5 - 25%,10 - 35%,5 - 15%,5 - 20%,0 - 5%,10 - 35%
+"Crop suitability to Flood Risk Soils (low, Medium, high)",low,low,low,low,low,low,low,low
+"Crop suitability to Drought Risk Soils (low, Medium, high)",High,Low,High,High,High,High,Low,High
+Threshold level of Calcium meq/100g (Range),10 - 25,2 - 5,2 - 5,2 - 5,2 - 5,5 - 15,2 - 5,2 - 5
+Threshold level of Bulk Density g/cc (Range),1.2 - 1.4,1.2 - 1.4,1.2 - 1.4,1.2 - 1.4,1.2 - 1.4,1.3 - 1.5,1.2 - 1.4,1.2 - 1.4
+"Mention 5 Major Pests and Severity (Low, Medium, High)","Mites (High), Inflorescence Caterpillar (High), Spindle Bug (Medium), Pentatomid Bug (Medium), Root Grub (Medium)","Tea Mosquito Bug (High), Mealybug (High), Stem Borer (Medium), Pod Borer (Medium), Aphids (Low)","Coffee White Stem Borer (High), Coffee Berry Borer (High), Mealybug (Medium), Green Scale (High), Shot Hole Borer (Medium)","Tea Mosquito Bug (High), Red Spider Mite (High), Thrips (Medium), Tea Tortrix (Medium), Shot Hole Borer (Medium)","Pollu Beetle (High), Top Shoot Borer (Medium), Leaf Gall Thrips (High), Scale Insects (Medium), Mealybug (Low)","Stem Borer (High), Scale Insects (Medium), Mealybug (Low), Termites (Low), Thrips (Low)","Root-knot Nematode (High), Aphids (Medium), Mealybug (Medium), Whitefly (Medium), Thrips (Low)","Thrips (High), Shoot and Capsule Borer (High), Root Borer (Medium), Whitefly (Medium), Aphids (Low)"
+"Mention 5 Major Diseases and Severity (Low, Medium, High)","Fruit Rot / Mahali (High), Yellow Leaf Disease (High), Bud Rot (Medium), Ganoderma / Foot Rot (Medium), Stem Bleeding (Low)","Black Pod (High), Stem Canker (Medium), Vascular Streak Dieback (High), Witches Broom (Medium), Root Rot (Low)","Coffee Leaf Rust (High), Black Rot (Medium), Root Rot (Medium), Cercospora Leaf Spot (Low), Dieback (Medium)","Blister Blight (High), Black Rot (Medium), Grey Blight (Medium), Red Rust (Low), Root Rot (High)","Foot Rot / Quick Wilt (High), Slow Wilt (High), Pollu Disease (Medium), Stunt Disease (Medium), Phyllody (Low)","Dieback (High), Leaf Spot (Medium), Leaf Rot (Medium), Seedling Wilt (Low), Root Rot (Low)","Foot Rot / Wilt (High), Leaf Spot (High), Anthracnose (Medium), Bacterial Leaf Spot (High), Stem Rot (Medium)","Katte / Mosaic Virus (High), Capsule Rot / Azhukal (High), Rhizome Rot (High), Chenthal (Medium), Damping Off (Medium)"
+Is trap Crop for,No,No,No,No,No,No,No,No
+Nutrient (Mineral) Deficiencies and Their Associated Syndrome,Mg: Interveinal chlorosis of older leaves; Zn: Rosetting/small leaves; N: Pale green foliage,Zn: Small/sickle shaped leaves; N: Yellowing of leaves; K: Marginal necrosis,Zn: Rosetting/small leaves; Mg: Interveinal chlorosis; B: Tip death/poor fruit set,N: Yellowing; K: Marginal scorching; Zn: Sickle shaped leaves; Mg: Chlorosis,N: Yellowing of older leaves; Mg: Interveinal chlorosis; K: Tip burn,N: Pale leaves; Mg: Yellowing,"N: Stunted growth, pale leaves; K: Leaf margin scorching; Mg: Interveinal yellowing",N: Yellowing; K: Leaf tip/edge necrosis; Zn: Reduced leaf size/rosetting; B: Poor capsule setting

@@ -1,0 +1,108 @@
+CropID,S.I,Sub-Category,Crop Name
+CRP0001,1,Cereals,Paddy/Rice
+CRP0002,2,Cereals,Maize
+CRP0003,3,Cereals,Jowar (Sorghum)
+CRP0004,4,Cereals,Bajra (Pearl Millet)
+CRP0005,5,Cereals,Ragi (Finger Millet)
+CRP0006,6,Cereals,Wheat
+CRP0007,7,Minor Millets,Foxtail Millet (Korralu)
+CRP0008,8,Minor Millets,Little Millet (Samalu)
+CRP0009,9,Minor Millets,Barnyard Millet (Udalu)
+CRP0010,10,Minor Millets,Proso Millet (Varigalu)
+CRP0011,11,Minor Millets,Kodo Millet (Paspalum scrobiculatum)
+CRP0012,12,Minor Millets,Browntop Millet (Urochloa ramosa / Brachiaria ramosa)
+CRP0013,13,Pulses,Red Gram (Pigeon Pea)
+CRP0014,14,Pulses,Black Gram (Urad)
+CRP0015,15,Pulses,Green Gram (Moong)
+CRP0016,16,Pulses,Horse Gram
+CRP0017,17,Pulses,Cowpea
+CRP0018,18,Pulses,Broad Beans (Faba Beans) (Vicia faba)
+CRP0019,19,Pulses,Chickpeas (Garbanzo Beans) (Cicer arietinum)
+CRP0020,20,Pulses,Lentils (Lens culinaris)
+CRP0021,21,Pulses,Cluster Bean
+CRP0022,22,Pulses,Field Bean
+CRP0023,23,Oilseeds,Groundnut
+CRP0024,24,Oilseeds,Sunflower
+CRP0025,25,Oilseeds,Castor
+CRP0026,26,Oilseeds,Mustard
+CRP0027,27,Oilseeds,Oil Palm
+CRP0028,28,Oilseeds,Sesame
+CRP0029,29,Commercial,Cotton
+CRP0030,30,Commercial,Sugarcane
+CRP0031,31,Commercial,Turmeric
+CRP0032,32,Commercial,Ginger
+CRP0033,33,Commercial,Garlic
+CRP0034,34,Commercial,Chilli (Commercial)
+CRP0035,35,Fodder,Napier Grass
+CRP0036,36,Fodder,Hedge Lucerne (Desmanthus)
+CRP0037,37,Fodder,Stylosanthes
+CRP0038,38,GLV,Spinach
+CRP0039,39,GLV,Amaranth
+CRP0040,40,GLV,Fenugreek
+CRP0041,41,GLV,Lettuce
+CRP0042,42,GLV,Cabbage
+CRP0043,43,GLV,Cauliflower
+CRP0044,44,GLV,Coriander
+CRP0045,45,GLV,Curry leaf
+CRP0046,46,GLV,Gogu
+CRP0047,47,GLV,Drumstick (Moringa)
+CRP0048,48,Creepers,Bitter Gourd
+CRP0049,49,Creepers,Snake Gourd
+CRP0050,50,Gourds,Bottle Gourd
+CRP0051,51,Gourds,Ridge Gourd
+CRP0052,52,Gourds,Pumpkin
+CRP0053,53,Melons,Watermelon
+CRP0054,54,Melons,Beetroot
+CRP0055,55,Melons,Radish
+CRP0056,56,Melons,Carrot
+CRP0057,57,Melons,Muskmelon
+CRP0058,58,Solanaceae,Tomato
+CRP0059,59,Solanaceae,Brinjal (Eggplant)
+CRP0060,60,Solanaceae,Chilli
+CRP0061,61,Solanaceae,Potato
+CRP0062,62,Vegetables,Okra
+CRP0063,63,Vegetables,Onion
+CRP0064,64,Vegetables,Elephant Yam
+CRP0065,65,Fruit Crops,Mango
+CRP0066,66,Fruit Crops,Citrus (various)
+CRP0067,67,Fruit Crops,Guava
+CRP0068,68,Fruit Crops,Papaya
+CRP0069,69,Fruit Crops,Coconut
+CRP0070,70,Fruit Crops,Cashew
+CRP0071,71,Fruit Crops,Banana
+CRP0072,72,Fruit Crops,Jackfruit
+CRP0073,73,Fruit Crops,Custard Apple
+CRP0074,74,Fruit Crops,Pomegranate
+CRP0075,75,Fruit Crops,Amla (Indian Gooseberry)
+CRP0076,76,Plantation,Areca Nut
+CRP0077,77,Plantation,Cocoa
+CRP0078,78,Plantation,Coffee
+CRP0079,79,Plantation,Tea
+CRP0080,80,Spices,Pepper
+CRP0081,81,Spices,cloves
+CRP0082,82,Spices,Betel Leaf
+CRP0083,83,Spices,Cardamom
+CRP0084,84,Medicinal,Ashwagandha
+CRP0085,85,Medicinal,Tulsi (Holy Basil)
+CRP0086,86,Medicinal,Neem
+CRP0087,87,Medicinal,Vetiver
+CRP0088,88,Flowers,Marigold(African/French)
+CRP0089,89,Flowers,Chrysanthemum
+CRP0090,90,Flowers,Rose
+CRP0091,91,Flowers,Crossandra (Kanakambaram)
+CRP0092,92,Flowers,Tuberose (Sugandhiraja)
+CRP0093,93,Flowers,Gaillardia (Blanket Flower)
+CRP0094,94,Flowers,Cock's Comb (Celosia)
+CRP0095,95,Flowers,China Aster
+CRP0096,96,Flowers,Lotus
+CRP0097,97,Canopy Trees,Teak
+CRP0098,98,Canopy Trees,Neem
+CRP0099,99,Canopy Trees,Pongamia (Kanuga)
+CRP0100,100,Canopy Trees,Tamarind
+CRP0101,101,Canopy Trees,Indian Rosewood (Sheesham)
+CRP0102,102,Sub-Canopy,Gliricidia
+CRP0103,103,Sub-Canopy,Silver Oak (Grevillea)
+CRP0104,104,Sub-Canopy,Bamboo
+CRP0105,105,Sub-Canopy,Sesbania
+CRP0106,106,Pioneer,Calliandra
+CRP0107,107,Pioneer,Vitex (Lagundi)

@@ -1,0 +1,19 @@
+Crop,Alluvial/Loam,Alluvial/SiltLoam,Alluvial/ClayLoam,Alluvial/SandyLoam,Black/Clay,Black/ClayLoam,Black/SiltClay,RedAndYellow/SandyLoam,RedAndYellow/Loam,RedAndYellow/ClayLoam,Laterite/Loam,Laterite/ClayLoam,Laterite/SandyClayLoam,Arid/Sandy,Arid/LoamySand,Arid/SandyLoam,ForestMount/Loam,ForestMount/SiltLoam,ForestMount/ClayLoam,Coastal/Sandy,Saline-Alkali/ClayLoam
+Paddy,P,P,P,H,M,M,M,T,T,T,M,M,M,T,T,T,M,M,M,T,M
+Cotton,M,M,M,H,P,P,P,H,M,H,T,T,T,M,M,M,T,T,T,T,T
+Groundnut,H,M,T,P,M,M,M,P,H,M,M,M,H,H,P,P,M,M,M,M,T
+Sugarcane,P,P,P,M,H,H,H,T,T,T,T,T,T,T,T,T,T,T,T,T,T
+Millets,H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+Pulses,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+Chilli,M,M,M,H,P,P,P,M,M,M,T,T,T,M,M,M,T,T,T,T,T
+Banana,P,P,P,M,M,M,M,T,T,T,T,T,T,T,T,T,T,T,T,T,T
+Mango,H,H,H,M,M,M,M,M,H,M,M,M,M,T,T,T,P,H,M,H,T
+Cashew,M,M,M,M,T,T,T,M,M,M,P,P,P,M,M,M,P,M,M,H,T
+Tobacco,H,M,M,P,H,P,H,M,M,H,T,T,T,M,M,M,T,T,T,T,T
+Maize,H,H,M,P,M,M,M,H,P,H,M,M,M,M,H,H,M,H,M,M,M
+Turmeric,M,M,M,M,M,M,M,M,M,M,H,H,M,T,T,T,H,P,H,T,T
+Sunflower,M,M,M,H,H,H,H,P,H,M,M,M,M,H,P,H,M,M,M,M,T
+Bengal Gram,M,M,M,H,H,H,H,P,P,H,M,M,M,M,M,H,M,M,M,M,T
+Black Gram,H,H,M,H,P,P,P,H,H,H,M,M,M,M,M,H,H,M,H,M,T
+Green Gram,H,H,M,H,P,P,H,P,P,H,M,M,M,M,H,P,H,M,H,M,T
+Coconut,M,M,M,H,T,T,T,M,M,M,M,M,M,T,T,T,H,M,P,P,T
