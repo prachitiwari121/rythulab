@@ -1,4 +1,4 @@
-Parameter,Citrus,Mango,Guava,Papaya,Banana,Cashew,Coconut,Jackfruit,Custard Apple,Pomegranate,Amla
+﻿Parameter,Citrus,Mango,Guava,Papaya,Banana,Cashew,Coconut,Jackfruit,Custard Apple,Pomegranate,Amla
 Crop Common Name,Citrus,Mango,Guava,Papaya,Banana,Cashew,Coconut,Jackfruit,Custard Apple,Pomegranate,Amla
 Crop Scientific Name,Citrus spp.,Mangifera indica,Psidium guajava,Carica papaya,Musa spp.,Anacardium occidentale,Cocos nucifera,Artocarpus heterophyllus,Annona squamosa,Punica granatum,Phyllanthus emblica
 Crop Family Name,Rutaceae,Anacardiaceae,Myrtaceae,Caricaceae,Musaceae,Anacardiaceae,Arecaceae,Moraceae,Annonaceae,Lythraceae,Phyllanthaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium,Tall,Medium,Medium Low to Medium,Medium Low to Medium,Medium to Tall,Very Tall,Tall,Medium,Medium,Medium to Tall
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium,Tall,Medium,Medium,Medium,Tall,Very Tall,Tall,Medium,Medium,Tall
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -26,7 +26,7 @@ Very Wide: >10 m)",Medium,Wide,Medium,Narrow,Narrow,Wide,Medium,Wide,Medium,Medi
 Shallow: 20–50 cm
 Medium: 50–100 cm
 Deep: 1–3 m
-Very Deep: >3 m (deep taproots: teak))",Deep,Very Deep,Medium to Deep,Medium,Shallow to Medium,Deep,Deep,Very Deep,Medium,Deep,Deep
+Very Deep: >3 m (deep taproots: teak))",Deep,Very Deep,Deep,Medium,Medium,Deep,Deep,Very Deep,Medium,Deep,Deep
 "Root Spread (Narrow: <2 m
 Medium: 2–5 m
 Wide: 5–10 m
@@ -47,7 +47,7 @@ Max pH (Numeric),7.5,7.5,8.2,7.0,7.5,6.5,8.0,7.5,8.5,8.0,8.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Loam, Sandy Loam, Red Soil","Loam, Sandy Loam","Loam, Sandy Loam","Loam, Clay Loam","Sandy Loam, Red Soil","Sandy Loam, Alluvial","Loam, Sandy Loam","Sandy Loam, Loam","Sandy Loam, Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),60,75,45,45,60,60,100,75,45,45,60
 Max Slope (Numeric (%)),15,20,15,10,10,20,15,20,15,15,20
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat to Moderate,Flat to Moderate,Flat,Flat,Moderate to Steep,Flat,Flat to Moderate,Moderate to Steep,Flat to Moderate,Moderate to Steep
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Moderate,Moderate,Flat,Flat,Steep,Flat,Moderate,Steep,Moderate,Steep
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Zn, Fe, B, Mg","N, P, K, Zn, B, Cu","N, P, K, Zn, B","N, P, K, B, Zn","N, P, K, Mg, S, Zn, Fe, B","N, P, K, S, Zn","N, P, K, Mg, Cl, B","N, P, K","N, P, K, Zn, Fe","N, P, K, Ca, B, Zn, Mg","N, P, K, B"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",Medium,Medium,Medium,High,High,Low,High,Medium,Low,Medium,Low

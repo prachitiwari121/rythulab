@@ -1,4 +1,4 @@
-Parameter,Groundnut,Sunflower,Castor,Mustard,Sesame
+﻿Parameter,Groundnut,Sunflower,Castor,Mustard,Sesame
 Crop Common Name,Groundnut,Sunflower,Castor,Mustard,Sesame
 Crop Scientific Name,Arachis hypogaea,Helianthus annuus,Ricinus communis,Brassica juncea,Sesamum indicum
 Crop Family Name,Fabaceae,Asteraceae,Euphorbiaceae,Brassicaceae,Pedaliaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Low,Medium Low,Medium Low to Medium,Low to Medium Low,Low to Medium Low
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Low,Medium Low,Medium,Medium Low,Medium Low
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -47,7 +47,7 @@ Max pH (Numeric),7.5,8.0,8.0,7.5,7.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Sandy Loam, Loam","Loam, Clay Loam","Sandy Loam, Loam","Loam, Clay Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),45,60,60,45,40
 Max Slope (Numeric (%)),10,10,15,10,15
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat to Moderate,Flat to Moderate,Flat to Moderate,Flat to Moderate
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Moderate,Moderate,Moderate,Moderate
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Ca, S, B, Zn","N, P, K, B, S, Zn","N, P, K, S, Zn, Mg","N, P, K, S, B, Zn","N, P, K, S, Zn"
 Standing Water Requirement (Yes/No),No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",Low,High,Medium,High,Low

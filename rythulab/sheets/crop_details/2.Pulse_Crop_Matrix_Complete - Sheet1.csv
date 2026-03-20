@@ -1,4 +1,4 @@
-Parameter,Red Gram,Black Gram,Green Gram,Horse Gram,Cowpea,Chickpeas,Broad Beans,Lentils,Cluster Bean,Field Bean
+﻿Parameter,Red Gram,Black Gram,Green Gram,Horse Gram,Cowpea,Chickpeas,Broad Beans,Lentils,Cluster Bean,Field Bean
 Crop Common Name,Red Gram (Pigeon Pea),Black Gram (Urad),Green Gram (Moong),Horse Gram,Cowpea,Chickpeas,Broad Beans,Lentils,Cluster Bean,Field Bean
 Crop Scientific Name,Cajanus cajan,Vigna mungo,Vigna radiata,Macrotyloma uniflorum,Vigna unguiculata,Cicer arietinum,Vicia faba,Lens culinaris,Cyamopsis tetragonoloba,Lablab purpureus
 Crop Family Name,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae,Fabaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium Low to Medium,Extra Low,Low,Low,Low,Low,Low to Medium Low,Extra Low,Medium Low,Low to Medium
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium,Extra Low,Low,Low,Low,Low,Medium Low,Extra Low,Medium Low,Medium
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -32,7 +32,7 @@ Medium: 2–5 m
 Wide: 5–10 m
 Very Wide: >10 m)",Medium,Narrow,Narrow,Narrow,Narrow,Narrow,Narrow,Narrow,Narrow,Narrow
 Growth Duration Days,150 - 180,70 - 90,65 - 85,120 - 150,60 - 110,90 - 120,100 - 150,110 - 130,90 - 120,120 - 180
-"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Long,Short,Short,Medium,Short to Medium,Medium,Medium to Long,Medium,Medium,Long
+"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Long,Short,Short,Medium,Medium,Medium,Long,Medium,Medium,Long
 Water Demand Value (Numeric (mm/Season/Hectare)),500 - 700,300 - 450,250 - 400,200 - 350,300 - 500,250 - 400,400 - 600,250 - 400,300 - 450,400 - 600
 "Water Demand class (Low (<400 mm), Medium (400–800 mm), High (800–1200 mm), Very High (>1200 mm))",Medium,Low,Low,Low,Low,Low,Medium,Low,Low,Medium
 Nitrogen Demand Value (Numeric (kg/ha)),20 - 40,20 - 25,15 - 20,10 - 20,20 - 30,20 - 30,25 - 40,20 - 30,20 - 30,20 - 30
@@ -47,7 +47,7 @@ Max pH (Numeric),7.5,7.5,7.5,8.0,7.5,8.5,7.5,8.0,8.5,7.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Loam, Clay Loam","Sandy Loam, Loam","Sandy Loam, Red Soil","Sandy Loam, Loam","Loam, Clay Loam","Loam, Clay Loam","Loam, Clay Loam","Sandy Loam, Loam","Loam, Sandy Loam"
 Min Soil Depth (Numeric (cm)),60,40,40,30,45,45,50,40,45,45
 Max Slope (Numeric (%)),15,10,10,20,15,10,10,10,15,15
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat,Flat,Moderate to Steep,Flat to Moderate,Flat to Moderate,Flat,Flat to Moderate,Flat to Moderate,Flat to Moderate
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Flat,Flat,Steep,Moderate,Moderate,Flat,Moderate,Moderate,Moderate
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, S, Zn, B","N, P, K, S, Zn","N, P, K, S, Fe","N, P, K","N, P, K, S, Zn","N, P, K, S, Zn, Mo","N, P, K, S, Zn","N, P, K, S, Mo","N, P, K, Zn","N, P, K, Zn"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",Low,Low,Low,Low,Low,Low,Low,Low,Low,Low

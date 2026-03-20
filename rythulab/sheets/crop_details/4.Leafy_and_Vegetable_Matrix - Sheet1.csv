@@ -1,4 +1,4 @@
-Parameter,Spinach,Amaranthus,Fenugreek,Drumstick,Coriander,Curry Leaf,Lettuce,Cabbage,Cauliflower,Gongura
+﻿Parameter,Spinach,Amaranthus,Fenugreek,Drumstick,Coriander,Curry Leaf,Lettuce,Cabbage,Cauliflower,Gongura
 Crop Common Name,Spinach,Amaranthus,Fenugreek,Drumstick,Coriander,Curry Leaf,Lettuce,Cabbage,Cauliflower,Gongura
 Crop Scientific Name,Spinacia oleracea,Amaranthus spp.,Trigonella foenum-graecum,Moringa oleifera,Coriandrum sativum,Murraya koenigii,Lactuca sativa,Brassica oleracea var. capitata,Brassica oleracea var. botrytis,Hibiscus sabdariffa
 Crop Family Name,Amaranthaceae,Amaranthaceae,Fabaceae,Moringaceae,Apiaceae,Rutaceae,Asteraceae,Brassicaceae,Brassicaceae,Malvaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Extra Low,Low,Low,Medium,Low,Medium Low to Medium,Extra Low,Low,Low,Medium Low
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Extra Low,Low,Low,Medium,Low,Medium,Extra Low,Low,Low,Medium Low
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -47,7 +47,7 @@ Max pH (Numeric),7.0,7.5,7.5,8.5,7.5,7.5,7.0,7.5,7.5,7.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Sandy Loam, Loam","Loam, Sandy Loam","Sandy Loam, Loam","Loam, Sandy Loam","Loam, Sandy Loam","Loam, Sandy Loam","Loam, Clay Loam","Loam, Clay Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),30,30,40,60,40,60,40,60,60,45
 Max Slope (Numeric (%)),10,15,10,20,10,20,5,10,10,15
-"Conducive Slope Class (Steep, moderate, Flat)",Flat,Flat to Moderate,Flat,Flat to Moderate,Flat,Flat to Moderate,Flat,Flat to Moderate,Flat to Moderate,Flat to Moderate
+"Conducive Slope Class (Steep, moderate, Flat)",Flat,Moderate,Flat,Moderate,Flat,Moderate,Flat,Moderate,Moderate,Moderate
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Fe, Mg, B","N, P, K, Ca, Mg","N, P, K, S","N, P, K, S, Zn, B","N, P, K, S","N, P, K, Mg, Fe","N, P, K, Ca, Mg","N, P, K, S, B, Ca, Mo","N, P, K, S, B, Ca, Mo","N, P, K"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",Medium,Low,Low,Medium,Low,Medium,High,High,High,Low

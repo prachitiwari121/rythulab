@@ -1,4 +1,4 @@
-Parameter,Tomato,Brinjal,Potato,Okra,Onion,Elephant Yam
+﻿Parameter,Tomato,Brinjal,Potato,Okra,Onion,Elephant Yam
 Crop Common Name,Tomato,Brinjal,Potato,Okra,Onion,Elephant Yam
 Crop Scientific Name,Solanum lycopersicum,Solanum melongena,Solanum tuberosum,Abelmoschus esculentus,Allium cepa,Amorphophallus paeoniifolius
 Crop Family Name,Solanaceae,Solanaceae,Solanaceae,Malvaceae,Amaryllidaceae,Araceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Low to Medium Low,Low to Medium Low,Low,Medium Low,Low,Low to Medium Low
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium Low,Medium Low,Low,Medium Low,Low,Medium Low
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -32,7 +32,7 @@ Medium: 2–5 m
 Wide: 5–10 m
 Very Wide: >10 m)",Narrow,Narrow,Narrow,Narrow,Narrow,Narrow
 Growth Duration Days,100 - 150,120 - 180,90 - 120,90 - 120,120 - 160,210 - 240
-"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Medium,Medium to Long,Medium,Medium,Medium,Long
+"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Medium,Long,Medium,Medium,Medium,Long
 Water Demand Value (Numeric (mm/Season/Hectare)),600 - 800,600 - 1000,450 - 600,500 - 700,400 - 600,1000 - 1500
 "Water Demand class (Low (<400 mm), Medium (400–800 mm), High (800–1200 mm), Very High (>1200 mm))",Medium,High,Medium,Medium,Medium,High
 Nitrogen Demand Value (Numeric (kg/ha)),100 - 120,100 - 150,120 - 150,80 - 100,100 - 120,80 - 120
@@ -47,7 +47,7 @@ Max pH (Numeric),7.0,7.0,6.5,7.5,7.5,7.0
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Loam, Clay Loam","Sandy Loam, Loam","Loam, Sandy Loam","Loam, Sandy Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),45,45,45,60,45,60
 Max Slope (Numeric (%)),10,10,10,15,10,20
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat to Moderate,Flat,Flat to Moderate,Flat,Flat to Moderate
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Moderate,Flat,Moderate,Flat,Moderate
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Ca, Mg, S, Zn, B","N, P, K, S, Mg, Zn","N, P, K, Mg, S, Mn, Zn, B","N, P, K, S, Mg, Zn","N, P, K, S, Zn, B","N, P, K, Mg, Fe"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",High,High,High,High,High,Medium

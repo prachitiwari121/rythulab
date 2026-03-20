@@ -1,4 +1,4 @@
-Parameter,Bitter Gourd,Snake Gourd,Bottle Gourd,Ridge Gourd,Pumpkin,Watermelon,Muskmelon,Beetroot,Radish,Carrot
+﻿Parameter,Bitter Gourd,Snake Gourd,Bottle Gourd,Ridge Gourd,Pumpkin,Watermelon,Muskmelon,Beetroot,Radish,Carrot
 Crop Common Name,Bitter Gourd,Snake Gourd,Bottle Gourd,Ridge Gourd,Pumpkin,Watermelon,Muskmelon,Beetroot,Radish,Carrot
 Crop Scientific Name,Momordica charantia,Trichosanthes cucumerina,Lagenaria siceraria,Luffa acutangula,Cucurbita moschata,Citrullus lanatus,Cucumis melo,Beta vulgaris,Raphanus sativus,Daucus carota
 Crop Family Name,Cucurbitaceae,Cucurbitaceae,Cucurbitaceae,Cucurbitaceae,Cucurbitaceae,Cucurbitaceae,Cucurbitaceae,Amaranthaceae,Brassicaceae,Apiaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Low to Medium Low,Medium Low,Medium Low to Medium,Medium Low,Low (prostrate),Low (prostrate),Low (prostrate),Low,Extra Low to Low,Low
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium Low,Medium Low,Medium,Medium Low,Low (prostrate),Low (prostrate),Low (prostrate),Low,Low,Low
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -47,7 +47,7 @@ Max pH (Numeric),7.0,7.0,7.0,7.5,7.5,7.0,7.5,7.0,7.5,7.0
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Sandy Loam, Loam","Sandy Loam, Loam","Sandy Loam, Loam","Sandy Loam, Loam","Sandy Loam, Loam","Sandy, Sandy Loam","Sandy Loam, Loam","Loam, Sandy Loam","Sandy Loam, Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),45,45,60,45,60,60,60,30,30,30
 Max Slope (Numeric (%)),10,10,15,10,20,20,15,10,10,10
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat to Moderate,Flat to Moderate,Flat to Moderate,Flat,Flat,Flat,Flat,Flat,Flat
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Moderate,Moderate,Moderate,Flat,Flat,Flat,Flat,Flat,Flat
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Ca, Mg, Zn","N, P, K, Ca, Mg","N, P, K, Ca, Mg","N, P, K, Ca, Mg","N, P, K, Ca, Mg, B","N, P, K, Ca, Mg, B","N, P, K, Ca, Mg, B","N, P, K, B, Mg, Na","N, P, K, S, B","N, P, K, Ca, Mg, B"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",Medium,Medium,Medium,Medium,Medium,Low,Low,Medium,Low,High

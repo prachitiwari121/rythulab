@@ -1,4 +1,4 @@
-Parameter,Arecanut,Cocoa,Coffee,Tea,Pepper,Cloves,Betel Leaf,Cardamom
+﻿Parameter,Arecanut,Cocoa,Coffee,Tea,Pepper,Cloves,Betel Leaf,Cardamom
 Crop Common Name,Arecanut,Cocoa,Coffee,Tea,Pepper,Cloves,Betel Leaf,Cardamom
 Crop Scientific Name,Areca catechu,Theobroma cacao,Coffea spp.,Camellia sinensis,Piper nigrum,Syzygium aromaticum,Piper betle,Elettaria cardamomum
 Crop Family Name,Arecaceae,Malvaceae,Rubiaceae,Theaceae,Piperaceae,Myrtaceae,Piperaceae,Zingiberaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Very Tall,Medium,Medium,Medium Low,Medium to Tall,Tall,Medium Low,Medium Low to Medium
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Very Tall,Medium,Medium,Medium Low,Tall,Tall,Medium Low,Medium
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -26,7 +26,7 @@ Very Wide: >10 m)",Narrow,Medium,Medium,Narrow,Narrow,Medium,Narrow,Narrow
 Shallow: 20–50 cm
 Medium: 50–100 cm
 Deep: 1–3 m
-Very Deep: >3 m (deep taproots: teak))",Medium to Deep,Medium to Deep,Deep,Deep,Medium to Deep,Deep,Shallow to Medium,Medium
+Very Deep: >3 m (deep taproots: teak))",Deep,Deep,Deep,Deep,Deep,Deep,Medium,Medium
 "Root Spread (Narrow: <2 m
 Medium: 2–5 m
 Wide: 5–10 m
@@ -47,7 +47,7 @@ Max pH (Numeric),7.5,7.5,6.5,5.5,6.5,6.0,7.5,6.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam, Lateritic","Loam, Alluvial","Loam, Sandy Loam","Loam, Sandy Loam","Loam, Red Soil","Loam, Red Soil","Loam, Alluvial","Loam, Red Soil"
 Min Soil Depth (Numeric (cm)),60,60,60,60,60,60,60,60
 Max Slope (Numeric (%)),15,20,15,15,15,20,10,15
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat,Moderate to Steep,Moderate to Steep,Moderate to Steep,Moderate to Steep,Flat,Moderate to Steep
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Flat,Steep,Steep,Steep,Steep,Flat,Steep
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, Mg, Zn, B","N, P, K, Mg, Zn","N, P, K, Mg, Zn, B","N, P, K, Mg, S, Zn","N, P, K, Mg, Zn","N, P, K, Mg","N, P, K, Mg","N, P, K, Mg, Zn, B"
 Standing Water Requirement (Yes/No),No,No,No,No,No,No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",High,Medium,Medium,Low,High,Low,High,Medium

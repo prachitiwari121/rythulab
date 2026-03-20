@@ -1,4 +1,4 @@
-Parameter,Napier Grass,Hedge Lucerne,Stylosanthes
+﻿Parameter,Napier Grass,Hedge Lucerne,Stylosanthes
 Crop Common Name,Napier Grass,Hedge Lucerne,Stylosanthes
 Crop Scientific Name,Pennisetum purpureum,Desmanthus virgatus,Stylosanthes hamata
 Crop Family Name,Poaceae,Fabaceae,Fabaceae
@@ -9,7 +9,7 @@ Low: 0.3–1.0 m (annuals, small shrubs)
 Medium Low: 1.0–3.0 m (bushes, small trees)
 Medium: 3.0–8.0 m (medium trees like mango, guava)
 Tall: 8.0–20 m (large trees: neem, teak)
-Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium Low,Low to Medium Low,Low
+Very Tall: >20 m (towering: coconut, tall eucalyptus))",Medium Low,Medium Low,Low
 "Canopy density (Very Sparse: <20% cover
 Sparse: 20-40%
 Medium: 40-70%
@@ -32,7 +32,7 @@ Medium: 2–5 m
 Wide: 5–10 m
 Very Wide: >10 m)",Medium,Medium,Narrow
 Growth Duration Days,Perennial,Perennial,Annual/Perennial
-"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Long,Long,Short to Medium
+"Growth Duration Class (Short (<90 days, Medium (90-150 Days), Long (>150 days))",Long,Long,Medium
 Water Demand Value (Numeric (mm/Season/Hectare)),1500 - 2500,600 - 1000,500 - 900
 "Water Demand class (Low (<400 mm), Medium (400–800 mm), High (800–1200 mm), Very High (>1200 mm))",Very High,Medium,Medium
 Nitrogen Demand Value (Numeric (kg/ha)),150 - 200,30 - 60,20 - 40
@@ -47,7 +47,7 @@ Max pH (Numeric),8.0,8.5,7.5
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Sandy Loam, Clay Loam","Sandy Loam, Red Soil"
 Min Soil Depth (Numeric (cm)),75,45,30
 Max Slope (Numeric (%)),10,15,20
-"Conducive Slope Class (Steep, moderate, Flat)",Flat to Moderate,Flat to Moderate,Moderate to Steep
+"Conducive Slope Class (Steep, moderate, Flat)",Moderate,Moderate,Steep
 All Critical Mineral Names and Their Min Required Conc,"N, P, K, S, Mg","N, P, K, Ca, S","N, P, K, Ca, S"
 Standing Water Requirement (Yes/No),No,No,No
 "Sensitivity to Nitrogen (Low, Medium, High)",High,Medium,Low
