@@ -1,6 +1,6 @@
 var CS = {
     step:1, farmOpen:true,
-    sel:[{id:"CRP0003",a:2.0},{id:"CRP0004",a:1.5},{id:"CRP0005",a:1.0},{id:"CRP0006",a:0.5}],
+    sel:[],
     wc:null, an:null
 };
 var CS_STEPS=[

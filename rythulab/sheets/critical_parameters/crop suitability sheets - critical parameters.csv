@@ -1,0 +1,130 @@
+Crop,Critical Parameter,CF Rule,Why Critical,Failure Impact
+Paddy,1. FloodRisk,"CF24_FloodRisk in [""Medium"",""High""]","Delta adapted, needs standing water",Total failure without
+,2. Drainage,"CF11_Drainage=""Poor""",Puddled wetland required,Root rot in aerobic soils
+,3. Water_Regime,"Water_Regime in [""Copious-Irrigation"",""Controlled-Irrigation""]",1500+ mm/season,Yield <20% rainfed
+Maize,1. TempC,"TempC in [""25-35°C"",""28-33°C""]",tasseling critical 30-35°C,Sterility above 38°C
+,2. Irrigation,"CF14_Irrigation in [""Protective"",""Assured""]",Silking stage moisture,50-70% yield loss
+,3. Depth_cm,CF8_Depth>=60,Deep feeder roots,Lodging shallow soils
+Bajra,1. DroughtRisk,"CF25_DroughtRisk in [""High"",""Very High""]",Drought escape crop,Fails irrigated areas
+,2. Texture,"CF7_Texture in [""Sandy"",""SandyLoam""]",Millet signature,Smut in heavy soils
+,3. GWDepth,CF13_GW>1.5,Avoid waterlogging,Root rot
+Jowar,1. HeatDays,CF17_HeatDays<=25,Heat tolerant but not extreme,Grain shrivel >30 days
+,2. Drainage,"CF11_Drainage in [""Good"",""Moderate""]",Sterile hybrid sensitive,Waterlogging kills
+,,,,
+,,,,
+Red Gram,1. Slope_pct,CF23_Slope<=8,Rhizobium inoculation ops,Nodulation failure >10%
+,2. Irrigation,"CF14_Irrigation=""Protective""",Pod filling moisture,60% pod drop
+,3. TempC,25<=TempC<=35,Flowering temp sensitive,Flower drop
+Bengal Gram,1. FrostRisk,"CF18_FrostRisk=""None""",Rabi killer,Total loss
+,2. Water_Regime,Rain-Fed-High OR Controlled-Irrigation,Cool moist pod set,Shriveling
+,3. pH,CF5_pH 6.5-8.0,Rhizobium optimal,N-fixation failure
+Blackgram,1. Irrigation,"CF14_Irrigation in [""Protective"",""Assured""]",Podding stage,70% pod shatter
+,2. Slope_pct,CF23_Slope<=5,Inoculation logistics,Poor nodulation
+,3. RH/WetDays,RH<70 OR WetDays<5,Flowering humidity,Blossom drop
+Greengram,1. Drainage,"CF11_Drainage in [""Good"",""Moderate""]",Avoid water stagnation,Root rot
+,2. TempC,22<=TempC<=32,Narrow window,Sterility
+Lentil (Masur),1. FrostRisk,"CF18_FrostRisk=""None""",Cool but frost-free flowering,Pod abortion
+,2. TempC,15<=TempC<=25°C,Rabi cool season,Heat sterility >28°C
+,3. Water_Regime,Rain-Fed-High OR Controlled-Irrigation,Moderate moisture,Wilt in drought
+,4. pH,CF5_pH 6.0-7.5,Rhizobium activity,Poor nodulation
+,,,,
+,,,,
+Groundnut,1. Texture,"CF7_Texture in [""SandyLoam"",""Sandy""]",Peg development,Peg rot in clay
+,2. Drainage,"CF11_Drainage=""Good""",Avoid waterlogging,Collar rot 80% loss
+,3. DroughtRisk,"CF25_DroughtRisk in [""High"",""Very High""]",Pod setting,Empty pods
+,4. GWDepth,CF13_GW>1.5,No shallow water,Rustic diseases
+Sesame,1. TempC,27<=TempC<=38,Capsule setting,Shriveled seeds
+,2. Drainage,"CF11_Drainage=""Good""",Dry flowering,Capsule drop
+,3. Water_Regime,Rain-Fed-Low OR Supplemental,Dry regime,Phyllody virus
+Sunflower,1. BioIndex,CF20_BioIndex>Medium,Allelopathy management,Soil sickness
+,2. Irrigation,"CF14_Irrigation=""Protective""",Button stage,Head deformity
+,3. Slope_pct,CF23_Slope<=5,Wind protection,Lodging
+Castor,1. Drainage,"CF11_Drainage in [""Good"",""Moderate""]",Deep taproot hates waterlogging,Root rot (80% loss) agritech.tnau​
+,2. DroughtRisk,"CF25_DroughtRisk in [""Medium"",""High""]",Semi-arid adapted,Capsule shatter irrigated
+,3. TempC,25<=TempC<=38°C,Heat tolerant capsule set,Poor seed fill <25°C
+,4. Soil Depth,CF8_Depth>=60cm,1.5-2m taproot,Stunted growth
+,5. Slope_pct,CF23_Slope<=10%,Wind protection for tall stems,Lodging/mechanical damage
+,,,,
+,,,,
+,,,,
+Chilli,1. TempC,24<=TempC<=32°C,Flowering/fruit set,Flower drop >35°C
+,2. Water_Regime,Irrigated-Moderate,Blossom end rot avoid,Fruit crack 50% loss
+,3. pH,CF5_pH 6.0-7.0,Nutrient uptake,Leaf curl virus
+,4. Drainage,"CF11_Drainage=""Good""",Thrips/virus vector,Total failure wet
+Turmeric,1. Shade/TempC,TempC<=32°C,Rhizome bulking shade need,Sunburn/yield <20%
+,2. Rainfall_mm,1500-2500mm,Rhizome expansion,Dry rot
+,3. Soil Type,"CF7_Texture=""Loam""",Organic matter,Poor curcumin
+,4. Drainage,"CF11_Drainage=""Good""",Rhizome rot,70% loss waterlog
+Coriander,1. TempC,15<=TempC<=25°C,Seed filling,Bolting heat
+,2. DayLength,CF21_DayLength<=12hr,Vegetative growth,Stem gall
+,3. Drainage,"CF11_Drainage=""Good""",Powdery mildew,Seed mould
+,4. pH,CF5_pH 6.0-8.0,Oil content,Low yield
+Fenugreek,1. TempC,18<=TempC<=25°C,Leaf/seed set,Pod shatter heat
+,2. Soil Type,"CF7_Texture in [""Loam"",""SandyLoam""]",Root rot avoid,Poor nodulation
+,3. Irrigation,"CF14_Irrigation=""Protective""",Dry spell,Wilt 40% loss
+,4. pH,CF5_pH 6.0-7.0,Rhizobium,Low protein
+Ginger,1. TempC,CF_TempC<=32,Shade proxy cooling,Leaf scorch ​
+,2. Drainage,"CF11_Drainage=""Good""",Rhizome rot,80% loss
+,3. Water_Regime,"CF_Water=""High""",Humidity retain,Dry failure
+,4. Slope_pct,CF23_Slope<=5,Erosion protect,Washout
+,,,,
+Cumin,1. TempC,15<=CF_TempC<=25,Cool rabi seed,Bolting heat
+,2. Drainage,"CF11_Drainage=""Excellent""",Mildew avoid,Seed loss
+,3. DroughtRisk,"CF25_DroughtRisk=""High""",Dry capsule,Fungal humid
+,4. Texture,"CF7_Texture=""SandyLoam""",Light root,Waterlog clay
+Mustard,1. TempC,10<=CF_TempC<=25,Siliqua cool,Shatter hot
+,2. GWDepth,CF13_GW>2m,Dry feet,Root rot
+,3. Drainage,"CF11_Drainage=""Good""",Blight prevent,Rot wet
+,4. Slope_pct,CF23_Slope<=3,Wind lodge,Yield drop
+Curry Leaves,1. TempC,CF_TempC<=32,Shade leaf,Burn edges
+,2. Water_Regime,"CF_Water=""Moderate""",Oil retain,Wilt dry
+,3. pH,CF5_pH 6.0-7.5,Nutrient,Chlorosis
+,4. Drainage,"CF11_Drainage=""Good""",Perennial root,Decline
+Mint,1. Water_Regime,"CF14_Irrigation=""Frequent""",Oil moist,Low menthol
+,2. TempC,18<=CF_TempC<=28,Volatile cool,Bolt heat
+,3. Drainage,"CF11_Drainage=""Moderate""",Rust airflow,Defoliate
+,4. Fertility,"CF4_N=""High""",Biomass,Thin yield
+Garlic,1. TempC,10<=CF_TempC<=25,Bulb formation cool rabi,Bolt heat >28°C
+,2. Drainage,"CF11_Drainage=""Excellent""",Clove rot avoid,Total loss wet
+,3. DroughtRisk,"CF25_DroughtRisk=""Low-Medium""",Vernalization moisture,Small bulbs dry
+,4. pH,CF5_pH 6.0-7.0,Nutrient uptake,Pink rot
+Fennel,1. TempC,15<=CF_TempC<=28,Umblet/seed set,Sterility extreme
+,2. Drainage,"CF11_Drainage=""Good""",Fusarium wilt,Seed drop 50%
+,3. Water_Regime,"CF_Water=""Rain-Fed-Medium""",Dry flowering,Poor fill
+,4. Texture,"CF7_Texture=""Loam-SandyLoam""",Taproot deep,Stunt clay
+Ajwain (carom seeds),1. TempC,18<=CF_TempC<=30,Seed oil thymol,Low volatile heat
+,2. Drainage,"CF11_Drainage=""Excellent""",Root rot/damping,Seedling death
+,3. DroughtRisk,"CF25_DroughtRisk=""Medium-High""",Dry adapted,Waterlog fungal
+,4. Slope_pct,CF23_Slope<=5,Airflow natural,Rust humid flat
+,,,,
+Tomato,1. TempC,21<=CF_TempC<=30,Fruit set,Blossom drop
+,2. Drainage,"CF11_Drainage=""Good""",Wilt/rot,60% loss
+,3. Support,"CF_Support=""Stake""",Disease airflow,Gray mold
+,4. pH,CF5_pH 6.0-6.8,Blossom end,Catface
+,,,,
+,,,,
+Brinjal,1. TempC,23<=CF_TempC<=32,Fruit enlarge,Drop heat
+,2. Water_Regime,"CF_Water=""Regular""",Fruit borer moisture,Dry split
+,3. Sun,"CF_Light=""Full""",Yield max,Leggy shade
+,4. Drainage,"CF11_Drainage=""Good""",Shoot borer,Root rot
+,,,,
+,,,,
+Okra,1. TempC,25<=CF_TempC<=35,Pod tender,Tough heat
+,2. Irrigation,"CF14_Irrigation=""Frequent""",Sticky pod,Fibrous dry
+,3. pH,CF5_pH 6.0-7.0,Yellow vein,Mosaic virus
+,4. Texture,"CF7_Texture=""SandyLoam""",Root deep,Stunt clay
+,,,,
+,,,,
+Onion,1. TempC,15<=CF_TempC<=25,Bulb swell rabi,Bolt heat
+,2. DayLength,CF21_DayLength>12hr,Bulbing trigger,Small green
+,3. Fertility,"CF4_N=""High""",Size max,Neck rot low N
+,4. Drainage,"CF11_Drainage=""Excellent""",Purple blotch,Smudge
+,,,,
+,,,,
+Potato,1. TempC,15<=CF_TempC<=25,Tuber set cool,Heat sprouts
+,2. Soil Depth,CF8_Depth>=50cm,Tuber space,Forked small
+,3. Drainage,"CF11_Drainage=""Good""",Late blight,Rot total
+,4. pH,CF5_pH 5.5-6.5,Scab avoid,Wart disease
+,2. Sun Exposure,"CF_Light=""Full 80%""",Corm vigor,Blind spikes shade
+,3. Wind Protect,"CF_Wind=""Sheltered""",Staking need,Lodge break
+,4. Soil Depth,CF8_Depth>=40cm,Corm anchor,Topple

@@ -293,3 +293,80 @@ def get_temperature_scores_from_crop_details(
                 scores[crop] = max(scores.get(crop, 0), score)
 
     return scores
+
+
+def _extract_first_numeric(value: object) -> Optional[float]:
+    matches = re.findall(r"\d+(?:\.\d+)?", _safe_str(value))
+    if not matches:
+        return None
+    return float(matches[0])
+
+
+def get_cropid_to_name_map(crop_details_dir: Path = CROP_DETAILS_DIR) -> Dict[str, str]:
+    list_file = crop_details_dir / "0.List of All crops - Sheet1.csv"
+    if not list_file.exists():
+        raise FileNotFoundError(f"Sheet not found: {list_file}")
+
+    df = pd.read_csv(list_file)
+    required = {"CropID", "Crop Name"}
+    if not required.issubset(set(df.columns)):
+        raise ValueError("0.List sheet must contain 'CropID' and 'Crop Name' columns")
+
+    mapping: Dict[str, str] = {}
+    for _, row in df.iterrows():
+        crop_id = _safe_str(row.get("CropID"))
+        crop_name = _safe_str(row.get("Crop Name"))
+        if crop_id and crop_name:
+            mapping[crop_id] = crop_name
+    return mapping
+
+
+def get_crop_water_demand_min_by_crop_id(
+    crop_id: str,
+    crop_details_dir: Path = CROP_DETAILS_DIR,
+) -> Optional[float]:
+    if not crop_id:
+        raise ValueError("crop_id is required")
+
+    cropid_to_name = get_cropid_to_name_map(crop_details_dir)
+    target_name = cropid_to_name.get(crop_id)
+    if not target_name:
+        raise ValueError(f"CropID '{crop_id}' not found in crop_details list sheet")
+
+    target_canonical = canonicalize_crop_name(target_name)
+    if not target_canonical:
+        raise ValueError(f"Unable to canonicalize crop name for CropID '{crop_id}'")
+
+    for csv_path in sorted(crop_details_dir.glob("*.csv")):
+        if csv_path.name.startswith("0.List"):
+            continue
+
+        df = pd.read_csv(csv_path)
+        if df.empty or len(df.columns) < 2:
+            continue
+
+        parameter_col = df.columns[0]
+        water_rows = df[
+            df[parameter_col]
+            .astype(str)
+            .str.lower()
+            .str.contains("water demand value", na=False)
+        ]
+        if water_rows.empty:
+            continue
+
+        canonical_columns = {
+            canonicalize_crop_name(col): col
+            for col in df.columns[1:]
+            if canonicalize_crop_name(col)
+        }
+        src_col = canonical_columns.get(target_canonical)
+        if not src_col:
+            continue
+
+        for _, row in water_rows.iterrows():
+            min_value = _extract_first_numeric(row.get(src_col))
+            if min_value is not None:
+                return min_value
+
+    return None

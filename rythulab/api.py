@@ -354,6 +354,7 @@ def get_feasible_crops(
     temperature_weight: str = None,
 ):
     from rythulab.phase_1_step_1 import get_suitable_crops_by_conditions
+    from rythulab.phase_1_step_3 import get_crop_water_demand_min
 
     # Support JSON body as well as form/query params
     frappe.logger().info("Enter")
@@ -421,12 +422,17 @@ def get_feasible_crops(
         norm_name = _norm_crop_name(crop_name)
         crop_type = crop_type_map.get(norm_name, "Main Crop")
         crop_id = cropid_map.get(norm_name) or _crop_id_from_name(crop_name)
+        try:
+            wr = get_crop_water_demand_min(crop_id)
+        except Exception:
+            wr = None
 
         crops.append({
             "id": crop_id,
             "cropid": crop_id,
             "name": crop_name,
             "type": crop_type,
+            "wr": wr,
             "sc": sc,
             "sm": season_score > 0,
             "zm": season_score > 0,

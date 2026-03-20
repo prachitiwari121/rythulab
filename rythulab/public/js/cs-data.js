@@ -1,6 +1,6 @@
 var CS_FARM = {
     area:      5.0,
-    zone:      "Semi-Arid Tropics (SAT)",
+    zone:      "North Coastal",
     zone_code: "North Coastal",
     season:    "Kharif (Jun–Oct)",
     season_code: "kharif",
