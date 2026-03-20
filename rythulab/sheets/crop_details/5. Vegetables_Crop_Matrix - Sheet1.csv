@@ -1,4 +1,5 @@
 ﻿Parameter,Tomato,Brinjal,Potato,Okra,Onion,Elephant Yam
+CropID,CRP0058,CRP0059,CRP0061,CRP0062,CRP0063,CRP0064
 Crop Common Name,Tomato,Brinjal,Potato,Okra,Onion,Elephant Yam
 Crop Scientific Name,Solanum lycopersicum,Solanum melongena,Solanum tuberosum,Abelmoschus esculentus,Allium cepa,Amorphophallus paeoniifolius
 Crop Family Name,Solanaceae,Solanaceae,Solanaceae,Malvaceae,Amaryllidaceae,Araceae
@@ -42,8 +43,8 @@ Phosphorus Demand Value (Numeric (kg/ha)),60 - 80,60 - 80,80 - 100,50 - 60,60 - 
 Potasium Demand Value (Numeric (kg/ha)),60 - 80,40 - 60,100 - 120,40 - 60,60 - 80,80 - 100
 "Potasium Demand Class (Low, Medium, High)",High,Medium,High,Medium,High,High
 "Calcium Demand Class (Low, Medium, High)",Medium,Medium,Medium,Medium,Low,High
-Min pH (Numeric),6.0,5.5,5.0,6.0,6.0,5.5
-Max pH (Numeric),7.0,7.0,6.5,7.5,7.5,7.0
+Min pH (Numeric),6,5.5,5,6,6,5.5
+Max pH (Numeric),7,7,6.5,7.5,7.5,7
 "Preferred Texture (Sand, Sandy Loam, Loam, Clay Loam, Clay)","Loam, Sandy Loam","Loam, Clay Loam","Sandy Loam, Loam","Loam, Sandy Loam","Loam, Sandy Loam","Sandy Loam, Loam"
 Min Soil Depth (Numeric (cm)),45,45,45,60,45,60
 Max Slope (Numeric (%)),10,10,10,15,10,20
@@ -101,7 +102,7 @@ Threshold level of wind speed kmph (Range),< 20 kmph,< 25 kmph,< 15 kmph,< 25 km
 Preferred slope % (Range),0 - 10%,0 - 10%,0 - 5%,0 - 10%,0 - 5%,0 - 10%
 "Crop suitability to Flood Risk Soils (low, Medium, high)",low,low,low,low,low,low
 "Crop suitability to Drought Risk Soils (low, Medium, high)",High,High,Low,High,Low,Low
-Threshold level of Calcium meq/100g (Range),2 - 5,2 - 5,2 - 4,2 - 5,2 - 4,2 - 5
+Threshold level of Calcium meq/100g (Range),02-May,02-May,02-Apr,02-May,02-Apr,02-May
 Threshold level of Bulk Density g/cc (Range),1.3 - 1.5,1.3 - 1.5,1.2 - 1.4,1.3 - 1.5,1.3 - 1.5,1.2 - 1.4
 "Mention 5 Major Pests and Severity (Low, Medium, High)","Fruit Borer (High), Leaf Miner (High), Whitefly (High), Thrips (Medium), Aphids (Medium)","Shoot and Fruit Borer (High), Epilachna Beetle (Medium), Jassids (High), Aphids (Medium), Red Spider Mite (Medium)","Aphids (High), Potato Tuber Moth (High), Jassids (Medium), Cutworms (Medium), Whitefly (Medium)","Shoot and Fruit Borer (High), Whitefly (High), Jassids (High), Aphids (Medium), Mites (Low)","Thrips (High), Onion Maggot (Medium), Aphids (Low), Armyworm (Medium), Mites (Low)","Aphids (Medium), Mealybug (High), Scale Insects (Medium), Thrips (Low), Root-knot Nematode (Medium)"
 "Mention 5 Major Diseases and Severity (Low, Medium, High)","Early Blight (High), Late Blight (High), Fusarium Wilt (High), Leaf Curl Virus (High), Bacterial Wilt (High)","Little Leaf (High), Phomopsis Blight (High), Bacterial Wilt (High), Damping Off (Medium), Root Rot (Low)","Late Blight (High), Early Blight (Medium), Common Scab (Medium), Black Scurf (Medium), Potato Virus (High)","Yellow Vein Mosaic Virus (High), Enation Leaf Curl (High), Powdery Mildew (Medium), Wilt (Medium), Cercospora Leaf Spot (Low)","Purple Blotch (High), Downy Mildew (Medium), Basal Rot (High), Neck Rot (Medium), Stemphylium Blight (Medium)","Collar Rot (High), Leaf Spot (Medium), Mosaic Virus (Low), Corm Rot (High), Wilt (Low)"

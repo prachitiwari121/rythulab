@@ -1,4 +1,5 @@
 ﻿Parameter,Cotton,Sugarcane,Turmeric,Ginger,Garlic,Chilli
+CropID,CRP0029,CRP0030,CRP0031,CRP0032,CRP0033,CRP0060
 Crop Common Name,Cotton,Sugarcane,Turmeric,Ginger,Garlic,Chilli
 Crop Scientific Name,Gossypium hirsutum,Saccharum officinarum,Curcuma longa,Zingiber officinale,Allium sativum,Capsicum annuum
 Crop Family Name,Malvaceae,Poaceae,Zingiberaceae,Zingiberaceae,Amaryllidaceae,Solanaceae
