@@ -517,7 +517,7 @@ function cs_s5(){
 function cs_runAnalysis(){cs_calcAnalysis();cs_next();}
 function cs_calcAnalysis(){
     var c=cs_full();
-    CS.an={s6:null,s7:_ck7(c),s8:_ck8(c),s9:_ck9(c),s10:_ck10(c)};
+    CS.an={s6:null,s7:null,s8:_ck8(c),s9:_ck9(c),s10:_ck10(c)};
 }
 function _ck6(cr){
     var F=CS_FARM;
@@ -705,9 +705,48 @@ function cs_s6(){
 }
 
 /* ── STEP 7 ───────────────────────────────────────────────────── */
+function cs_fetchS7Analysis(){
+    if(CS.s7Loading) return;
+
+    CS.s7Loading=true;
+    CS.s7Error=null;
+
+    fetch("/api/method/rythulab.api.get_phase1_resource_pressure",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(cs_buildS6Payload())
+    })
+    .then(function(r){return r.json();})
+    .then(function(res){
+        var msg=res&&res.message?res.message:{};
+        CS.an=CS.an||{};
+        CS.an.s7=Array.isArray(msg.warnings)?msg.warnings:[];
+    })
+    .catch(function(err){
+        console.warn("Step 7 backend check failed, using local fallback.",err);
+        CS.s7Error=err;
+        CS.an=CS.an||{};
+        CS.an.s7=_ck7(cs_full());
+    })
+    .finally(function(){
+        CS.s7Loading=false;
+        if(CS.step===7) cs_renderStep(7);
+    });
+}
+
 function cs_s7(){
     if(!CS.an)cs_calcAnalysis();
-    var ws=CS.an.s7;
+    if(!Array.isArray(CS.an.s7)&&!CS.s7Loading) cs_fetchS7Analysis();
+
+    if(CS.s7Loading){
+        return cs_hd(7,"Resource pressure check",
+            "If crop sensitivity to that CF is high (using crop sensitivity table) and CF_resource ≤ Moderate, crop_resource_demand high then warning.")+
+            '<div class="cs-empty">Running resource pressure check from backend...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Sending farm context features to backend.</span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(6)">← Back</button></div>';
+    }
+
+    var ws=Array.isArray(CS.an.s7)?CS.an.s7:[];
     var bd=ws.length?
         '<div class="cs-wlist">'+ws.map(function(w){
             return'<div class="cs-wi '+(w.t==="note"?"cs-wi-ok":"cs-wi-w")+'">'+
@@ -790,9 +829,14 @@ function cs_s10(){
 function cs_s11(){
     if(!CS.an)cs_calcAnalysis();
     var a=CS.an;
-    var w6=a.s6.reduce(function(t,d){return t+d.checks.filter(function(c){return!c.ok;}).length;},0);
-    var sv=a.s6.reduce(function(t,d){return t+d.checks.filter(function(c){return!c.ok&&c.sv;}).length;},0);
-    var w7=a.s7.length,w8=a.s8.length,w9=a.s9.length,w10=a.s10.length,tw=w6+w7+w8+w9+w10;
+    var s6=Array.isArray(a.s6)?a.s6:[];
+    var s7=Array.isArray(a.s7)?a.s7:[];
+    var s8=Array.isArray(a.s8)?a.s8:[];
+    var s9=Array.isArray(a.s9)?a.s9:[];
+    var s10=Array.isArray(a.s10)?a.s10:[];
+    var w6=s6.reduce(function(t,d){return t+(d.checks||[]).filter(function(c){return!c.ok;}).length;},0);
+    var sv=s6.reduce(function(t,d){return t+(d.checks||[]).filter(function(c){return!c.ok&&c.sv;}).length;},0);
+    var w7=s7.length,w8=s8.length,w9=s9.length,w10=s10.length,tw=w6+w7+w8+w9+w10;
     var crops=cs_full();
     var srows=[
         {n:6,l:"Farm feasibility check",  w:w6},

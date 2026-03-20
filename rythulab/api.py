@@ -428,6 +428,66 @@ def _build_phase1_step6_farm_cfs(payload):
     return resolved
 
 
+def _build_phase1_step7_farm_cfs(payload):
+    farm_cfs = payload.get("farm_cfs") or {}
+
+    short_to_cf = {
+        "N": "CF1",
+        "P": "CF2",
+        "K": "CF3",
+        "SOC": "CF4",
+        "PH": "CF5",
+        "EC": "CF6",
+        "TXT": "CF7",
+        "ESD": "CF8",
+        "WHC": "CF9",
+        "BD": "CF10",
+        "DR": "CF11",
+        "ER": "CF12",
+        "GW": "CF13",
+        "IA": "CF14",
+        "RR": "CF15",
+        "TMP": "CF16",
+        "HSD": "CF17",
+        "FR": "CF18",
+        "WS": "CF19",
+        "BI": "CF20",
+        "PP": "CF21",
+        "EW": "CF22",
+        "SLP": "CF23",
+        "FDR": "CF24",
+        "DDR": "CF25",
+        "CA": "CF26",
+    }
+
+    resolved = {}
+    for key, value in farm_cfs.items():
+        key_text = str(key or "").strip()
+        normalized_key = key_text.upper()
+
+        cf_code = None
+        if re.match(r"^CF\d+", normalized_key):
+            cf_match = re.match(r"^(CF\d+)", normalized_key)
+            cf_code = cf_match.group(1) if cf_match else None
+        else:
+            cf_code = short_to_cf.get(normalized_key)
+
+        if not cf_code:
+            continue
+
+        if isinstance(value, dict):
+            resolved[cf_code] = {
+                "slab": value.get("slab"),
+                "s": value.get("s"),
+                "status": value.get("status"),
+                "val": value.get("val"),
+                "l": value.get("l"),
+            }
+        else:
+            resolved[cf_code] = value
+
+    return resolved
+
 def _format_step6_check(entry):
     return {
         "k": entry.get("parameter"),
@@ -444,7 +504,7 @@ def _format_step6_check(entry):
 
 def _no_critical_parameters_result(crop):
     check_entry = {
-        "k": "Critical Parameters",
+        "k": "No Critical Parameters",
         "ok": True,
         "det": "No critical parameters defined for this crop.",
         "sv": False,
@@ -748,5 +808,59 @@ def get_phase1_farm_feasibility(selected_crops=None, farm_cfs=None, farm_context
     return {
         "ok": True,
         "results": results,
+        "resolved_cfs": resolved_cfs,
+    }
+
+
+@frappe.whitelist()
+def get_phase1_resource_pressure(selected_crops=None, farm_cfs=None, farm_context=None):
+    from rythulab.phase_1_step_7 import check_resource_pressure
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+    farm_cfs = farm_cfs or payload.get("farm_cfs") or {}
+    farm_context = farm_context or payload.get("farm_context") or {}
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+    if isinstance(farm_cfs, str):
+        farm_cfs = frappe.parse_json(farm_cfs)
+    if isinstance(farm_context, str):
+        farm_context = frappe.parse_json(farm_context)
+
+    request_payload = {
+        "selected_crops": selected_crops,
+        "farm_cfs": farm_cfs,
+        "farm_context": farm_context,
+    }
+    resolved_cfs = _build_phase1_step7_farm_cfs(request_payload)
+
+    results = []
+    warnings = []
+
+    for crop in selected_crops or []:
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip()
+        if not crop_id:
+            continue
+
+        analysis = check_resource_pressure(crop_id, resolved_cfs)
+        results.append({
+            "crop": crop,
+            "analysis": analysis,
+        })
+
+        for warning in analysis.get("warnings", []):
+            warnings.append({
+                "cn": analysis.get("crop_name") or crop.get("name") or crop_id,
+                "t": "warn",
+                "m": warning.get("message"),
+                "cf_code": warning.get("cf_code"),
+                "cf_label": warning.get("cf_label"),
+            })
+
+    return {
+        "ok": True,
+        "results": results,
+        "warnings": warnings,
         "resolved_cfs": resolved_cfs,
     }
