@@ -517,7 +517,7 @@ function cs_s5(){
 function cs_runAnalysis(){cs_calcAnalysis();cs_next();}
 function cs_calcAnalysis(){
     var c=cs_full();
-    CS.an={s6:_ck6(c),s7:_ck7(c),s8:_ck8(c),s9:_ck9(c),s10:_ck10(c)};
+    CS.an={s6:null,s7:_ck7(c),s8:_ck8(c),s9:_ck9(c),s10:_ck10(c)};
 }
 function _ck6(cr){
     var F=CS_FARM;
@@ -596,14 +596,97 @@ function _ck10(cr){
 }
 
 /* ── STEP 6 ───────────────────────────────────────────────────── */
+function cs_buildS6Payload(){
+    var farmCFs={};
+    Object.keys(CS_FARM.cf||{}).forEach(function(key){
+        var cf=CS_FARM.cf[key]||{};
+        farmCFs[key]={
+            l:cf.l,
+            unit:cf.unit,
+            val:cf.val,
+            s:cf.s,
+            slab:cf.slab
+        };
+    });
+
+    return {
+        selected_crops: cs_full().map(function(c){
+            return {
+                id:c.id,
+                cropid:c.cropid||c.id,
+                name:c.name,
+                type:c.type,
+                a:c.a
+            };
+        }),
+        farm_cfs: farmCFs,
+        farm_context: {
+            area: CS_FARM.area,
+            zone: CS_FARM.zone_code||CS_FARM.zone,
+            season: CS_FARM.season_code||CS_FARM.season,
+            soil: CS_FARM.soil_code||CS_FARM.soil,
+            waterAvail: CS_FARM.waterAvail,
+            water_supply: CS_FARM.water_supply,
+            wind: CS_FARM.wind,
+            minTemp: CS_FARM.minTemp,
+            maxTemp: CS_FARM.maxTemp,
+            rain: CS_FARM.rain,
+            re: CS_FARM.re,
+            irr: CS_FARM.irr,
+            sw: CS_FARM.sw
+        }
+    };
+}
+
+function cs_fetchS6Analysis(){
+    if(CS.s6Loading) return;
+
+    CS.s6Loading=true;
+    CS.s6Error=null;
+
+    fetch("/api/method/rythulab.api.get_phase1_farm_feasibility",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(cs_buildS6Payload())
+    })
+    .then(function(r){return r.json();})
+    .then(function(res){
+        var msg=res&&res.message?res.message:{};
+        CS.an=CS.an||{};
+        CS.an.s6=Array.isArray(msg.results)?msg.results:[];
+    })
+    .catch(function(err){
+        console.warn("Step 6 backend check failed, using local fallback.",err);
+        CS.s6Error=err;
+        CS.an=CS.an||{};
+        CS.an.s6=_ck6(cs_full());
+    })
+    .finally(function(){
+        CS.s6Loading=false;
+        if(CS.step===6) cs_renderStep(6);
+    });
+}
+
 function cs_s6(){
     if(!CS.an)cs_calcAnalysis();
-    var data=CS.an.s6,anyF=data.some(function(d){return d.checks.some(function(c){return!c.ok;});});
+    if(!CS.an.s6&&!CS.s6Loading) cs_fetchS6Analysis();
+
+    if(CS.s6Loading){
+        return cs_hd(6,"Farm feasibility check",
+            "Checking if the critical parameters required by each of the main crops are met by the farm, flagging severe warnings if it is not met.")+
+            '<div class="cs-empty">Running farm feasibility check from backend...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Sending all farm CFs to backend.</span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(5)">← Back</button></div>';
+    }
+
+    var data=Array.isArray(CS.an.s6)?CS.an.s6:[];
+    var anyF=data.some(function(d){return(d.checks||[]).some(function(c){return!c.ok;});});
     var cards=data.map(function(d){
-        var ck=d.checks.map(function(c){
+        var checks=d.checks||[];
+        var ck=checks.map(function(c){
             return'<span class="cs-chk '+(c.ok?"cs-chk-p":c.sv?"cs-chk-f":"cs-chk-w")+'">'+(c.ok?"✓":"✗")+" "+c.k+"</span>";
         }).join("");
-        var fails=d.checks.filter(function(c){return!c.ok;});
+        var fails=checks.filter(function(c){return!c.ok;});
         var det=fails.length?
             '<div class="cs-wlist" style="margin-top:7px">'+fails.map(function(f){
                 return'<div class="cs-wi '+(f.sv?"cs-wi-s":"cs-wi-w")+'">'+
@@ -615,7 +698,7 @@ function cs_s6(){
     }).join("");
     return cs_hd(6,"Farm feasibility check",
         "Checking if the critical parameters required by each of the main crops are met by the farm, flagging severe warnings if it is not met.")+
-        '<div class="cs-cig">'+cards+'</div>'+
+        '<div class="cs-cig">'+(cards||'<div class="cs-empty">No farm feasibility response returned.</div>')+'</div>'+
         '<div class="cs-sf"><span class="cs-fn">'+(anyF?"Severe warnings detected — review before proceeding.":"All crops cleared the farm feasibility check.")+'</span>'+
         '<button class="cs-btn sec" onclick="cs_goto(5)">← Back</button>'+
         '<button class="cs-btn pri" onclick="cs_next()">Resource pressure check →</button></div>';

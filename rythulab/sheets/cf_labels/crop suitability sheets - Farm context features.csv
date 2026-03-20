@@ -1,0 +1,28 @@
+CF No,Context Feature,Unit,Very Weak,Weak,Moderate,Good,Ideal
+CF1,Available Nitrogen,kg/ha,<100,100–150,150–250,250–350,>350
+CF2,Available Phosphorus,kg/ha,<5,5–10,10–20,20–30,>30
+CF3,Available Potassium,kg/ha,<80,80–120,120–200,200–300,>300
+CF4,Soil Organic Carbon,%,<0.3,0.3–0.5,0.5–0.75,0.75–1.0,>1.0
+CF5,Soil pH,pH,<5.0 or >9.0,5.0–5.5 or 8.5–9.0,5.5–6.5 or 7.5–8.5,6.0–7.5,6.5–7.0
+CF6,Soil Salinity (EC),dS/m,>8,4–8,2–4,1–2,<1
+CF7,Soil Texture Suitability,qualitative,Sand / Heavy Clay,Loamy Sand,Sandy Loam,Silt Loam,Loam / Clay Loam
+CF8,Effective Soil Depth,cm,<20,20–40,40–75,75–100,>100
+CF9,Water Holding Capacity,mm/m,<80,80–120,120–180,180–220,>220
+CF10,Soil Compaction (Bulk Density),g/cm³,>1.8,1.7–1.8,1.6–1.7,1.4–1.6,<1.4
+CF11,Drainage Condition,qualitative,Waterlogged,Poor,Moderate,Good,Well Drained
+CF12,Erosion Risk,qualitative,Severe (Gully),Rill,Sheet,Minor,None
+CF13,Groundwater Depth,m,>50,30–50,15–30,5–15,<5
+CF14,Irrigation Availability,qualitative,None,Occasional,Seasonal,Reliable,Assured
+CF15,Rain Reliability (CV),% variability,>50,35–50,25–35,15–25,<15
+CF16,Temp Suitability (Dev from Opt),°C dev,>7,5–7,3–5,1–3,0 (±1)
+CF17,Heat Stress Days (>38°C),days/season,>40,25–40,15–25,5–15,<5
+CF18,Frost Days,days/year,>10,5–10,2–5,1–2,0
+CF19,Wind Speed (Avg),km/h,>25,18–25,12–18,8–12,<8
+CF20,Biological Index (MBC),mg/kg,<100,100–200,200–400,400–600,>600
+CF21,Pest Pressure,qualitative,High (>20% loss),Medium (10-20%),Low-Mod (5-10%),Low (<5%),Very Low
+CF22,Earthworm Density,#/m²,<20,20–50,50–100,100–200,>200
+CF23,Slope,%,>15,8–15,3–8,1–3,<1
+CF24,Flood Risk,qualitative,Frequent,Occasional,Rare,Very Rare,None
+CF25,Drought Risk,qualitative,Severe (>30 days),High (15-30),Moderate (7-15),Low (3-7),None
+CF26,Available Ca,mg/kg,<200,200–500,500–1000,1000–2000,2000–4000
+CF27,Bulk Density,g/cm³,>1.8,1.7–1.8,1.6–1.7,1.4–1.6,<1.4 

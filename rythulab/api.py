@@ -238,6 +238,234 @@ def _to_float(value, default=None):
         return default
 
 
+def _extract_numeric_value(value, default=None):
+    if value is None or value == "":
+        return default
+    if isinstance(value, (int, float)):
+        return float(value)
+
+    match = re.search(r"-?\d+(?:\.\d+)?", str(value))
+    if not match:
+        return default
+    try:
+        return float(match.group(0))
+    except Exception:
+        return default
+
+
+def _get_cf_field(farm_cfs, key, field_name="val"):
+    value = (farm_cfs or {}).get(key)
+    if isinstance(value, dict):
+        return value.get(field_name)
+    return value
+
+
+def _normalize_texture(value):
+    text = (value or "").strip().lower().replace("-", " ")
+    mapping = {
+        "sandy loam": "SandyLoam",
+        "sandy": "Sandy",
+        "sand": "Sandy",
+        "loam": "Loam",
+        "loamy": "Loam",
+        "clay loam": "ClayLoam",
+        "red sandy loam": "SandyLoam",
+    }
+    return mapping.get(text, value)
+
+
+def _normalize_drainage(value):
+    text = (value or "").strip().lower()
+    mapping = {
+        "waterlogged": "Poor",
+        "poor": "Poor",
+        "moderate": "Moderate",
+        "good": "Good",
+        "well drained": "Excellent",
+        "well-drained": "Excellent",
+        "excellent": "Excellent",
+    }
+    return mapping.get(text, value)
+
+
+def _normalize_irrigation(value):
+    text = (value or "").strip().lower()
+    mapping = {
+        "none": "None",
+        "occasional": "Protective",
+        "seasonal": "Protective",
+        "reliable": "Assured",
+        "assured": "Assured",
+        "frequent": "Frequent",
+    }
+    return mapping.get(text, value)
+
+
+def _normalize_nitrogen_class(value):
+    text = (value or "").strip().lower()
+    mapping = {
+        "very weak": "Low",
+        "weak": "Low",
+        "moderate": "Medium",
+        "good": "High",
+        "ideal": "High",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+    }
+    return mapping.get(text, value)
+
+
+def _normalize_frost_risk(value):
+    numeric = _extract_numeric_value(value, default=None)
+    if numeric is None:
+        return value
+    if numeric <= 0:
+        return "None"
+    if numeric <= 2:
+        return "Low"
+    if numeric <= 5:
+        return "Medium"
+    return "High"
+
+
+def _normalize_drought_risk(water_slab, water_supply):
+    slab = (water_slab or "").strip().lower()
+    supply = (water_supply or "").strip().lower()
+    if "copious" in supply:
+        return "Low-Medium"
+    if "controlled" in supply:
+        return "Medium"
+    mapping = {
+        "very weak": "Very High",
+        "weak": "High",
+        "moderate": "Medium",
+        "good": "Low",
+        "ideal": "Low-Medium",
+    }
+    return mapping.get(slab)
+
+
+def _normalize_flood_risk(water_supply, drainage):
+    supply = (water_supply or "").strip().lower()
+    drainage_text = (drainage or "").strip().lower()
+    if "copious" in supply or drainage_text == "poor":
+        return "High"
+    if "controlled" in supply or drainage_text == "moderate":
+        return "Medium"
+    if drainage_text == "good":
+        return "Low"
+    return None
+
+
+def _build_phase1_step6_farm_cfs(payload):
+    farm_context = payload.get("farm_context") or {}
+    farm_cfs = payload.get("farm_cfs") or {}
+    resolved = {}
+
+    ph_value = _extract_numeric_value(_get_cf_field(farm_cfs, "pH"), default=None)
+    if ph_value is not None:
+        resolved["CF5_pH"] = ph_value
+
+    texture_value = _normalize_texture(_get_cf_field(farm_cfs, "TXT"))
+    if texture_value:
+        resolved["CF7_Texture"] = texture_value
+
+    depth_value = _extract_numeric_value(_get_cf_field(farm_cfs, "ESD"), default=None)
+    if depth_value is not None:
+        resolved["CF8_Depth"] = depth_value
+
+    drainage_value = _normalize_drainage(_get_cf_field(farm_cfs, "DR"))
+    if drainage_value:
+        resolved["CF11_Drainage"] = drainage_value
+
+    groundwater_value = _extract_numeric_value(_get_cf_field(farm_cfs, "GW"), default=None)
+    if groundwater_value is not None:
+        resolved["CF13_GW"] = groundwater_value
+
+    irrigation_value = _normalize_irrigation(_get_cf_field(farm_cfs, "IA"))
+    if irrigation_value:
+        resolved["CF14_Irrigation"] = irrigation_value
+
+    heat_days_value = _extract_numeric_value(_get_cf_field(farm_cfs, "HSD"), default=None)
+    if heat_days_value is not None:
+        resolved["CF17_HeatDays"] = heat_days_value
+
+    frost_risk_value = _normalize_frost_risk(_get_cf_field(farm_cfs, "FR"))
+    if frost_risk_value:
+        resolved["CF18_FrostRisk"] = frost_risk_value
+
+    nitrogen_value = _normalize_nitrogen_class(_get_cf_field(farm_cfs, "N", "slab"))
+    if nitrogen_value:
+        resolved["CF4_N"] = nitrogen_value
+
+    water_slab = _get_cf_field(farm_cfs, "W", "slab")
+    water_value = _get_cf_field(farm_cfs, "W")
+    if water_value:
+        resolved["CF_Water"] = water_value
+
+    water_supply = farm_context.get("water_supply") or farm_context.get("waterSupply")
+    if water_supply:
+        resolved["Water_Regime"] = water_supply
+
+    drought_risk_value = _normalize_drought_risk(water_slab, water_supply)
+    if drought_risk_value:
+        resolved["CF25_DroughtRisk"] = drought_risk_value
+
+    flood_risk_value = _normalize_flood_risk(water_supply, drainage_value)
+    if flood_risk_value:
+        resolved["CF24_FloodRisk"] = flood_risk_value
+
+    rainfall_value = _extract_numeric_value(farm_context.get("rain"), default=None)
+    if rainfall_value is not None:
+        resolved["Rainfall_mm"] = rainfall_value
+
+    min_temp = _extract_numeric_value(farm_context.get("minTemp"), default=None)
+    max_temp = _extract_numeric_value(farm_context.get("maxTemp"), default=None)
+    if min_temp is not None and max_temp is not None:
+        resolved["TempC"] = round((min_temp + max_temp) / 2.0, 2)
+
+    return resolved
+
+
+def _format_step6_check(entry):
+    return {
+        "k": entry.get("parameter"),
+        "ok": bool(entry.get("passed")),
+        "det": entry.get("message"),
+        "sv": str(entry.get("severity") or "").lower() == "severe",
+        "cf_codes": entry.get("cf_codes") or [],
+        "cf_labels": entry.get("cf_labels") or [],
+        "expected": entry.get("expected"),
+        "actual_value": entry.get("actual_value"),
+        "input_keys": entry.get("input_keys") or [],
+    }
+
+
+def _no_critical_parameters_result(crop):
+    check_entry = {
+        "k": "Critical Parameters",
+        "ok": True,
+        "det": "No critical parameters defined for this crop.",
+        "sv": False,
+        "cf_codes": [],
+        "cf_labels": [],
+        "expected": "",
+        "actual_value": "",
+        "input_keys": [],
+    }
+    return {
+        "crop": crop,
+        "checks": [check_entry],
+        "failed_checks": [],
+        "passed_checks": [check_entry],
+        "warnings": [],
+        "all_passed": True,
+        "failed_count": 0,
+        "passed_count": 1,
+    }
+
+
 def _build_crop_type_map():
     crop_docs = frappe.get_all("Crop", fields=["crop_name", "crop_type"])
     by_norm = {}
@@ -466,3 +694,59 @@ def get_feasible_crops(
 def get_phase1_crops(**kwargs):
     # Backward-compatible alias for frontend code already calling this endpoint.
     return get_feasible_crops(**kwargs)
+
+
+@frappe.whitelist()
+def get_phase1_farm_feasibility(selected_crops=None, farm_cfs=None, farm_context=None):
+    from rythulab.phase_1_step_6 import check_critical_parameters
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+    farm_cfs = farm_cfs or payload.get("farm_cfs") or {}
+    farm_context = farm_context or payload.get("farm_context") or {}
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+    if isinstance(farm_cfs, str):
+        farm_cfs = frappe.parse_json(farm_cfs)
+    if isinstance(farm_context, str):
+        farm_context = frappe.parse_json(farm_context)
+
+    request_payload = {
+        "selected_crops": selected_crops,
+        "farm_cfs": farm_cfs,
+        "farm_context": farm_context,
+    }
+    resolved_cfs = _build_phase1_step6_farm_cfs(request_payload)
+
+    results = []
+    for crop in selected_crops or []:
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip()
+        if not crop_id:
+            continue
+
+        try:
+            analysis = check_critical_parameters(crop_id, resolved_cfs)
+        except ValueError as exc:
+            message = str(exc)
+            if "has no critical parameters defined" in message:
+                results.append(_no_critical_parameters_result(crop))
+                continue
+            raise
+
+        results.append({
+            "crop": crop,
+            "checks": [_format_step6_check(entry) for entry in analysis.get("checks", [])],
+            "failed_checks": analysis.get("failed_checks", []),
+            "passed_checks": analysis.get("passed_checks", []),
+            "warnings": analysis.get("warnings", []),
+            "all_passed": analysis.get("all_passed", False),
+            "failed_count": analysis.get("failed_count", 0),
+            "passed_count": analysis.get("passed_count", 0),
+        })
+
+    return {
+        "ok": True,
+        "results": results,
+        "resolved_cfs": resolved_cfs,
+    }
