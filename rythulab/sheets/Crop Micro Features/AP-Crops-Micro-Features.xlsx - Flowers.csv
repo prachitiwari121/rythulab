@@ -1,0 +1,10 @@
+CropID,Crop,Produces (MF List),Requires (MF List),Suppresses (MF List)
+CRP0088,Marigold(African/French),"MF3G, MF19, MF20, MF21, MF24, MF26","MF3G, MF13","MF2, MF22"
+CRP0089,Chrysanthemum,"MF3G, MF19, MF20, MF21, MF24, MF26","MF3G, MF13","MF2, MF22"
+CRP0090,Rose,"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0091,Crossandra (Kanakambaram),"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0092,Tuberose (Sugandhiraja),"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0093,Gaillardia (Blanket Flower),"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0094,Cock's Comb (Celosia),"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0095,China Aster,"MF3G, MF19, MF20, MF24","MF3G, MF13",MF2
+CRP0096,Lotus,"MF9, MF14, MF19, MF20, MF24","MF9, MF14",MF10

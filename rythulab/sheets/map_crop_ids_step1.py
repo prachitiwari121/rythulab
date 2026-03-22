@@ -25,6 +25,13 @@ def write_csv(path: Path, rows: List[List[str]]) -> None:
 
 def norm(text: str) -> str:
     text = (text or "").strip().lower()
+    text = text.replace("&", " and ")
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def loose_norm(text: str) -> str:
+    text = (text or "").strip().lower()
     text = re.sub(r"\([^)]*\)", " ", text)
     text = text.replace("&", " and ")
     text = re.sub(r"[^a-z0-9]+", " ", text)
@@ -155,11 +162,17 @@ def resolve_canonical(name: str, norm_to_canonical: Dict[str, str], alias_map: D
     if not key:
         return ""
 
+    if key in norm_to_canonical:
+        return norm_to_canonical[key]
+
     if key in alias_map:
         return alias_map[key]
 
-    if key in norm_to_canonical:
-        return norm_to_canonical[key]
+    loose_key = loose_norm(name)
+    if loose_key:
+        loose_matches = [canonical for canonical in norm_to_canonical.values() if loose_norm(canonical) == loose_key]
+        if len(loose_matches) == 1:
+            return loose_matches[0]
 
     candidates = list(norm_to_canonical.keys())
     best = difflib.get_close_matches(key, candidates, n=1, cutoff=0.9)
