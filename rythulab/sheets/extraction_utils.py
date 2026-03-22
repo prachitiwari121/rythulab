@@ -188,10 +188,22 @@ def _extract_scores_from_category_row(
 def build_all_crops(
     step1_dir: Path = STEP1_DIR,
     crop_details_dir: Path = CROP_DETAILS_DIR,
+    isMainCrop: bool = False,
 ) -> List[str]:
     all_crops: List[str] = []
     seen = set()
     canonical_to_cropid = get_canonical_crop_to_cropid_map(crop_details_dir)
+
+    excluded_ids: set = set()
+    if isMainCrop:
+        list_df = _load_crop_list_df(crop_details_dir)
+        if "Sub-Category" in list_df.columns:
+            excluded_ids = set(
+                list_df.loc[
+                    list_df["Sub-Category"].astype(str).str.strip().str.lower() == "canopy trees",
+                    "CropID",
+                ].apply(_safe_str)
+            )
 
     for file_name in {
         STEP1_FILES["soil"],
@@ -210,7 +222,7 @@ def build_all_crops(
         for crop in source:
             canonical = canonicalize_crop_name(crop)
             crop_id = canonical_to_cropid.get(canonical or "")
-            if not crop_id or crop_id in seen:
+            if not crop_id or crop_id in seen or crop_id in excluded_ids:
                 continue
             seen.add(crop_id)
             all_crops.append(crop_id)

@@ -42,7 +42,7 @@ SEASON_SCORE_MAP = {
     "T": 0,
 }
 
-ALL_CROPS = build_all_crops()
+ALL_CROPS = build_all_crops(isMainCrop=True)
 CROPID_TO_NAME = get_cropid_to_name_map()
 
 
