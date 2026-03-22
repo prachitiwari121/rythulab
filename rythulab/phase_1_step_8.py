@@ -26,6 +26,7 @@ SHEETS_DIR = BASE_DIR / "sheets"
 MICRO_FEATURES_DIR = SHEETS_DIR / "Crop Micro Features"
 CF_MF_IMPACT_PATH = SHEETS_DIR / "CFvsMF" / "CF_MF_Impact_Matrix - Select CF_MF interactions.csv"
 CROP_LIST_PATH = SHEETS_DIR / "crop_details" / "0.List of All crops - Sheet1.csv"
+CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 
 MF_CODE_RE = re.compile(r"MF\d+(?:-[A-Z]+|[A-Z]*)", re.IGNORECASE)
 CF_CODE_RE = re.compile(r"^(CF\d+)", re.IGNORECASE)
@@ -158,6 +159,53 @@ def _build_cropid_to_label_map(crop_list_path: Path = CROP_LIST_PATH) -> Dict[st
 	return mapping
 
 
+def _is_true_like(value: Any) -> bool:
+	normalized = _normalize_text(value)
+	return normalized in {"yes", "true", "1", "y"}
+
+
+def _build_cropid_to_standing_water_requirement_map(
+	crop_details_dir: Path = CROP_DETAILS_DIR,
+) -> Dict[str, bool]:
+	mapping: Dict[str, bool] = {}
+
+	for csv_path in sorted(Path(crop_details_dir).glob("*.csv")):
+		if csv_path.name.startswith("0.List"):
+			continue
+
+		with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
+			reader = csv.reader(handle)
+			rows = list(reader)
+
+		if not rows:
+			continue
+
+		cropid_row = next(
+			(row for row in rows if row and _normalize_text(row[0]) == "cropid"),
+			None,
+		)
+		standing_row = next(
+			(
+				row
+				for row in rows
+				if row and "standing water requirement" in _normalize_text(row[0])
+			),
+			None,
+		)
+
+		if not cropid_row or not standing_row:
+			continue
+
+		max_len = max(len(cropid_row), len(standing_row))
+		for idx in range(1, max_len):
+			crop_id = str(cropid_row[idx] if idx < len(cropid_row) else "").strip().upper()
+			standing_value = standing_row[idx] if idx < len(standing_row) else ""
+			if crop_id:
+				mapping[crop_id] = _is_true_like(standing_value)
+
+	return mapping
+
+
 def _normalize_farm_cfs(farm_cfs: Dict[str, Any]) -> Dict[str, Any]:
 	if not isinstance(farm_cfs, dict):
 		raise ValueError("farm_cfs must be a JSON object like {'CF1': 'Weak', 'CF2': 'Very Weak'}")
@@ -179,6 +227,7 @@ def check_produced_mf_deterioration_warning(crop_id: str, farm_cfs: Dict[str, An
 		raise ValueError("crop_id must not be empty")
 
 	crop_label = _build_cropid_to_label_map().get(crop_id, crop_id)
+	standing_water_required = _build_cropid_to_standing_water_requirement_map().get(crop_id, False)
 
 	produced_by_cropid = _build_produced_mf_by_cropid()
 	produced_mfs = produced_by_cropid.get(crop_id, [])
@@ -201,6 +250,9 @@ def check_produced_mf_deterioration_warning(crop_id: str, farm_cfs: Dict[str, An
 	seen = set()
 
 	for cf_code, negative_mfs in negative_cf_mf_links.items():
+		if standing_water_required and cf_code == "CF11":
+			continue
+
 		farm_value = normalized_farm_cfs.get(cf_code)
 		if not _is_weak_or_very_weak(farm_value):
 			continue
