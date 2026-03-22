@@ -866,3 +866,67 @@ def get_phase1_resource_pressure(selected_crops=None, farm_cfs=None, farm_contex
         "warnings": warnings,
         "resolved_cfs": resolved_cfs,
     }
+
+
+@frappe.whitelist()
+def get_phase1_ecosystem_impact(selected_crops=None, farm_cfs=None, farm_context=None):
+    from rythulab.phase_1_step_8 import check_produced_mf_deterioration_warning
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+    farm_cfs = farm_cfs or payload.get("farm_cfs") or {}
+    farm_context = farm_context or payload.get("farm_context") or {}
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+    if isinstance(farm_cfs, str):
+        farm_cfs = frappe.parse_json(farm_cfs)
+    if isinstance(farm_context, str):
+        farm_context = frappe.parse_json(farm_context)
+
+    request_payload = {
+        "selected_crops": selected_crops,
+        "farm_cfs": farm_cfs,
+        "farm_context": farm_context,
+    }
+    resolved_cfs = _build_phase1_step7_farm_cfs(request_payload)
+    step8_farm_cfs = {}
+
+    for cf_code, cf_value in (resolved_cfs or {}).items():
+        if isinstance(cf_value, dict):
+            slab_value = cf_value.get("slab")
+            if slab_value not in (None, ""):
+                step8_farm_cfs[cf_code] = slab_value
+        elif cf_value not in (None, ""):
+            step8_farm_cfs[cf_code] = cf_value
+
+    results = []
+    warnings = []
+
+    for crop in selected_crops or []:
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip()
+        if not crop_id:
+            continue
+
+        analysis = check_produced_mf_deterioration_warning(crop_id, step8_farm_cfs)
+        results.append({
+            "crop": crop,
+            "analysis": analysis,
+        })
+
+        for warning in analysis.get("warnings", []):
+            warnings.append({
+                "cn": analysis.get("crop_label") or crop.get("name") or crop_id,
+                "t": "warn",
+                "m": warning.get("message"),
+                "cf_code": warning.get("cf_code"),
+                "cf_label": warning.get("cf_label"),
+                "mf_code": warning.get("mf_code"),
+                "mf_label": warning.get("mf_label"),
+            })
+
+    return {
+        "ok": True,
+        "results": results,
+        "warnings": warnings
+    }

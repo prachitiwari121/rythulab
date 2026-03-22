@@ -517,7 +517,7 @@ function cs_s5(){
 function cs_runAnalysis(){cs_calcAnalysis();cs_next();}
 function cs_calcAnalysis(){
     var c=cs_full();
-    CS.an={s6:null,s7:null,s8:_ck8(c),s9:_ck9(c),s10:_ck10(c)};
+    CS.an={s6:null,s7:null,s8:null,s9:_ck9(c),s10:_ck10(c)};
 }
 function _ck6(cr){
     var F=CS_FARM;
@@ -763,9 +763,49 @@ function cs_s7(){
 }
 
 /* ── STEP 8 — no revision button ─────────────────────────────── */
+function cs_fetchS8Analysis(){
+    if(CS.s8Loading) return;
+
+    CS.s8Loading=true;
+    CS.s8Error=null;
+
+    fetch("/api/method/rythulab.api.get_phase1_ecosystem_impact",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(cs_buildS6Payload())
+    })
+    .then(function(r){return r.json();})
+    .then(function(res){
+        var msg=res&&res.message?res.message:{};
+        CS.an=CS.an||{};
+        CS.an.s8=Array.isArray(msg.warnings)?msg.warnings:[];
+    })
+    .catch(function(err){
+        console.warn("Step 8 backend check failed, using local fallback.",err);
+        CS.s8Error=err;
+        CS.an=CS.an||{};
+        CS.an.s8=_ck8(cs_full());
+    })
+    .finally(function(){
+        CS.s8Loading=false;
+        if(CS.step===8) cs_renderStep(8);
+    });
+}
+
 function cs_s8(){
     if(!CS.an)cs_calcAnalysis();
-    var ws=CS.an.s8;
+    if(!Array.isArray(CS.an.s8)&&!CS.s8Loading) cs_fetchS8Analysis();
+
+    if(CS.s8Loading){
+        return cs_hd(8,"Ecosystem impact check",
+            'Checks if the crop Micro Features (MF) deteriorates any Context Feature (CF) of the farm that is already weak, medium weak → Note the warning with reason.<br><br>'+
+            'Example: Crop X produces MF "a" and MF "a" -vely affects CF b (value = Medium Low / low). Hence revise.')+
+            '<div class="cs-empty">Running ecosystem impact check from backend...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Sending farm context features to backend.</span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(7)">← Back</button></div>';
+    }
+
+    var ws=Array.isArray(CS.an.s8)?CS.an.s8:[];
     var bd=ws.length?
         '<div class="cs-wlist">'+ws.map(function(w){
             return'<div class="cs-wi cs-wi-w">'+
