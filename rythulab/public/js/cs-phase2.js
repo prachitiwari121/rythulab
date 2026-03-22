@@ -137,6 +137,7 @@ var CS2 = {
     step: 1,
     mainCrops: [],
     missingMF: [],
+    step1Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -176,6 +177,68 @@ function cs_phase2_init(){
     lay.innerHTML='<div class="cs-sbar" id="cs-sbar"></div><div class="cs-sc" id="cs-content"></div>';
     root.appendChild(lay);
     p2_renderSidebar(); p2_renderStep(CS2.step);
+    cs_fetchPhase2Step1();
+}
+
+/* ── Fetch Phase 2 Step 1 from backend ───────────────────────── */
+function cs_fetchPhase2Step1(){
+    var crops = CS2.mainCrops;
+    if(!crops || !crops.length) return;
+    if(CS2.p2s1Loading) return;
+    CS2.p2s1Loading = true;
+    fetch("/api/method/rythulab.api.get_phase2_missing_mfs", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name, type:c.type||"", a:c.a||0};
+            })
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+        CS2.step1Data = {
+            missing_mfs: Array.isArray(msg.missing_mfs) ? msg.missing_mfs : [],
+            missing_mf_details: Array.isArray(msg.missing_mf_details) ? msg.missing_mf_details : [],
+            recommended_crops: Array.isArray(msg.recommended_crops) ? msg.recommended_crops : [],
+            required_mfs: Array.isArray(msg.required_mfs) ? msg.required_mfs : [],
+            available_mfs: Array.isArray(msg.available_mfs) ? msg.available_mfs : []
+        };
+        if(Array.isArray(msg.missing_mfs)){
+            CS2.missingMF = msg.missing_mfs;
+        }
+        if(Array.isArray(msg.recommended_crops)){
+            msg.recommended_crops.forEach(function(rec){
+                var already = CS2.associateList.find(function(e){
+                    return e.crop && e.crop.id === rec.crop_id;
+                });
+                if(!already){
+                    CS2.associateList.push({
+                        crop: {
+                            id: rec.crop_id,
+                            name: rec.crop_name,
+                            mfp: rec.covers_missing_mfs || [],
+                            type: "Associate",
+                            family: "",
+                            desc: "",
+                            border: false,
+                            trap: false
+                        },
+                        reasons: rec.reasons || []
+                    });
+                }
+            });
+        }
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 1 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s1Loading = false;
+        if(CS2.step === 1) p2_renderStep(1);
+    });
 }
 
 /* ── Compute all recommendations upfront ─────────────────────── */
@@ -354,9 +417,18 @@ function p2_toggleSel(prefix, id, checked){
 /* ── Step 1: Missing MF — grouped by microfeature ───────────── */
 function p2_s1(){
     var mc=CS2.mainCrops;
-    var availMF=[]; mc.forEach(function(c){(c.mfp||[]).forEach(function(m){if(availMF.indexOf(m)<0)availMF.push(m);});});
-    var reqMF=[];   mc.forEach(function(c){(c.mfr||[]).forEach(function(m){if(reqMF.indexOf(m)<0)reqMF.push(m);});});
-    var missing=CS2.missingMF;
+    var step1Data=CS2.step1Data||{};
+    var availMF=Array.isArray(step1Data.available_mfs)?step1Data.available_mfs.slice():[];
+    var reqMF=Array.isArray(step1Data.required_mfs)?step1Data.required_mfs.slice():[];
+    var missing=Array.isArray(step1Data.missing_mfs)?step1Data.missing_mfs.slice():CS2.missingMF.slice();
+    var missingDetails=Array.isArray(step1Data.missing_mf_details)?step1Data.missing_mf_details:[];
+
+    if(!availMF.length){
+        mc.forEach(function(c){(c.mfp||[]).forEach(function(m){if(availMF.indexOf(m)<0)availMF.push(m);});});
+    }
+    if(!reqMF.length){
+        mc.forEach(function(c){(c.mfr||[]).forEach(function(m){if(reqMF.indexOf(m)<0)reqMF.push(m);});});
+    }
 
     var availHtml=availMF.map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join(" ");
     var reqHtml=reqMF.map(function(m){
@@ -369,7 +441,41 @@ function p2_s1(){
 
     // Group associate crops by missing MF
     var mfGroupsHtml = '';
-    if(missing.length){
+    if(missingDetails.length){
+        mfGroupsHtml = '<div style="font-size:12px;font-weight:700;color:#2a3a1a;margin-bottom:10px">Associate crops available for each missing microfeature:</div>';
+        missingDetails.forEach(function(detail){
+            var mfCode = detail.mf_code;
+            var reasonHtml = Array.isArray(detail.required_by_reasons) && detail.required_by_reasons.length
+                ? '<div style="font-size:11px;color:#3a4a2a;background:#fff;border-radius:6px;padding:8px 10px;margin-bottom:8px">'+detail.required_by_reasons.join('<br>')+'</div>'
+                : '';
+            var providingEntries = CS2.associateList.filter(function(entry){
+                return (entry.crop && entry.crop.mfp || []).indexOf(mfCode) >= 0;
+            });
+            var cropListHtml;
+            if(providingEntries.length){
+                cropListHtml = providingEntries.map(function(entry){
+                    return p2_cropCard(entry, CS2.selectedAssoc, 'assoc');
+                }).join('');
+            } else if(Array.isArray(detail.producer_crops) && detail.producer_crops.length){
+                cropListHtml = detail.producer_crops.map(function(crop){
+                    return '<div style="background:var(--green-bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:6px">'+
+                        '<div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px">'+crop.crop_name+'</div>'+
+                        '<div style="font-size:11px;color:#3a4a2a">Crop ID: '+crop.crop_id+'</div>'+
+                        '</div>';
+                }).join('');
+            } else {
+                cropListHtml = '<div style="font-size:11px;color:#8a9a7a;padding:8px 12px;background:#f9f9f9;border-radius:6px;margin-bottom:6px">No associate crops in current database provide this microfeature.</div>';
+            }
+            mfGroupsHtml +=
+                '<div style="margin-bottom:16px">'+
+                '<div style="font-size:12px;font-weight:700;color:#2a3a1a;background:#f0f7e8;border-left:3px solid var(--green-mid);border-radius:0 7px 7px 0;padding:7px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px">'+
+                '<span style="background:var(--green-mid);color:white;font-size:10px;padding:1px 7px;border-radius:8px">Missing MF</span>'+
+                (detail.mf_label || cs_mfl(mfCode))+'</div>'+
+                reasonHtml+
+                cropListHtml+
+                '</div>';
+        });
+    } else if(missing.length){
         mfGroupsHtml = '<div style="font-size:12px;font-weight:700;color:#2a3a1a;margin-bottom:10px">Associate crops available for each missing microfeature:</div>';
         missing.forEach(function(mf){
             var providingCrops = P2_CROPS.filter(function(ac){

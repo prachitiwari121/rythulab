@@ -1042,3 +1042,33 @@ def get_phase1_microfeature_conflicts(selected_crops=None):
         "warnings": warnings,
         "results": analysis_conflicts,
     }
+
+
+@frappe.whitelist()
+def get_phase2_missing_mfs(selected_crops=None):
+    from rythulab.phase_2_step_1 import find_missing_mfs_and_producers
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if not isinstance(crop, dict):
+            continue
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = find_missing_mfs_and_producers(crop_ids)
+
+    return {
+        "ok": True,
+        "missing_mfs": result.get("missing_mfs", []),
+        "missing_mf_details": result.get("missing_mf_details", []),
+        "recommended_crops": result.get("recommended_crops", []),
+        "required_mfs": result.get("required_mfs", []),
+        "available_mfs": result.get("available_mfs", []),
+    }
