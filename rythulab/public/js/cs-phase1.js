@@ -517,7 +517,7 @@ function cs_s5(){
 function cs_runAnalysis(){cs_calcAnalysis();cs_next();}
 function cs_calcAnalysis(){
     var c=cs_full();
-    CS.an={s6:null,s7:null,s8:null,s9:null,s10:_ck10(c)};
+    CS.an={s6:null,s7:null,s8:null,s9:null,s10:null};
 }
 function _ck6(cr){
     var F=CS_FARM;
@@ -900,13 +900,67 @@ function cs_s9(){
 }
 
 /* ── STEP 10 ──────────────────────────────────────────────────── */
+function cs_buildS10Payload(){
+    return {
+        selected_crops: cs_full().map(function(c){
+            return {
+                id:c.id,
+                cropid:c.cropid||c.id,
+                name:c.name,
+                type:c.type,
+                a:c.a
+            };
+        })
+    };
+}
+
+function cs_fetchS10Analysis(){
+    if(CS.s10Loading) return;
+
+    CS.s10Loading=true;
+    CS.s10Error=null;
+
+    fetch("/api/method/rythulab.api.get_phase1_microfeature_conflicts",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(cs_buildS10Payload())
+    })
+    .then(function(r){return r.json();})
+    .then(function(res){
+        var msg=res&&res.message?res.message:{};
+        CS.an=CS.an||{};
+        CS.an.s10=Array.isArray(msg.warnings)?msg.warnings:[];
+    })
+    .catch(function(err){
+        console.warn("Step 10 backend check failed, using local fallback.",err);
+        CS.s10Error=err;
+        CS.an=CS.an||{};
+        CS.an.s10=_ck10(cs_full());
+    })
+    .finally(function(){
+        CS.s10Loading=false;
+        if(CS.step===10) cs_renderStep(10);
+    });
+}
+
 function cs_s10(){
     if(!CS.an)cs_calcAnalysis();
-    var cf=CS.an.s10;
+    if(!Array.isArray(CS.an.s10)&&!CS.s10Loading) cs_fetchS10Analysis();
+
+    if(CS.s10Loading){
+        return cs_hd(10,"Microfeature conflict check",
+            'Checks for other conflicts that may arise between the Microfeatures of the main crops.<br><br>'+
+            '<strong>Rule:</strong> Required MF ∩ Suppress MF not empty → flag conflicts between Crop X (required MF) and Crop Y (suppress the same MF). Note the warning with reason.')+
+            '<div class="cs-empty">Running microfeature conflict check from backend...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Sending selected crops to backend.</span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(9)">← Back</button></div>';
+    }
+
+    var cf=Array.isArray(CS.an.s10)?CS.an.s10:[];
     var bd=cf.length?
         '<div class="cs-wlist">'+cf.map(function(c){
             return'<div class="cs-wi cs-wi-w">'+
-            '<div class="cs-wt">MF conflict — "'+cs_mfl(c.mf)+'" ('+c.nc+' vs '+c.sc+')</div>'+
+            '<div class="cs-wt">MF conflict — "'+c.mf_label+'" ('+c.nc+' vs '+c.sc+')</div>'+
             '<div class="cs-wb">'+c.msg+'</div></div>';
         }).join("")+'</div>':
         '<div class="cs-empty">No microfeature conflicts detected.</div>';

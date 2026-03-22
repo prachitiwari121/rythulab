@@ -996,3 +996,49 @@ def get_phase1_intercrop_competition(selected_crops=None):
         "warnings": warnings,
         "results": analysis_warnings,
     }
+
+
+@frappe.whitelist()
+def get_phase1_microfeature_conflicts(selected_crops=None):
+    from rythulab.phase_1_step_10 import check_microfeature_conflicts
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    crop_lookup = {}
+
+    for crop in selected_crops or []:
+        if not isinstance(crop, dict):
+            continue
+
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        if not crop_id:
+            continue
+
+        crop_ids.append(crop_id)
+        crop_lookup[crop_id] = crop
+
+    analysis_conflicts = check_microfeature_conflicts(crop_ids)
+
+    warnings = []
+    for conflict in analysis_conflicts:
+        crop_req_id = (conflict.get("crop_requiring_id") or "").strip().upper()
+        crop_supp_id = (conflict.get("crop_suppressing_id") or "").strip().upper()
+
+        warnings.append({
+            "nc": conflict.get("crop_requiring_label") or crop_req_id,
+            "sc": conflict.get("crop_suppressing_label") or crop_supp_id,
+            "mf": conflict.get("mf_code"),
+            "msg": conflict.get("message"),
+            "mf_label": conflict.get("mf_label"),
+        })
+
+    return {
+        "ok": True,
+        "warnings": warnings,
+        "results": analysis_conflicts,
+    }
