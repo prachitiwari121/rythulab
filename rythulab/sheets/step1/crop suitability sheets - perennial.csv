@@ -1,72 +1,34 @@
 CropID,Crop,North Coastal,Godavari,Krishna,Southern,Scarce Rainfall,High Altitude & Tribal
-,Black Pepper,S,S,U,U,U,P
 CRP0083,Cardamom,U,U,U,U,U,P
 CRP0100,Tamarind,M,H,H,H,H,S
 CRP0065,Mango,H,P,P,P,H,M
 CRP0071,Banana,H,P,P,H,U,U
 CRP0066,Citrus (various),H,H,H,H,M,M
-,Sapota,M,M,M,P,M,U
 CRP0068,Papaya,M,P,H,H,S,U
 CRP0067,Guava,M,H,H,H,M,M
 CRP0074,Pomegranate,U,S,M,H,P,U
-,Grapes,U,S,M,H,P,U
 CRP0073,Custard Apple,M,M,M,H,H,S
 CRP0072,Jackfruit,H,H,H,H,M,H
-,Pineapple,M,M,M,S,U,S
 CRP0075,Amla (Indian Gooseberry),M,M,M,H,H,M
 CRP0100,Tamarind,M,H,H,H,H,S
-,Jamun,M,M,M,H,M,M
-,Ber,S,M,M,H,P,S
-,Avocado,S,S,M,M,S,H
-,Litchi,U,U,U,S,U,H
-,Dragon Fruit,M,M,H,H,H,S
 CRP0069,Coconut,P,P,H,H,U,U
 CRP0027,Oil Palm,M,P,H,M,U,U
 CRP0070,Cashew,P,H,M,H,U,M
 CRP0076,Areca Nut,M,M,S,S,U,H
 CRP0078,Coffee,U,U,U,U,U,P
 CRP0078,Coffee,S,S,U,U,U,H
-,Black Pepper,S,S,U,U,U,P
 CRP0077,Cocoa,U,U,U,U,U,M
-,Rubber,U,U,U,U,U,S
 CRP0090,Rose,H,P,P,H,M,H
-,Jasmine,P,P,H,H,M,S
 CRP0092,Tuberose (Sugandhiraja),H,P,P,H,M,S
-,Gerbera,M,H,H,P,M,M
-,Carnation,S,M,M,H,S,H
-,Gladiolus,M,H,H,H,M,M
-,Lily,M,H,H,H,M,M
-,Anthurium,M,M,M,H,S,M
-,Orchids,M,M,M,M,U,H
-,Hibiscus,H,H,H,P,M,M
-,Bougainvillea,H,H,H,P,H,M
 CRP0045,Curry leaf,P,P,H,H,M,M
-,Mint,H,H,H,H,M,H
-,Lemongrass,M,H,H,H,M,M
-,Oregano,M,M,M,H,M,H
-,Thyme,S,M,M,M,S,H
-,Rosemary,S,M,M,M,S,H
-,Bay Leaf,M,M,M,H,M,M
-,Sage,S,M,M,M,S,H
-,Ajwain,M,M,M,H,H,M
 CRP0098,Neem,P,P,P,P,P,M
 CRP0075,Amla (Indian Gooseberry),H,H,H,P,H,M
-,Guduchi (Giloy),M,M,M,H,M,H
-,Moringa,H,H,H,P,H,M
+CRP0047,Moringa,H,H,H,P,H,M
 CRP0045,Curry leaf,P,P,H,H,M,M
-,Betel Vine,H,P,H,M,S,S
-,Sarpagandha,M,M,M,H,M,M
-,Long Pepper,M,M,M,M,S,H
-,Punarnava,M,M,M,H,M,M
+CRP0082,Betel Vine,H,P,H,M,S,S
 CRP0097,Teak,H,H,M,H,M,P
-,Eucaplyptus,H,H,H,H,P,M
-,Casuarina,P,H,H,M,S,U
-,Melia dubia,H,H,H,H,H,M
 CRP0098,Neem,P,P,P,P,P,M
 CRP0103,Silver Oak (Grevillea),M,M,M,H,M,H
-,Acacia,M,M,M,H,P,M
-,Gmelina,M,M,M,H,M,M
-,Red Sanders,U,U,U,P,P,U
 CRP0104,Bamboo,M,M,M,M,M,P
 CRP0001,Paddy/Rice,U,T,T,P,P,T
 CRP0002,Maize,S,U,H,M,S,H
@@ -112,7 +74,6 @@ CRP0042,Cabbage,U,S,H,U,H,P
 CRP0043,Cauliflower,S,U,S,U,M,S
 CRP0044,Coriander,M,T,U,H,S,H
 CRP0046,Gogu,S,M,T,M,T,T
-CRP0047,Drumstick (Moringa),H,T,T,T,T,T
 CRP0048,Bitter Gourd,H,H,T,H,M,H
 CRP0049,Snake Gourd,T,M,H,S,H,U
 CRP0050,Bottle Gourd,M,T,M,M,P,H
@@ -133,7 +94,6 @@ CRP0064,Elephant Yam,P,H,T,H,P,M
 CRP0079,Tea,U,M,U,P,P,S
 CRP0080,Pepper,H,M,H,S,H,T
 CRP0081,cloves,S,T,S,S,S,S
-CRP0082,Betel Leaf,M,T,U,P,U,U
 CRP0084,Ashwagandha,P,M,P,T,M,M
 CRP0085,Tulsi (Holy Basil),T,T,H,P,U,P
 CRP0087,Vetiver,M,P,T,P,P,T

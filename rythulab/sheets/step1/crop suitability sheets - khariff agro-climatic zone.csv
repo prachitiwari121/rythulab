@@ -15,48 +15,23 @@ CRP0025,Castor,U,M,M,H,M,U
 CRP0024,Sunflower,S,M,M,H,M,U
 CRP0060,Chilli,M,H,H,H,S,M
 CRP0031,Turmeric,S,M,M,H,U,P
-,Tobacco,U,P,P,U,U,U
 CRP0058,Tomato,H,H,M,M,S,M
 CRP0059,Brinjal (Eggplant),H,H,M,M,M,M
 CRP0062,Okra,H,H,M,M,M,M
-,Cucumber,M,M,M,S,S,S
 CRP0048,Bitter Gourd,M,M,M,S,S,M
 CRP0051,Ridge Gourd,M,M,M,M,S,S
 CRP0021,Cluster Bean,S,M,M,M,H,S
-,Green Leafy Veg,H,M,M,M,S,M
-,Jute,P,H,S,U,U,U
-,Mesta,H,M,S,U,U,U
-,Sun Hemp,H,M,M,U,U,U
 CRP0032,Ginger,M,H,H,H,S,H
 CRP0033,Garlic,S,M,M,M,M,S
 CRP0088,Marigold(African/French),H,P,P,H,M,M
 CRP0091,Crossandra (Kanakambaram),M,H,H,P,M,S
-,Balsam,M,M,M,M,S,H
-,Zinnia,M,M,M,H,M,H
-,Cosmos,M,M,M,M,S,H
-,Aster,M,H,H,H,M,M
+CRP0095,Aster,M,H,H,H,M,M
 CRP0085,Tulsi (Holy Basil),H,H,H,H,M,H
-,Mint,P,H,H,H,M,H
-,Green Amaranth,H,H,H,H,M,M
-,Fenugreek Leaves,M,M,M,M,M,M
-,Dill,M,M,M,M,S,M
-,Lemongrass,M,H,H,H,M,M
+CRP0040,Fenugreek,M,M,M,M,M,M
 CRP0084,Ashwagandha,M,M,M,H,P,S
 CRP0085,Tulsi (Holy Basil),H,H,H,H,M,H
-,Brahmi,H,H,H,M,S,M
-,Coleus,M,H,H,H,M,M
-,Kalmegh,M,M,M,M,S,S
-,Stevia,M,M,M,H,M,M
-,Aloe Vera,H,H,H,P,H,S
-,Senna,M,M,M,H,H,S
-,Fodder Sorghum (Jowar),H,H,H,H,P,H
-,Napier–Bajra Hybrid,M,H,H,H,H,M
-,Fodder Bajra (Pearl Millet),M,M,M,M,P,M
 CRP0002,Maize,H,H,H,H,H,M
 CRP0017,Cowpea,H,H,H,H,H,M
-,Guar (Clusterbean Fodder),M,M,M,M,H,M
-,Stylo (Stylo hamata),M,M,M,M,H,M
-,Guinea Grass,M,M,M,H,M,M
 CRP0005,Ragi (Finger Millet),U,M,S,T,M,H
 CRP0006,Wheat,T,T,M,T,T,U
 CRP0008,Little Millet (Samalu),T,U,H,P,T,P
@@ -77,7 +52,6 @@ CRP0036,Hedge Lucerne (Desmanthus),S,M,U,P,U,T
 CRP0037,Stylosanthes,U,T,S,T,U,S
 CRP0038,Spinach,T,M,U,U,T,U
 CRP0039,Amaranth,S,U,P,T,T,T
-CRP0040,Fenugreek,T,H,U,S,P,P
 CRP0041,Lettuce,T,T,P,T,T,T
 CRP0042,Cabbage,M,T,P,S,U,T
 CRP0043,Cauliflower,T,U,M,H,T,P
@@ -122,7 +96,6 @@ CRP0090,Rose,H,P,S,H,H,M
 CRP0092,Tuberose (Sugandhiraja),M,H,M,U,S,U
 CRP0093,Gaillardia (Blanket Flower),P,M,T,H,U,H
 CRP0094,Cock's Comb (Celosia),S,P,T,H,P,S
-CRP0095,China Aster,H,M,T,P,H,P
 CRP0096,Lotus,T,T,S,H,M,T
 CRP0097,Teak,T,M,S,U,T,M
 CRP0099,Pongamia (Kanuga),S,U,S,H,U,M

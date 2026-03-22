@@ -1,15 +1,12 @@
 CropID,Crop,Alluvial/Loam,Alluvial/SiltLoam,Alluvial/ClayLoam,Alluvial/SandyLoam,Black/Clay,Black/ClayLoam,Black/SiltClay,RedAndYellow/SandyLoam,RedAndYellow/Loam,RedAndYellow/ClayLoam,Laterite/Loam,Laterite/ClayLoam,Laterite/SandyClayLoam,Arid/Sandy,Arid/LoamySand,Arid/SandyLoam,ForestMount/Loam,ForestMount/SiltLoam,ForestMount/ClayLoam,Coastal/Sandy,Saline-Alkali/ClayLoam
-,Paddy,P,P,P,H,M,M,M,T,T,T,M,M,M,T,T,T,M,M,M,T,M
+CRP0001,Paddy,P,P,P,H,M,M,M,T,T,T,M,M,M,T,T,T,M,M,M,T,M
 CRP0029,Cotton,M,M,M,H,P,P,P,H,M,H,T,T,T,M,M,M,T,T,T,T,T
 CRP0023,Groundnut,H,M,T,P,M,M,M,P,H,M,M,M,H,H,P,P,M,M,M,M,T
 CRP0030,Sugarcane,P,P,P,M,H,H,H,T,T,T,T,T,T,T,T,T,T,T,T,T,T
-,Millets,H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
-,Pulses,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
 CRP0060,Chilli,M,M,M,H,P,P,P,M,M,M,T,T,T,M,M,M,T,T,T,T,T
 CRP0071,Banana,P,P,P,M,M,M,M,T,T,T,T,T,T,T,T,T,T,T,T,T,T
 CRP0065,Mango,H,H,H,M,M,M,M,M,H,M,M,M,M,T,T,T,P,H,M,H,T
 CRP0070,Cashew,M,M,M,M,T,T,T,M,M,M,P,P,P,M,M,M,P,M,M,H,T
-,Tobacco,H,M,M,P,H,P,H,M,M,H,T,T,T,M,M,M,T,T,T,T,T
 CRP0002,Maize,H,H,M,P,M,M,M,H,P,H,M,M,M,M,H,H,M,H,M,M,M
 CRP0031,Turmeric,M,M,M,M,M,M,M,M,M,M,H,H,M,T,T,T,H,P,H,T,T
 CRP0024,Sunflower,M,M,M,H,H,H,H,P,H,M,M,M,M,H,P,H,M,M,M,M,T
@@ -17,24 +14,23 @@ CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),M,M,M,H,H,H,H,P,P,H,M,M,M,M
 CRP0014,Black Gram (Urad),H,H,M,H,P,P,P,H,H,H,M,M,M,M,M,H,H,M,H,M,T
 CRP0015,Green Gram (Moong),H,H,M,H,P,P,H,P,P,H,M,M,M,M,H,P,H,M,H,M,T
 CRP0069,Coconut,M,M,M,H,T,T,T,M,M,M,M,M,M,T,T,T,H,M,P,P,T
-CRP0001,Paddy/Rice,S,S,T,T,S,M,S,M,H,S,T,M,H,M,P,H,S,M,P,S,S
 CRP0003,Jowar (Sorghum),S,T,U,H,T,P,H,H,U,H,U,M,U,S,S,P,P,H,M,T,U
 CRP0004,Bajra (Pearl Millet),M,T,S,S,H,U,H,T,H,P,H,T,S,H,S,P,H,S,P,P,S
 CRP0005,Ragi (Finger Millet),P,T,S,P,M,P,M,S,H,U,T,T,P,H,U,M,H,T,M,H,T
 CRP0006,Wheat,H,T,S,S,T,S,P,T,T,P,P,H,U,T,T,H,M,S,T,U,T
-CRP0007,Foxtail Millet (Korralu),M,M,M,S,M,M,M,H,P,U,M,S,T,P,H,P,S,H,U,T,U
-CRP0008,Little Millet (Samalu),S,T,U,H,H,U,P,H,U,U,M,U,H,T,T,T,S,M,P,S,T
-CRP0009,Barnyard Millet (Udalu),M,T,H,T,M,U,H,P,P,U,T,M,S,H,S,S,T,T,P,H,S
-CRP0010,Proso Millet (Varigalu),T,U,H,S,T,P,U,M,H,U,U,S,M,P,P,T,M,S,H,U,T
-CRP0011,Kodo Millet (Paspalum scrobiculatum),M,U,U,M,U,M,M,T,T,S,S,M,T,T,T,P,T,T,P,U,T
-CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),M,P,U,T,P,U,H,T,P,P,U,H,U,S,U,M,H,U,S,U,M
-CRP0013,Red Gram (Pigeon Pea),H,M,H,T,M,P,U,U,T,H,U,T,M,M,S,U,T,H,T,T,S
-CRP0016,Horse Gram,U,T,H,H,S,P,H,T,U,H,H,M,S,U,U,S,U,M,U,U,S
-CRP0017,Cowpea,U,U,P,H,U,P,S,M,U,P,H,U,S,T,U,S,T,U,T,T,T
-CRP0018,Broad Beans (Faba Beans) (Vicia faba),P,P,T,U,M,T,H,M,M,S,U,H,T,T,M,H,M,T,T,H,M
-CRP0020,Lentils (Lens culinaris),S,H,U,H,M,T,U,S,P,P,T,M,S,U,T,S,H,H,T,T,T
-CRP0021,Cluster Bean,S,S,U,M,S,S,H,P,U,U,M,T,T,U,H,S,U,S,M,T,H
-CRP0022,Field Bean,S,S,H,S,T,M,M,U,M,T,U,H,S,M,U,S,P,S,U,U,P
+CRP0007,Foxtail Millet (Korralu),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0008,Little Millet (Samalu),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0009,Barnyard Millet (Udalu),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0010,Proso Millet (Varigalu),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0011,Kodo Millet (Paspalum scrobiculatum),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),H,M,T,P,M,M,M,P,P,H,H,M,P,P,P,H,H,M,H,H,T
+CRP0013,Red Gram (Pigeon Pea),H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0016,Horse Gram,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0017,Cowpea,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0018,Broad Beans (Faba Beans) (Vicia faba),H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0020,Lentils (Lens culinaris),H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0021,Cluster Bean,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
+CRP0022,Field Bean,H,M,M,H,P,P,H,H,P,H,M,M,M,M,M,H,H,M,H,M,T
 CRP0025,Castor,U,H,U,T,M,T,T,H,P,T,U,H,H,U,T,M,S,S,H,M,H
 CRP0026,Mustard,M,M,P,H,U,T,M,S,U,M,U,M,H,H,S,P,P,P,P,P,S
 CRP0027,Oil Palm,U,H,U,S,P,T,S,U,M,M,U,H,P,P,U,S,M,S,M,U,T

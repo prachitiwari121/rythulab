@@ -7,7 +7,6 @@ CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),U,S,S,M,P,U
 CRP0023,Groundnut,H,H,H,H,M,U
 CRP0024,Sunflower,M,H,H,P,H,U
 CRP0025,Castor,U,M,M,H,H,U
-,Safflower,U,S,M,M,H,U
 CRP0028,Sesame,M,M,M,M,M,S
 CRP0015,Green Gram (Moong),M,M,M,M,M,S
 CRP0014,Black Gram (Urad),M,M,M,M,S,M
@@ -22,47 +21,18 @@ CRP0056,Carrot,M,M,M,H,M,M
 CRP0054,Beetroot,M,M,M,H,M,M
 CRP0055,Radish,H,H,H,H,M,H
 CRP0044,Coriander,H,H,H,H,M,M
-,Peas,S,M,M,M,S,H
 CRP0022,Field Bean,M,M,M,H,S,H
 CRP0029,Cotton,M,S,S,M,H,U
-,Sun Hemp,S,S,S,S,S,U
-,Cumin,S,M,M,M,H,U
 CRP0040,Fenugreek,M,M,M,H,H,S
 CRP0033,Garlic,M,M,M,H,M,S
 CRP0031,Turmeric,M,H,H,P,S,H
 CRP0088,Marigold(African/French),H,P,P,H,M,M
 CRP0089,Chrysanthemum,H,P,P,H,M,H
 CRP0095,China Aster,M,H,H,H,M,M
-,Calendula,M,M,M,H,M,H
-,Petunia,M,H,H,H,M,H
-,Pansy,S,M,M,H,M,H
-,Dianthus,M,H,H,H,M,M
-,Verbena,M,H,H,H,S,M
-,Phlox,M,H,H,H,S,M
-,Antirrhinum,M,H,H,H,M,M
 CRP0044,Coriander,H,P,P,H,M,M
-,Fenugreek Leaves,H,H,H,H,H,M
-,Dill,M,M,M,H,M,M
-,Parsley,M,M,M,H,M,M
-,Celery,S,M,M,M,S,M
-,Spring Onion,M,H,H,H,M,M
-,Mint,H,H,H,H,M,H
-,Rosemary,S,M,M,M,S,H
 CRP0084,Ashwagandha,H,H,H,P,P,M
-,Isabgol,S,M,M,M,H,U
-,Safed Musli,M,M,M,H,M,M
-,Shatavari,M,M,M,H,M,M
-,Giloy,M,M,M,H,M,H
-,Kalmegh,M,M,M,M,M,S
-,Berseem (Egyptian Clover),S,M,M,M,M,H
-,Lucerne (Alfalfa),S,M,M,M,M,H
-,Oats (Fodder),S,M,M,M,M,H
-,Fodder Sorghum (Late sown),S,S,S,M,H,S
-,Fodder Bajra (Late sown),S,S,S,M,H,S
-,Fodder Maize (Winter),S,M,M,M,M,S
 CRP0017,Cowpea,M,M,M,M,M,S
-,Hybrid Napier (Perennial cuts),M,H,H,H,H,M
-,Guinea Grass (Perennial cuts),M,M,M,M,M,M
+CRP0035,Hybrid Napier (Perennial cuts),M,H,H,H,H,M
 CRP0005,Ragi (Finger Millet),T,T,U,U,H,U
 CRP0006,Wheat,U,P,U,H,M,U
 CRP0007,Foxtail Millet (Korralu),S,H,H,P,M,U
@@ -80,7 +50,6 @@ CRP0027,Oil Palm,U,S,T,H,M,U
 CRP0030,Sugarcane,S,M,S,T,H,H
 CRP0032,Ginger,U,T,H,H,M,M
 CRP0034,Chilli (Commercial),H,M,S,M,H,M
-CRP0035,Napier Grass,M,U,U,P,S,S
 CRP0036,Hedge Lucerne (Desmanthus),H,P,H,T,M,U
 CRP0037,Stylosanthes,H,H,M,U,M,H
 CRP0038,Spinach,H,P,P,P,U,T

@@ -1,19 +1,15 @@
 CropID,Crop,Copious-Irrigation,Controlled-Irrigation,Supplemental-Irrigation,Rain-Fed-High,Rain-Fed-Low-Erratic
-,Paddy,P,H,M,M,T
+CRP0001,Paddy,P,H,M,M,T
 CRP0029,Cotton,H,P,H,M,M
 CRP0023,Groundnut,H,P,H,M,H
 CRP0030,Sugarcane,P,H,M,T,T
-,Millets,H,M,P,P,P
-,Pulses,H,P,H,P,H
 CRP0060,Chilli,P,H,M,M,U
 CRP0071,Banana,P,H,M,U,T
 CRP0065,Mango,P,H,M,H,M
 CRP0070,Cashew,H,M,H,P,P
-,Tobacco,H,P,H,M,M
 CRP0002,Maize,P,H,P,H,M
 CRP0031,Turmeric,P,H,M,M,U
 CRP0024,Sunflower,H,P,P,H,H
-,BengalGram,M,P,H,P,P
 CRP0014,Black Gram (Urad),H,P,H,P,P
 CRP0015,Green Gram (Moong),H,P,H,P,P
 CRP0069,Coconut,P,H,M,H,M
@@ -23,28 +19,26 @@ CRP0003,Jowar (Sorghum),P,H,H,P,H
 CRP0004,Bajra (Pearl Millet),H,H,H,P,P
 CRP0005,Ragi (Finger Millet),H,H,H,P,P
 CRP0013,Red Gram (Pigeon Pea),H,P,H,P,P
-,Lemon,P,H,M,M,M
 CRP0068,Papaya,P,H,M,M,M
 CRP0058,Tomato,P,P,P,H,M
 CRP0063,Onion,P,P,P,H,M
 CRP0059,Brinjal (Eggplant),H,P,P,H,M
 CRP0062,Okra,H,P,H,H,M
 CRP0044,Coriander,H,P,H,H,M
-CRP0001,Paddy/Rice,P,M,H,U,T
 CRP0006,Wheat,P,M,P,U,U
-CRP0007,Foxtail Millet (Korralu),U,H,S,P,T
-CRP0008,Little Millet (Samalu),H,M,U,M,T
-CRP0009,Barnyard Millet (Udalu),P,M,U,H,P
-CRP0010,Proso Millet (Varigalu),P,M,T,T,P
-CRP0011,Kodo Millet (Paspalum scrobiculatum),H,P,H,S,S
-CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),U,S,M,S,H
-CRP0016,Horse Gram,S,T,P,U,U
-CRP0017,Cowpea,T,M,S,M,U
-CRP0018,Broad Beans (Faba Beans) (Vicia faba),T,T,H,S,P
-CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),U,S,S,T,P
-CRP0020,Lentils (Lens culinaris),H,T,H,M,U
-CRP0021,Cluster Bean,T,S,M,T,T
-CRP0022,Field Bean,M,U,U,T,U
+CRP0007,Foxtail Millet (Korralu),H,M,P,P,P
+CRP0008,Little Millet (Samalu),H,M,P,P,P
+CRP0009,Barnyard Millet (Udalu),H,M,P,P,P
+CRP0010,Proso Millet (Varigalu),H,M,P,P,P
+CRP0011,Kodo Millet (Paspalum scrobiculatum),H,M,P,P,P
+CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),H,M,P,P,P
+CRP0016,Horse Gram,H,P,H,P,H
+CRP0017,Cowpea,H,P,H,P,H
+CRP0018,Broad Beans (Faba Beans) (Vicia faba),H,P,H,P,H
+CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),H,P,H,P,H
+CRP0020,Lentils (Lens culinaris),H,P,H,P,H
+CRP0021,Cluster Bean,H,P,H,P,H
+CRP0022,Field Bean,H,P,H,P,H
 CRP0026,Mustard,U,S,T,U,T
 CRP0027,Oil Palm,H,U,M,H,P
 CRP0032,Ginger,T,S,H,H,P
