@@ -68,10 +68,51 @@ def _normalize_score(value: object) -> str:
     return score if score in {"P", "H", "M", "S", "U", "T"} else ""
 
 
+def _load_crop_list_df(crop_details_dir: Path = CROP_DETAILS_DIR) -> pd.DataFrame:
+    list_file = crop_details_dir / "0.List of All crops - Sheet1.csv"
+    if not list_file.exists():
+        raise FileNotFoundError(f"Sheet not found: {list_file}")
+
+    df = pd.read_csv(list_file)
+    required = {"CropID", "Crop Name"}
+    if not required.issubset(set(df.columns)):
+        raise ValueError("0.List sheet must contain 'CropID' and 'Crop Name' columns")
+    return df
+
+
+def get_cropid_to_canonical_name_map(
+    crop_details_dir: Path = CROP_DETAILS_DIR,
+) -> Dict[str, str]:
+    df = _load_crop_list_df(crop_details_dir)
+
+    mapping: Dict[str, str] = {}
+    for _, row in df.iterrows():
+        crop_id = _safe_str(row.get("CropID"))
+        canonical_name = canonicalize_crop_name(row.get("Crop Name"))
+        if crop_id and canonical_name:
+            mapping[crop_id] = canonical_name
+    return mapping
+
+
+def get_canonical_crop_to_cropid_map(
+    crop_details_dir: Path = CROP_DETAILS_DIR,
+) -> Dict[str, str]:
+    df = _load_crop_list_df(crop_details_dir)
+
+    mapping: Dict[str, str] = {}
+    for _, row in df.iterrows():
+        crop_id = _safe_str(row.get("CropID"))
+        canonical_name = canonicalize_crop_name(row.get("Crop Name"))
+        if crop_id and canonical_name and canonical_name not in mapping:
+            mapping[canonical_name] = crop_id
+    return mapping
+
+
 def _extract_scores_from_crop_rows(
     df: pd.DataFrame,
     category: str,
-    ordered_crops: List[str],
+    ordered_crop_ids: List[str],
+    cropid_to_canonical_name: Dict[str, str],
     score_map: Dict[str, int],
 ) -> Dict[str, int]:
     if "Crop" not in df.columns:
@@ -86,15 +127,19 @@ def _extract_scores_from_crop_rows(
     }
 
     scores: Dict[str, int] = {}
-    for crop in ordered_crops:
-        idx = canonical_rows.get(crop)
+    for crop_id in ordered_crop_ids:
+        canonical_name = cropid_to_canonical_name.get(crop_id)
+        if not canonical_name:
+            continue
+
+        idx = canonical_rows.get(canonical_name)
         if idx is None:
             continue
 
         suitability = _normalize_score(df.iloc[idx][category])
         if not suitability or suitability == "T":
             continue
-        scores[crop] = score_map[suitability]
+        scores[crop_id] = score_map[suitability]
 
     return scores
 
@@ -103,7 +148,8 @@ def _extract_scores_from_category_row(
     df: pd.DataFrame,
     selector_column: str,
     selector_value: str,
-    ordered_crops: List[str],
+    ordered_crop_ids: List[str],
+    cropid_to_canonical_name: Dict[str, str],
     score_map: Dict[str, int],
 ) -> Dict[str, int]:
     first_col = df.columns[0]
@@ -122,22 +168,30 @@ def _extract_scores_from_category_row(
     }
 
     scores: Dict[str, int] = {}
-    for crop in ordered_crops:
-        src_col = canonical_columns.get(crop)
+    for crop_id in ordered_crop_ids:
+        canonical_name = cropid_to_canonical_name.get(crop_id)
+        if not canonical_name:
+            continue
+
+        src_col = canonical_columns.get(canonical_name)
         if not src_col:
             continue
 
         suitability = _normalize_score(row[src_col])
         if not suitability or suitability == "T":
             continue
-        scores[crop] = score_map[suitability]
+        scores[crop_id] = score_map[suitability]
 
     return scores
 
 
-def build_all_crops(step1_dir: Path = STEP1_DIR) -> List[str]:
+def build_all_crops(
+    step1_dir: Path = STEP1_DIR,
+    crop_details_dir: Path = CROP_DETAILS_DIR,
+) -> List[str]:
     all_crops: List[str] = []
     seen = set()
+    canonical_to_cropid = get_canonical_crop_to_cropid_map(crop_details_dir)
 
     for file_name in {
         STEP1_FILES["soil"],
@@ -155,10 +209,11 @@ def build_all_crops(step1_dir: Path = STEP1_DIR) -> List[str]:
 
         for crop in source:
             canonical = canonicalize_crop_name(crop)
-            if not canonical or canonical in seen:
+            crop_id = canonical_to_cropid.get(canonical or "")
+            if not crop_id or crop_id in seen:
                 continue
-            seen.add(canonical)
-            all_crops.append(canonical)
+            seen.add(crop_id)
+            all_crops.append(crop_id)
 
     return all_crops
 
@@ -169,6 +224,7 @@ def get_scores_from_step1_season(
     ordered_crops: List[str],
     score_map: Dict[str, int],
     step1_dir: Path = STEP1_DIR,
+    crop_details_dir: Path = CROP_DETAILS_DIR,
 ) -> Dict[str, int]:
     key = season_key.strip().lower()
     if key not in STEP1_FILES:
@@ -176,7 +232,14 @@ def get_scores_from_step1_season(
 
     file_path = _sheet_path(STEP1_FILES[key], step1_dir)
     df = pd.read_csv(file_path)
-    return _extract_scores_from_crop_rows(df, agro_climatic_zone, ordered_crops, score_map)
+    cropid_to_canonical_name = get_cropid_to_canonical_name_map(crop_details_dir)
+    return _extract_scores_from_crop_rows(
+        df,
+        agro_climatic_zone,
+        ordered_crops,
+        cropid_to_canonical_name,
+        score_map,
+    )
 
 
 def get_scores_from_step1_category(
@@ -185,6 +248,7 @@ def get_scores_from_step1_category(
     ordered_crops: List[str],
     score_map: Dict[str, int],
     step1_dir: Path = STEP1_DIR,
+    crop_details_dir: Path = CROP_DETAILS_DIR,
 ) -> Dict[str, int]:
     kind_key = kind.strip().lower()
     if kind_key == "soil":
@@ -197,15 +261,23 @@ def get_scores_from_step1_category(
         raise ValueError("kind must be either 'soil' or 'water'")
 
     df = pd.read_csv(_sheet_path(file_name, step1_dir))
+    cropid_to_canonical_name = get_cropid_to_canonical_name_map(crop_details_dir)
 
     if "Crop" in df.columns and category_value in df.columns:
-        return _extract_scores_from_crop_rows(df, category_value, ordered_crops, score_map)
+        return _extract_scores_from_crop_rows(
+            df,
+            category_value,
+            ordered_crops,
+            cropid_to_canonical_name,
+            score_map,
+        )
 
     return _extract_scores_from_category_row(
         df,
         selector_column,
         category_value,
         ordered_crops,
+        cropid_to_canonical_name,
         score_map,
     )
 
@@ -258,6 +330,7 @@ def get_temperature_scores_from_crop_details(
 ) -> Dict[str, float]:
     requested_range = normalize_temperature_bounds(min_temperature, max_temperature)
     scores: Dict[str, float] = {}
+    cropid_to_canonical_name = get_cropid_to_canonical_name_map(crop_details_dir)
 
     for csv_path in sorted(crop_details_dir.glob("*.csv")):
         if csv_path.name.startswith("0.List"):
@@ -279,8 +352,12 @@ def get_temperature_scores_from_crop_details(
         }
 
         for _, row in temp_rows.iterrows():
-            for crop in ordered_crops:
-                src_col = canonical_columns.get(crop)
+            for crop_id in ordered_crops:
+                canonical_name = cropid_to_canonical_name.get(crop_id)
+                if not canonical_name:
+                    continue
+
+                src_col = canonical_columns.get(canonical_name)
                 if not src_col:
                     continue
 
@@ -290,7 +367,7 @@ def get_temperature_scores_from_crop_details(
 
                 deviation = calculate_temperature_deviation(requested_range, crop_range)
                 score = temperature_score_from_deviation(deviation)
-                scores[crop] = max(scores.get(crop, 0), score)
+                scores[crop_id] = max(scores.get(crop_id, 0), score)
 
     return scores
 
@@ -303,14 +380,7 @@ def _extract_first_numeric(value: object) -> Optional[float]:
 
 
 def get_cropid_to_name_map(crop_details_dir: Path = CROP_DETAILS_DIR) -> Dict[str, str]:
-    list_file = crop_details_dir / "0.List of All crops - Sheet1.csv"
-    if not list_file.exists():
-        raise FileNotFoundError(f"Sheet not found: {list_file}")
-
-    df = pd.read_csv(list_file)
-    required = {"CropID", "Crop Name"}
-    if not required.issubset(set(df.columns)):
-        raise ValueError("0.List sheet must contain 'CropID' and 'Crop Name' columns")
+    df = _load_crop_list_df(crop_details_dir)
 
     mapping: Dict[str, str] = {}
     for _, row in df.iterrows():
@@ -328,14 +398,7 @@ def get_crop_water_demand_min_by_crop_id(
     if not crop_id:
         raise ValueError("crop_id is required")
 
-    cropid_to_name = get_cropid_to_name_map(crop_details_dir)
-    target_name = cropid_to_name.get(crop_id)
-    if not target_name:
-        raise ValueError(f"CropID '{crop_id}' not found in crop_details list sheet")
-
-    target_canonical = canonicalize_crop_name(target_name)
-    if not target_canonical:
-        raise ValueError(f"Unable to canonicalize crop name for CropID '{crop_id}'")
+    target_crop_id = _safe_str(crop_id).upper()
 
     for csv_path in sorted(crop_details_dir.glob("*.csv")):
         if csv_path.name.startswith("0.List"):
@@ -346,6 +409,27 @@ def get_crop_water_demand_min_by_crop_id(
             continue
 
         parameter_col = df.columns[0]
+
+        cropid_rows = df[
+            df[parameter_col]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .eq("cropid")
+        ]
+        if cropid_rows.empty:
+            continue
+
+        cropid_row = cropid_rows.iloc[0]
+        src_col = None
+        for col in df.columns[1:]:
+            value = _safe_str(cropid_row.get(col)).upper()
+            if value == target_crop_id:
+                src_col = col
+                break
+        if not src_col:
+            continue
+
         water_rows = df[
             df[parameter_col]
             .astype(str)
@@ -353,15 +437,6 @@ def get_crop_water_demand_min_by_crop_id(
             .str.contains("water demand value", na=False)
         ]
         if water_rows.empty:
-            continue
-
-        canonical_columns = {
-            canonicalize_crop_name(col): col
-            for col in df.columns[1:]
-            if canonicalize_crop_name(col)
-        }
-        src_col = canonical_columns.get(target_canonical)
-        if not src_col:
             continue
 
         for _, row in water_rows.iterrows():

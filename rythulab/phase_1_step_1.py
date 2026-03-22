@@ -1,6 +1,7 @@
 try:
     from rythulab.sheets.extraction_utils import (
         build_all_crops,
+        get_cropid_to_name_map,
         get_scores_from_step1_category,
         get_scores_from_step1_season,
         get_temperature_scores_from_crop_details,
@@ -8,6 +9,7 @@ try:
 except ModuleNotFoundError:
     from sheets.extraction_utils import (
         build_all_crops,
+        get_cropid_to_name_map,
         get_scores_from_step1_category,
         get_scores_from_step1_season,
         get_temperature_scores_from_crop_details,
@@ -41,6 +43,7 @@ SEASON_SCORE_MAP = {
 }
 
 ALL_CROPS = build_all_crops()
+CROPID_TO_NAME = get_cropid_to_name_map()
 
 
 def _sort_crops_by_score(suitable_crops, ordered_crops, n):
@@ -52,7 +55,7 @@ def _sort_crops_by_score(suitable_crops, ordered_crops, n):
 def _sort_scored_crops(suitable_crops, ordered_crops, n):
     crop_positions = {crop: index for index, crop in enumerate(ordered_crops)}
     suitable_crops.sort(
-        key=lambda item: (-item["weighted_score"], crop_positions[item["crop"]])
+        key=lambda item: (-item["weighted_score"], crop_positions[item["crop_id"]])
     )
     return suitable_crops[:n]
 
@@ -193,7 +196,8 @@ def get_suitable_crops_by_conditions(
 
         filtered_crops.append(
             {
-                "crop": crop,
+                "crop_id": crop,
+                "crop": CROPID_TO_NAME.get(crop, crop),
                 "season_score": season_scores[crop],
                 "water_score": water_scores[crop],
                 "soil_score": soil_scores[crop],

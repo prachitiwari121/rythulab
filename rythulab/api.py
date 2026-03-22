@@ -699,6 +699,7 @@ def get_feasible_crops(
     cropid_map = _build_cropid_map_from_sheet()
     crops = []
     for item in feasible:
+        crop_id = item.get("crop_id")
         crop_name = item.get("crop")
         weighted = float(item.get("weighted_score") or 0.0)
         sc = int(round(max(0.0, min(5.0, weighted)) * 20))
@@ -707,9 +708,10 @@ def get_feasible_crops(
         soil_score = float(item.get("soil_score") or 0)
         temp_score = item.get("temperature_score")
 
-        norm_name = _norm_crop_name(crop_name)
+        norm_name = _norm_crop_name(crop_name or "")
         crop_type = crop_type_map.get(norm_name, "Main Crop")
-        crop_id = cropid_map.get(norm_name) or _crop_id_from_name(crop_name)
+        if not crop_id:
+            crop_id = cropid_map.get(norm_name) or _crop_id_from_name(crop_name)
         try:
             wr = get_crop_water_demand_min(crop_id)
         except Exception:
