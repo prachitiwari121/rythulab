@@ -76,8 +76,8 @@ def _load_cropid_to_name_map() -> Dict[str, str]:
     return mapping
 
 
-def _find_crop_column(crop_name: str) -> tuple[Path, str]:
-    target = _norm(crop_name)
+def _find_crop_column_by_id(crop_id: str) -> tuple[Path, str]:
+    target = crop_id.strip().upper()
 
     for csv_path in sorted(CROP_DETAILS_DIR.glob("*.csv")):
         if csv_path.name.startswith("0.List"):
@@ -90,12 +90,20 @@ def _find_crop_column(crop_name: str) -> tuple[Path, str]:
         if not rows:
             continue
 
-        headers = rows[0]
-        for header in headers[1:]:
-            if _norm(str(header)) == target:
-                return csv_path, header
+        # Find the CropID row
+        cropid_row = next(
+            (r for r in rows if r and _norm(str(r[0])) == "cropid"),
+            None,
+        )
+        if cropid_row is None:
+            continue
 
-    raise ValueError(f"Crop '{crop_name}' not found in crop detail matrices")
+        headers = rows[0]
+        for col_idx, cell in enumerate(cropid_row[1:], start=1):
+            if str(cell or "").strip().upper() == target:
+                return csv_path, headers[col_idx]
+
+    raise ValueError(f"CropID '{crop_id}' not found in crop detail matrices")
 
 
 def _extract_farm_cf_status(cf_code: str, farm_cfs: Dict[str, Any], cf_label: str) -> Any:
@@ -130,11 +138,9 @@ def check_resource_pressure(crop_id: str, farm_cfs: Dict[str, Any]) -> Dict[str,
         raise ValueError("crop_id must not be empty")
 
     cropid_to_name = _load_cropid_to_name_map()
-    crop_name = cropid_to_name.get(crop_id)
-    if not crop_name:
-        raise ValueError(f"Crop ID '{crop_id}' not found in crop list")
+    crop_name = cropid_to_name.get(crop_id, crop_id)
 
-    matrix_path, crop_column = _find_crop_column(crop_name)
+    matrix_path, crop_column = _find_crop_column_by_id(crop_id)
     row_to_cf_map = extract_row_name_to_cf_map(CROP_DETAILS_DIR)
     cf_info_map = build_cf_info_map()
 
