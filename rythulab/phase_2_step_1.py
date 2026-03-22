@@ -80,7 +80,8 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 
 		for mf_code in (required_by_cropid.get(crop_id) or []):
 			required_mfs.add(mf_code)
-			required_by_mf.setdefault(mf_code, []).append(f"{crop_name} requires {mf_code}")
+			mf_label = get_mf_label(mf_code) or mf_code
+			required_by_mf.setdefault(mf_code, []).append(f"{crop_name} requires {mf_label}")
 
 		for mf_code in (produced_by_cropid.get(crop_id) or []):
 			available_mfs.add(mf_code)
@@ -115,7 +116,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 			mf_label = get_mf_label(mf_code)
 			rec["covers_missing_mfs"].append(mf_code)
 			rec["reasons"].append(
-				f"Produces missing MF {mf_code} ({mf_label or 'unknown'})"
+				f"Produces missing MF ({mf_label or 'unknown'})"
 			)
 
 		producers_by_mf[mf_code] = {
@@ -131,7 +132,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 		covered = _sorted_unique(rec["covers_missing_mfs"])
 		rec["covers_missing_mfs"] = covered
 		rec["reasons"] = [
-			f"Produces {mf} ({get_mf_label(mf) or 'unknown'})" for mf in covered
+			f"Produces ({get_mf_label(mf) or 'unknown'})" for mf in covered
 		]
 		recommended_list.append(rec)
 
