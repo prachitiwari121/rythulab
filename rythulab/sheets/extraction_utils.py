@@ -330,7 +330,6 @@ def get_temperature_scores_from_crop_details(
 ) -> Dict[str, float]:
     requested_range = normalize_temperature_bounds(min_temperature, max_temperature)
     scores: Dict[str, float] = {}
-    cropid_to_canonical_name = get_cropid_to_canonical_name_map(crop_details_dir)
 
     for csv_path in sorted(crop_details_dir.glob("*.csv")):
         if csv_path.name.startswith("0.List"):
@@ -341,23 +340,30 @@ def get_temperature_scores_from_crop_details(
             continue
 
         parameter_col = df.columns[0]
+        cropid_rows = df[
+            df[parameter_col]
+            .astype(str)
+            .str.strip()
+            .str.lower()
+            .eq("cropid")
+        ]
+        if cropid_rows.empty:
+            continue
+
+        cropid_row = cropid_rows.iloc[0]
+        cropid_to_col: Dict[str, str] = {}
+        for col in df.columns[1:]:
+            value = _safe_str(cropid_row.get(col)).upper()
+            if value:
+                cropid_to_col[value] = col
+
         temp_rows = df[df[parameter_col].astype(str).str.lower().str.contains("temp", na=False)]
         if temp_rows.empty:
             continue
 
-        canonical_columns = {
-            canonicalize_crop_name(col): col
-            for col in df.columns[1:]
-            if canonicalize_crop_name(col)
-        }
-
         for _, row in temp_rows.iterrows():
             for crop_id in ordered_crops:
-                canonical_name = cropid_to_canonical_name.get(crop_id)
-                if not canonical_name:
-                    continue
-
-                src_col = canonical_columns.get(canonical_name)
+                src_col = cropid_to_col.get(_safe_str(crop_id).upper())
                 if not src_col:
                     continue
 

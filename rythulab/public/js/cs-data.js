@@ -9,8 +9,8 @@ var CS_FARM = {
     waterAvail:"Moderate",
     water_supply:  "Copious-Irrigation",
     wind:      "Low–Moderate",
-    minTemp:   "20°C",
-    maxTemp:   "35°C",
+    minTemp:   "20",
+    maxTemp:   "35",
     rain:520, re:0.65, irr:100, sw:30,
     cf:{
         N:  {l:"Available Nitrogen",
