@@ -517,7 +517,7 @@ function cs_s5(){
 function cs_runAnalysis(){cs_calcAnalysis();cs_next();}
 function cs_calcAnalysis(){
     var c=cs_full();
-    CS.an={s6:null,s7:null,s8:null,s9:_ck9(c),s10:_ck10(c)};
+    CS.an={s6:null,s7:null,s8:null,s9:null,s10:_ck10(c)};
 }
 function _ck6(cr){
     var F=CS_FARM;
@@ -823,9 +823,64 @@ function cs_s8(){
 }
 
 /* ── STEP 9 ───────────────────────────────────────────────────── */
+function cs_buildS9Payload(){
+    return {
+        selected_crops: cs_full().map(function(c){
+            return {
+                id:c.id,
+                cropid:c.cropid||c.id,
+                name:c.name,
+                type:c.type,
+                a:c.a
+            };
+        })
+    };
+}
+
+function cs_fetchS9Analysis(){
+    if(CS.s9Loading) return;
+
+    CS.s9Loading=true;
+    CS.s9Error=null;
+
+    fetch("/api/method/rythulab.api.get_phase1_intercrop_competition",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(cs_buildS9Payload())
+    })
+    .then(function(r){return r.json();})
+    .then(function(res){
+        var msg=res&&res.message?res.message:{};
+        CS.an=CS.an||{};
+        CS.an.s9=Array.isArray(msg.warnings)?msg.warnings:[];
+    })
+    .catch(function(err){
+        console.warn("Step 9 backend check failed, using local fallback.",err);
+        CS.s9Error=err;
+        CS.an=CS.an||{};
+        CS.an.s9=_ck9(cs_full());
+    })
+    .finally(function(){
+        CS.s9Loading=false;
+        if(CS.step===9) cs_renderStep(9);
+    });
+}
+
 function cs_s9(){
     if(!CS.an)cs_calcAnalysis();
-    var cf=CS.an.s9;
+    if(!Array.isArray(CS.an.s9)&&!CS.s9Loading) cs_fetchS9Analysis();
+
+    if(CS.s9Loading){
+        return cs_hd(9,"Intercrop competition check",
+            'Checks for Intercrop competition between structural traits, resource demand, Pest-Host relationships.<br>'+
+            'Example: Root, Canopy, Height, Pest overlap → note the warning with reason.<br>'+
+            'Crop X and Crop Y chosen have __________ competition — revise.')+
+            '<div class="cs-empty">Running intercrop competition check from backend...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Sending selected crops to backend.</span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(8)">← Back</button></div>';
+    }
+
+    var cf=Array.isArray(CS.an.s9)?CS.an.s9:[];
     var bd=cf.length?
         '<div class="cs-wlist">'+cf.map(function(c){
             return'<div class="cs-wi cs-wi-w">'+

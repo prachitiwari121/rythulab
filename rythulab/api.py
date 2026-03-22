@@ -930,3 +930,69 @@ def get_phase1_ecosystem_impact(selected_crops=None, farm_cfs=None, farm_context
         "results": results,
         "warnings": warnings
     }
+
+
+@frappe.whitelist()
+def get_phase1_intercrop_competition(selected_crops=None):
+    from rythulab.phase_1_step_9 import check_crop_competition
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    crop_lookup = {}
+
+    for crop in selected_crops or []:
+        if not isinstance(crop, dict):
+            continue
+
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        if not crop_id:
+            continue
+
+        crop_ids.append(crop_id)
+        crop_lookup[crop_id] = crop
+
+    analysis_warnings = check_crop_competition(crop_ids)
+
+    type_map = {
+        "light_competition": "Light",
+        "horizontal_canopy_competition": "Canopy",
+        "ground_competition": "Ground",
+        "root_competition": "Root",
+        "temporal_competition": "Temporal",
+        "resource_competition": "Resource",
+        "pest_host_overlap": "Pest",
+    }
+
+    warnings = []
+    for warning in analysis_warnings:
+        crop_a_id = (warning.get("crop_a_id") or "").strip().upper()
+        crop_b_id = (warning.get("crop_b_id") or "").strip().upper()
+
+        crop_a = crop_lookup.get(crop_a_id, {})
+        crop_b = crop_lookup.get(crop_b_id, {})
+
+        crop_a_name = warning.get("crop_a_label") or crop_a.get("name") or crop_a_id
+        crop_b_name = warning.get("crop_b_label") or crop_b.get("name") or crop_b_id
+
+        warning_type = warning.get("warning_type")
+
+        warnings.append({
+            "a": crop_a_name,
+            "b": crop_b_name,
+            "t": type_map.get(warning_type, "Competition"),
+            "m": warning.get("message"),
+            "warning_type": warning_type,
+            "crop_a_id": crop_a_id,
+            "crop_b_id": crop_b_id,
+        })
+
+    return {
+        "ok": True,
+        "warnings": warnings,
+        "results": analysis_warnings,
+    }
