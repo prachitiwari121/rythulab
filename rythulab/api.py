@@ -1101,3 +1101,31 @@ def get_phase2_cross_compatibility(selected_crops=None):
         "selected_required_mfs": result.get("selected_required_mfs", []),
         "associated_crops": result.get("associated_crops", []),
     }
+
+
+@frappe.whitelist()
+def get_phase2_disease_mitigation(selected_crops=None):
+    from rythulab.phase_2_step_3 import find_disease_mitigating_crops
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = find_disease_mitigating_crops(crop_ids)
+
+    return {
+        "ok": True,
+        "selected_crop_ids": result.get("selected_crop_ids", []),
+        "crop_disease_mitigations": result.get("crop_disease_mitigations", []),
+    }

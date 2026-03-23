@@ -139,6 +139,7 @@ var CS2 = {
     missingMF: [],
     step1Data: null,
     step2Data: null,
+    step3Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -180,6 +181,7 @@ function cs_phase2_init(){
     p2_renderSidebar(); p2_renderStep(CS2.step);
     cs_fetchPhase2Step1();
     cs_fetchPhase2Step2();
+    cs_fetchPhase2Step3();
 }
 
 /* ── Fetch Phase 2 Step 1 from backend ───────────────────────── */
@@ -310,6 +312,79 @@ function cs_fetchPhase2Step2(){
     .finally(function(){
         CS2.p2s2Loading = false;
         if(CS2.step === 2) p2_renderStep(2);
+    });
+}
+
+/* ── Fetch Phase 2 Step 3 from backend ───────────────────────── */
+function cs_fetchPhase2Step3(){
+    var crops = CS2.mainCrops;
+    if(!crops || !crops.length) return;
+    if(CS2.p2s3Loading) return;
+    CS2.p2s3Loading = true;
+
+    fetch("/api/method/rythulab.api.get_phase2_disease_mitigation", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name, type:c.type||"", a:c.a||0};
+            })
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+
+        CS2.step3Data = {
+            selected_crop_ids: Array.isArray(msg.selected_crop_ids) ? msg.selected_crop_ids : [],
+            crop_disease_mitigations: Array.isArray(msg.crop_disease_mitigations) ? msg.crop_disease_mitigations : []
+        };
+
+        (CS2.step3Data.crop_disease_mitigations || []).forEach(function(cropItem){
+            (cropItem.crops_that_produce_mitigating_mfs || []).forEach(function(rec){
+                var producedCodes = (rec.produces_mfs || []).map(function(mf){
+                    return mf && mf.mf_code ? mf.mf_code : null;
+                }).filter(Boolean);
+
+                var reasonLines = Array.isArray(rec.reasons) ? rec.reasons.slice() : [];
+
+                var already = CS2.associateList.find(function(e){
+                    return e.crop && e.crop.id === rec.crop_id;
+                });
+
+                if(!already){
+                    CS2.associateList.push({
+                        crop: {
+                            id: rec.crop_id,
+                            name: rec.crop_name,
+                            mfp: producedCodes,
+                            type: "Associate",
+                            family: "",
+                            desc: "",
+                            border: false,
+                            trap: false
+                        },
+                        reasons: reasonLines
+                    });
+                    return;
+                }
+
+                already.crop.mfp = Array.from(new Set((already.crop.mfp || []).concat(producedCodes)));
+                reasonLines.forEach(function(reason){
+                    if(already.reasons.indexOf(reason) < 0){
+                        already.reasons.push(reason);
+                    }
+                });
+            });
+        });
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 3 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s3Loading = false;
+        if(CS2.step === 3) p2_renderStep(3);
     });
 }
 
@@ -624,38 +699,96 @@ function p2_s2(){
 
 /* ── Step 3: Main crop Disease risk — diseases only ─────────── */
 function p2_s3(){
-    var mc=CS2.mainCrops;
+    var backendRows = CS2.step3Data && Array.isArray(CS2.step3Data.crop_disease_mitigations)
+        ? CS2.step3Data.crop_disease_mitigations
+        : null;
 
-    // Only show diseases (not pests)
-    var diseaseRows=mc.map(function(c){
-        var diseases=(c.pests||[]).filter(p2_isDisease);
-        if(!diseases.length) return'';
-        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+c.name+'</td>'+
-            '<td style="font-size:11px;color:#3a4a2a">'+diseases.join(", ")+'</td></tr>';
-    }).filter(Boolean).join("");
+    if(CS2.p2s3Loading && !backendRows){
+        return p2_hd(3,"Main crop Disease risk",
+            "Loading disease risks and mitigation crops from backend...")+
+            '<div class="cs-empty">Loading backend recommendations...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching high-risk diseases for selected crops.</span>'+
+            '<button class="cs-btn sec" onclick="p2_goto(2)">← Back</button>'+ 
+            '<button class="cs-btn pri" disabled>Farm context features →</button></div>';
+    }
 
-    if(!diseaseRows) diseaseRows='<tr><td colspan="2" style="color:#aaa;font-style:italic;padding:10px;text-align:center">No disease records found for selected crops.</td></tr>';
+    var diseaseRows='';
+    var diseaseSuggestions=[];
 
-    // Find associate crops that mitigate disease risks
-    var suggestions=CS2.associateList.filter(function(e){
-        return e.reasons.some(function(r){return r.indexOf("Reduces risk")>=0;});
-    });
+    if(backendRows){
+        diseaseRows = backendRows.map(function(cropItem){
+            var diseases = (cropItem.high_risk_diseases || []).map(function(d){
+                var sev = d && d.severity ? (' (' + d.severity + ')') : '';
+                return (d.disease || d.disease_id || '') + sev;
+            }).filter(Boolean);
 
-    // Also match by disease keywords in reasons
-    var diseaseSuggestions=suggestions.filter(function(e){
-        return e.reasons.some(function(r){
-            return r.indexOf("Reduces risk")>=0 && Object.keys(P2_DISEASE_MF).some(function(dis){
-                return p2_isDisease(dis) && r.toLowerCase().indexOf(dis.toLowerCase())>=0;
+            var diseaseText = diseases.length
+                ? diseases.join(', ')
+                : 'No high-risk diseases mapped in crop details sheet.';
+
+            return '<tr><td style="font-weight:700;color:var(--text-dark)">'+(cropItem.crop_name || cropItem.crop_id || '')+'</td>'+
+                '<td style="font-size:11px;color:#3a4a2a">'+diseaseText+'</td></tr>';
+        }).join('');
+
+        var suggestionMap = {};
+        backendRows.forEach(function(cropItem){
+            (cropItem.crops_that_produce_mitigating_mfs || []).forEach(function(rec){
+                if(!rec || !rec.crop_id) return;
+
+                if(!suggestionMap[rec.crop_id]){
+                    suggestionMap[rec.crop_id] = {
+                        crop: {
+                            id: rec.crop_id,
+                            name: rec.crop_name || rec.crop_id,
+                            mfp: (rec.produces_mfs || []).map(function(m){ return m && m.mf_code ? m.mf_code : null; }).filter(Boolean),
+                            type: "Associate",
+                            family: "",
+                            desc: "",
+                            border: false,
+                            trap: false
+                        },
+                        reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
+                    };
+                    return;
+                }
+
+                suggestionMap[rec.crop_id].crop.mfp = Array.from(new Set(
+                    (suggestionMap[rec.crop_id].crop.mfp || []).concat(
+                        (rec.produces_mfs || []).map(function(m){ return m && m.mf_code ? m.mf_code : null; }).filter(Boolean)
+                    )
+                ));
+
+                (rec.reasons || []).forEach(function(reason){
+                    if(suggestionMap[rec.crop_id].reasons.indexOf(reason) < 0){
+                        suggestionMap[rec.crop_id].reasons.push(reason);
+                    }
+                });
             });
         });
-    });
 
-    // If no disease-specific crops, show all with disease-fighting MFs (beneficial_insects, pest_repellent)
-    if(!diseaseSuggestions.length){
-        diseaseSuggestions = CS2.associateList.filter(function(e){
-            return (e.crop.mfp||[]).some(function(mf){return mf==="beneficial_insects"||mf==="nematode_suppression";});
+        diseaseSuggestions = Object.keys(suggestionMap).map(function(k){ return suggestionMap[k]; });
+    } else {
+        var mc=CS2.mainCrops;
+        diseaseRows=mc.map(function(c){
+            var diseases=(c.pests||[]).filter(p2_isDisease);
+            if(!diseases.length) return'';
+            return'<tr><td style="font-weight:700;color:var(--text-dark)">'+c.name+'</td>'+
+                '<td style="font-size:11px;color:#3a4a2a">'+diseases.join(", ")+'</td></tr>';
+        }).filter(Boolean).join("");
+
+        var suggestions=CS2.associateList.filter(function(e){
+            return e.reasons.some(function(r){return r.indexOf("Reduces risk")>=0;});
+        });
+        diseaseSuggestions=suggestions.filter(function(e){
+            return e.reasons.some(function(r){
+                return r.indexOf("Reduces risk")>=0 && Object.keys(P2_DISEASE_MF).some(function(dis){
+                    return p2_isDisease(dis) && r.toLowerCase().indexOf(dis.toLowerCase())>=0;
+                });
+            });
         });
     }
+
+    if(!diseaseRows) diseaseRows='<tr><td colspan="2" style="color:#aaa;font-style:italic;padding:10px;text-align:center">No disease records found for selected crops.</td></tr>';
 
     var html=diseaseSuggestions.length?
         diseaseSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
