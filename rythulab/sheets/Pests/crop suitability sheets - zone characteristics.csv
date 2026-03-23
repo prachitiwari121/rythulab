@@ -1,0 +1,7 @@
+Agro-climatic zone,Rainfall (mm),Irrigation,Soil Types,Key Features,Baseline pest pressure,Common insect pests,Common diseases
+North Coastal Zone,1000-1100,Moderate,"Red acidic, laterite","SW monsoon dominated, high humidity",High,"PEST0001, PEST0003, PEST0054, PEST0022, PEST0036, PEST0035","blast (rice), bacterial leaf blight, leaf spot diseases, downy mildew"
+Godavari Delta Zone,800-1100,Excellent,"Deltaic alluvium, red loams","Highly fertile delta, canal irrigation, high humidity",Very High,"PEST0001, PEST0002, PEST0003, PEST0042, PEST0022, PEST0035","rice blast, sheath blight, bacterial leaf blight, wilt diseases"
+Krishna Zone,800-1100,Excellent,"Deltaic alluvium, saline pockets","Fertile delta, extensive canal network, mod humidity, irritation",High,"PEST0054, PEST0020, PEST0022, PEST0036, PEST0035","leaf curl virus, wilt, powdery mildew, bacterial blight"
+Southern Zone,700-900,Moderate,"Red sandy, red loamy, black cotton","Mixed soils, varied topography, mod rainfall, mixed irrigation/rainfed",Moderate,"PEST0022, PEST0054, PEST0020, PEST0057","wilt diseases, leaf spot, powdery mildew"
+Scarce Rainfall Zone (Rayalaseema),500-750,Limited,"Red earths (Chalkas), red sandy","Hot, Drought-prone, erratic rainfall, rainfed",Low–Moderate,"PEST0020, PEST0057, PEST0022","wilt diseases, root rot, mosaic virus"
+High Altitude / Tribal Areas,1400+,Limited,"Hill soils, forest soils, laterite","mod-High rainfall, hilly terrain, forest ecosystem, cooler uplands",Moderate,"PEST0027, PEST0042, PEST0022","leaf spot diseases, mildew, fungal blights"

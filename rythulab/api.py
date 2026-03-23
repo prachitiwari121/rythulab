@@ -1266,3 +1266,39 @@ def get_phase2_wind_barrier_crops(selected_crops=None):
         "ok": True,
         "recommended_crops": recommended,
     }
+
+
+@frappe.whitelist()
+def get_phase2_zone_pest_mitigation(agro_climatic_zone=None):
+    from rythulab.phase_2_step_6 import find_zone_pest_mitigating_crops
+
+    payload = frappe.request.get_json(silent=True) or {}
+    zone = agro_climatic_zone or payload.get("agro_climatic_zone") or payload.get("zone")
+
+    if not zone:
+        return {
+            "ok": False,
+            "error": "Missing required field: agro_climatic_zone",
+            "common_pests": [],
+            "mitigating_mfs": [],
+            "recommended_crops": [],
+        }
+
+    try:
+        result = find_zone_pest_mitigating_crops(zone)
+    except ValueError as exc:
+        return {
+            "ok": False,
+            "error": str(exc),
+            "common_pests": [],
+            "mitigating_mfs": [],
+            "recommended_crops": [],
+        }
+
+    return {
+        "ok": True,
+        "agro_climatic_zone": result.get("agro_climatic_zone", zone),
+        "common_pests": result.get("common_pests", []),
+        "mitigating_mfs": result.get("mitigating_mfs", []),
+        "recommended_crops": result.get("recommended_crops", []),
+    }

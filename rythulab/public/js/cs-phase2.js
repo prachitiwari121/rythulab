@@ -142,6 +142,7 @@ var CS2 = {
     step3Data: null,
     step4Data: null,
     step5Data: null,
+    step6Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -471,6 +472,40 @@ function cs_fetchPhase2Step5(){
     .finally(function(){
         CS2.p2s5Loading = false;
         if(CS2.step === 5) p2_renderStep(5);
+    });
+}
+
+/* ── Fetch Phase 2 Step 6 from backend ───────────────────────── */
+function cs_fetchPhase2Step6(){
+    if(CS2.p2s6Loading) return;
+    CS2.p2s6Loading = true;
+
+    var zone = (CS_FARM && (CS_FARM.zone || CS_FARM.zone_code)) ? (CS_FARM.zone || CS_FARM.zone_code) : "";
+
+    fetch("/api/method/rythulab.api.get_phase2_zone_pest_mitigation", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ agro_climatic_zone: zone })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        CS2.step6Data = {
+            agro_climatic_zone: msg.agro_climatic_zone || zone,
+            common_pests: Array.isArray(msg.common_pests) ? msg.common_pests : [],
+            mitigating_mfs: Array.isArray(msg.mitigating_mfs) ? msg.mitigating_mfs : [],
+            recommended_crops: Array.isArray(msg.recommended_crops) ? msg.recommended_crops : []
+        };
+        if(msg && msg.ok === false){
+            console.warn("Phase 2 Step 6 returned no recommendations:", msg.error || "No recommendation candidates");
+        }
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 6 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s6Loading = false;
+        if(CS2.step === 6) p2_renderStep(6);
     });
 }
 
@@ -1045,16 +1080,85 @@ function p2_s5(){
 
 /* ── Step 6: Border crop (Pest barrier Pollination promoter) ─── */
 function p2_s6(){
+    if(!CS2.step6Data && !CS2.p2s6Loading){
+        cs_fetchPhase2Step6();
+    }
+
     var ppCF=CS_FARM.cf.PP, paCF=CS_FARM.cf.PA;
-    var pestBorder=CS2.borderList.filter(function(e){
-        return(e.crop.mfp||[]).indexOf("pest_repellent")>=0||(e.crop.mfp||[]).indexOf("beneficial_insects")>=0;
-    });
-    var polBorder=CS2.borderList.filter(function(e){
-        return(e.crop.mfp||[]).indexOf("pollinator_habitat")>=0;
-    });
-    var cards=(pestBorder.concat(polBorder.filter(function(e){
-        return!pestBorder.find(function(p){return p.crop.id===e.crop.id;});
-    }))).map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join("");
+
+    var suggestions = [];
+    if(CS2.step6Data && Array.isArray(CS2.step6Data.recommended_crops)){
+        suggestions = CS2.step6Data.recommended_crops.map(function(rec){
+            var producedCodes = (rec.produced_mitigating_mfs || []).map(function(mf){
+                return mf && mf.mf_code ? mf.mf_code : null;
+            }).filter(Boolean);
+
+            var producedLabels = (rec.produced_mitigating_mfs || []).map(function(mf){
+                return mf && mf.mf_label ? mf.mf_label : (mf && mf.mf_code ? mf.mf_code : "");
+            }).filter(Boolean);
+
+            var reasons = [];
+            if(producedLabels.length){
+                reasons.push("Produces mitigating MFs: " + producedLabels.join(", "));
+            }
+            if(Array.isArray(rec.supports_pest_labels) && rec.supports_pest_labels.length){
+                reasons.push("Mitigates common zone pests: " + rec.supports_pest_labels.join(", "));
+            } else if(Array.isArray(rec.supports_pest_ids) && rec.supports_pest_ids.length){
+                reasons.push("Mitigates common zone pests: " + rec.supports_pest_ids.join(", "));
+            }
+
+            return {
+                crop: {
+                    id: rec.crop_id,
+                    name: rec.crop_name,
+                    mfp: producedCodes,
+                    type: "Border",
+                    family: "",
+                    desc: "",
+                    border: true,
+                    trap: false
+                },
+                reasons: reasons.length ? reasons : ["Supports pest mitigation for this zone"]
+            };
+        });
+
+        suggestions.forEach(function(entry){
+            var existing = CS2.borderList.find(function(item){
+                return item.crop && item.crop.id === entry.crop.id;
+            });
+
+            if(!existing){
+                CS2.borderList.push(entry);
+                return;
+            }
+
+            existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
+            entry.reasons.forEach(function(reason){
+                if(existing.reasons.indexOf(reason) < 0){
+                    existing.reasons.push(reason);
+                }
+            });
+        });
+    }
+
+    if(!suggestions.length){
+        var pestBorder=CS2.borderList.filter(function(e){
+            return(e.crop.mfp||[]).indexOf("pest_repellent")>=0||(e.crop.mfp||[]).indexOf("beneficial_insects")>=0;
+        });
+        var polBorder=CS2.borderList.filter(function(e){
+            return(e.crop.mfp||[]).indexOf("pollinator_habitat")>=0;
+        });
+        suggestions = pestBorder.concat(polBorder.filter(function(e){
+            return !pestBorder.find(function(p){return p.crop.id===e.crop.id;});
+        }));
+    }
+
+    var cards = CS2.p2s6Loading && !CS2.step6Data
+        ? '<div class="cs-empty">Loading zone-based pest mitigation recommendations from backend...</div>'
+        : suggestions.length
+        ? suggestions.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join("")
+        : '<div class="cs-empty">No pest barrier / pollinator border crops found.</div>';
+
     return p2_hd(6,"Border crop (Pest barrier Pollination promoter)",
         "Based on the farm's general pest vulnerability (Pest Pressure CF) and region, crops that act as pest barriers and promote pollination are recommended as border crops.")+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
@@ -1066,7 +1170,7 @@ function p2_s6(){
         '<div class="cs-fcr"><span class="cs-fcrl">Status</span><span style="font-weight:700;color:var(--csa600)">'+(paCF?paCF.slab:"N/A")+'</span></div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Value</span><span class="cs-fcrv">'+(paCF?paCF.val:"N/A")+'</span></div>'+
         '</div></div>'+
-        (cards||'<div class="cs-empty">No pest barrier / pollinator border crops found.</div>')+
+        cards+
         '<div class="cs-sf"><span class="cs-fn">Select border crops to include in your system.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(5)">← Back</button>'+
         '<button class="cs-btn pri" onclick="p2_next()">Trap crops →</button></div>';
