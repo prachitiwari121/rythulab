@@ -999,6 +999,24 @@ function p2_s5(){
                 reasons: [rec.reason || "Produces MF11 (Wind Barrier)"]
             };
         });
+
+        suggestions.forEach(function(entry){
+            var existing = CS2.borderList.find(function(item){
+                return item.crop && item.crop.id === entry.crop.id;
+            });
+
+            if(!existing){
+                CS2.borderList.push(entry);
+                return;
+            }
+
+            existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
+            entry.reasons.forEach(function(reason){
+                if(existing.reasons.indexOf(reason) < 0){
+                    existing.reasons.push(reason);
+                }
+            });
+        });
     }
 
     if(!suggestions.length){
