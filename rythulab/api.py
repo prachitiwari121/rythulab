@@ -1302,3 +1302,36 @@ def get_phase2_zone_pest_mitigation(agro_climatic_zone=None):
         "mitigating_mfs": result.get("mitigating_mfs", []),
         "recommended_crops": result.get("recommended_crops", []),
     }
+
+
+@frappe.whitelist()
+def get_phase2_trap_crop_recommendations(selected_crops=None):
+    from rythulab.phase_2_step_7 import build_frontend_payload
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = build_frontend_payload(crop_ids)
+
+    return {
+        "ok": True,
+        "selected_crop_ids": crop_ids,
+        "trap_crops": result.get("trap_crops", []),
+        "companion_crops_via_mf": result.get("companion_crops_via_mf", []),
+        "recommended_trap_crops": result.get("recommended_trap_crops", []),
+        "recommended_companion_crops": result.get("recommended_companion_crops", []),
+        "trapList": result.get("trapList", []),
+        "associateList": result.get("associateList", []),
+    }

@@ -1,0 +1,2866 @@
+{
+  "Aphids": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0017",
+    "closest_pest_ids": [
+      "PEST0009",
+      "PEST0022",
+      "PEST0058"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0009",
+        "pest_name": "Aphids (Rhopalosiphum maidis)",
+        "category": "Maize, Sorghum",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0022",
+        "pest_name": "Aphids (Aphis craccivora)",
+        "category": "All Pulses, Cotton, Veg",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0058",
+        "pest_name": "Aphids (Aphis gossypii)",
+        "category": "Cucurbits, Okra, Vegetables",
+        "score": 0.9
+      }
+    ],
+    "best_pest_id": "PEST0009"
+  },
+  "Apple Borer": {
+    "crops": [
+      "Cashew"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0045",
+    "closest_pest_ids": [
+      "PEST0020",
+      "PEST0001",
+      "PEST0039"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.58
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.5583
+      },
+      {
+        "pest_id": "PEST0039",
+        "pest_name": "Sugarcane Borer (Chilo infuscatellus)",
+        "category": "Sugarcane",
+        "score": 0.525
+      }
+    ],
+    "best_pest_id": "PEST0020"
+  },
+  "Bark Eating Caterpillar": {
+    "crops": [
+      "Amla",
+      "Guava",
+      "Neem"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0046",
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0038",
+      "PEST0082"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.5088
+      },
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0082",
+        "pest_name": "Burrowing Nematode (Radopholus similis)",
+        "category": "Sugarcane, Banana, Turmeric",
+        "score": 0.2854
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Bihar Hairy Caterpillar": {
+    "crops": [
+      "Sunflower"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "id": "PEST0027",
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0038",
+      "PEST0031"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4852
+      },
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0031",
+        "pest_name": "Castor Whitefly (Trialeurodes ricini)",
+        "category": "Castor",
+        "score": 0.2737
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Black Bean Aphids": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "id": "PEST0022",
+    "closest_pest_ids": [
+      "PEST0009",
+      "PEST0022",
+      "PEST0058"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0009",
+        "pest_name": "Aphids (Rhopalosiphum maidis)",
+        "category": "Maize, Sorghum",
+        "score": 0.4225
+      },
+      {
+        "pest_id": "PEST0022",
+        "pest_name": "Aphids (Aphis craccivora)",
+        "category": "All Pulses, Cotton, Veg",
+        "score": 0.4225
+      },
+      {
+        "pest_id": "PEST0058",
+        "pest_name": "Aphids (Aphis gossypii)",
+        "category": "Cucurbits, Okra, Vegetables",
+        "score": 0.4225
+      }
+    ],
+    "best_pest_id": "PEST0009"
+  },
+  "Blister Beetle": {
+    "crops": [
+      "Field Bean",
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "id": "PEST0047",
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0001",
+      "PEST0011"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.4583
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0011",
+        "pest_name": "Pearl Millet Stem Borer (Chilo partellus)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.2811
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Bud Weevil": {
+    "crops": [
+      "Jackfruit"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0048",
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0065",
+      "PEST0024"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.5772
+      },
+      {
+        "pest_id": "PEST0065",
+        "pest_name": "Budworm (Helicoverpa armigera)",
+        "category": "Jasmine, Marigold",
+        "score": 0.3059
+      },
+      {
+        "pest_id": "PEST0024",
+        "pest_name": "Bruchids (Callosobruchus maculatus)",
+        "category": "Greengram, Blackgram, Cowpea (stored)",
+        "score": 0.2167
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Bud Worm": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0065",
+    "closest_pest_ids": [
+      "PEST0065",
+      "PEST0006",
+      "PEST0060"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0065",
+        "pest_name": "Budworm (Helicoverpa armigera)",
+        "category": "Jasmine, Marigold",
+        "score": 0.6067
+      },
+      {
+        "pest_id": "PEST0006",
+        "pest_name": "Army Worm (Mythimna separata)",
+        "category": "Sorghum, Maize, Wheat",
+        "score": 0.5074
+      },
+      {
+        "pest_id": "PEST0060",
+        "pest_name": "Cutworm (Spodoptera litura)",
+        "category": "Tomato, Cabbage, Onion",
+        "score": 0.4333
+      }
+    ],
+    "best_pest_id": "PEST0065"
+  },
+  "Cabbage Butterfly": {
+    "crops": [
+      "Cabbage",
+      "Cauliflower"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0051",
+    "closest_pest_ids": [
+      "PEST0051",
+      "PEST0031",
+      "PEST0039"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0051",
+        "pest_name": "Pomegranate Anar Butterfly (Deudorix isocrates)",
+        "category": "Pomegranate",
+        "score": 0.518
+      },
+      {
+        "pest_id": "PEST0031",
+        "pest_name": "Castor Whitefly (Trialeurodes ricini)",
+        "category": "Castor",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0039",
+        "pest_name": "Sugarcane Borer (Chilo infuscatellus)",
+        "category": "Sugarcane",
+        "score": 0.2844
+      }
+    ],
+    "best_pest_id": "PEST0051"
+  },
+  "Capsule Borer": {
+    "crops": [
+      "Castor"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "id": "PEST0020",
+    "closest_pest_ids": [
+      "PEST0001",
+      "PEST0039",
+      "PEST0020"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.5772
+      },
+      {
+        "pest_id": "PEST0039",
+        "pest_name": "Sugarcane Borer (Chilo infuscatellus)",
+        "category": "Sugarcane",
+        "score": 0.5429
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.5386
+      }
+    ],
+    "best_pest_id": "PEST0001"
+  },
+  "Carrot Weevil": {
+    "crops": [
+      "Carrot"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0048",
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0031",
+      "PEST0047"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.525
+      },
+      {
+        "pest_id": "PEST0031",
+        "pest_name": "Castor Whitefly (Trialeurodes ricini)",
+        "category": "Castor",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.2737
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Chocolate Spot": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "id": "PEST0021",
+    "closest_pest_ids": [
+      "PEST0005",
+      "PEST0010",
+      "PEST0089"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0005",
+        "pest_name": "Rice Hispa (Dicladispa armigera)",
+        "category": "Paddy",
+        "score": 0.2708
+      },
+      {
+        "pest_id": "PEST0010",
+        "pest_name": "Wheat Aphid (Sitobion avenae)",
+        "category": "Wheat",
+        "score": 0.26
+      },
+      {
+        "pest_id": "PEST0089",
+        "pest_name": "Coconut Root Wilt Nematode (Rhadinaphelenchus cocophilus)",
+        "category": "Coconut, Oil Palm",
+        "score": 0.26
+      }
+    ],
+    "best_pest_id": "PEST0005"
+  },
+  "Coffee Berry Borer": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0021",
+    "closest_pest_ids": [
+      "PEST0054",
+      "PEST0020",
+      "PEST0021"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0054",
+        "pest_name": "Fruit Borer (Leucinodes orbonalis)",
+        "category": "Brinjal, Tomato",
+        "score": 0.442
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.4204
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.4176
+      }
+    ],
+    "best_pest_id": "PEST0054"
+  },
+  "Coffee White Stem Borer": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0021",
+    "closest_pest_ids": [
+      "PEST0014",
+      "PEST0011",
+      "PEST0001"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0014",
+        "pest_name": "Finger Millet Stem Borer (Sesamia inferens)",
+        "category": "Finger Millet",
+        "score": 0.5399
+      },
+      {
+        "pest_id": "PEST0011",
+        "pest_name": "Pearl Millet Stem Borer (Chilo partellus)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.5207
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.5189
+      }
+    ],
+    "best_pest_id": "PEST0014"
+  },
+  "Epilachna Beetle": {
+    "crops": [
+      "Bitter Gourd",
+      "Brinjal",
+      "Pumpkin",
+      "Ridge Gourd"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0047",
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0048",
+      "PEST0015"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.3787
+      },
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.3138
+      },
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.2889
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Flea Beetle": {
+    "crops": [
+      "Beetroot",
+      "Radish"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "id": "PEST0047",
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0018",
+      "PEST0026"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.4139
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.3095
+      },
+      {
+        "pest_id": "PEST0026",
+        "pest_name": "Leaf Miner (Phytomyza atricornis)",
+        "category": "Chickpea",
+        "score": 0.3095
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Gall Fly": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0004",
+      "PEST0008",
+      "PEST0012"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0004",
+        "pest_name": "Gall Midge (Orseolia oryzae)",
+        "category": "Paddy",
+        "score": 0.4861
+      },
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.4309
+      },
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.4309
+      }
+    ],
+    "best_pest_id": "PEST0004"
+  },
+  "Gall Midge": {
+    "crops": [
+      "Little Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0004",
+      "PEST0013",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0004",
+        "pest_name": "Gall Midge (Orseolia oryzae)",
+        "category": "Paddy",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0013",
+        "pest_name": "Earhead Midge (Stenodiplosis sorghicola)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.554
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.3917
+      }
+    ],
+    "best_pest_id": "PEST0004"
+  },
+  "Grasshoppers": {
+    "crops": [
+      "Amaranthus",
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Hedge Lucerne",
+      "Horse Gram",
+      "Kodo Millet",
+      "Little Millet",
+      "Napier Grass",
+      "Proso Millet",
+      "Stylosanthes"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv",
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0043",
+      "PEST0053",
+      "PEST0002"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0043",
+        "pest_name": "Mango Hopper (Idioscopus nitidulus)",
+        "category": "Mango",
+        "score": 0.3792
+      },
+      {
+        "pest_id": "PEST0053",
+        "pest_name": "Grape Thrips (Rhipiphorothrips cruentatus)",
+        "category": "Grape",
+        "score": 0.3792
+      },
+      {
+        "pest_id": "PEST0002",
+        "pest_name": "Brown Plant Hopper (Nilaparvata lugens)",
+        "category": "Paddy",
+        "score": 0.3467
+      }
+    ],
+    "best_pest_id": "PEST0043"
+  },
+  "Green Scale": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0005",
+      "PEST0097",
+      "PEST0062"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0005",
+        "pest_name": "Rice Hispa (Dicladispa armigera)",
+        "category": "Paddy",
+        "score": 0.3095
+      },
+      {
+        "pest_id": "PEST0097",
+        "pest_name": "Lesion Nematode (Pratylenchus loosi)",
+        "category": "Tea (Srikakulam dist.), Coffee",
+        "score": 0.3
+      },
+      {
+        "pest_id": "PEST0062",
+        "pest_name": "Scale Insects on Trees/Flowers",
+        "category": "Trees, Rose",
+        "score": 0.2835
+      }
+    ],
+    "best_pest_id": "PEST0005"
+  },
+  "Hadda Beetle": {
+    "crops": [
+      "Ashwagandha"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0048",
+      "PEST0015"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.4061
+      },
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.312
+      },
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.2826
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Hairy Caterpillar": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0038",
+      "PEST0035"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4964
+      },
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.3824
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Cotton, Tomato",
+        "score": 0.26
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Head Borer": {
+    "crops": [
+      "Cabbage"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0020",
+      "PEST0001",
+      "PEST0021"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.6039
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.58
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.5102
+      }
+    ],
+    "best_pest_id": "PEST0020"
+  },
+  "Head Borer / Helicoverpa": {
+    "crops": [
+      "Sunflower"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0020",
+      "PEST0001",
+      "PEST0055"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.3769
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.3677
+      },
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.3554
+      }
+    ],
+    "best_pest_id": "PEST0020"
+  },
+  "Inflorescence Caterpillar": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0032",
+      "PEST0072"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4899
+      },
+      {
+        "pest_id": "PEST0032",
+        "pest_name": "Sunflower Mite (Tetranychus urticae)",
+        "category": "Sunflower, Soybean",
+        "score": 0.2667
+      },
+      {
+        "pest_id": "PEST0072",
+        "pest_name": "Lance Nematode (Hoplolaimus indicus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.2667
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Internode Borer": {
+    "crops": [
+      "Sugarcane"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0039",
+      "PEST0020",
+      "PEST0001"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0039",
+        "pest_name": "Sugarcane Borer (Chilo infuscatellus)",
+        "category": "Sugarcane",
+        "score": 0.5717
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.5583
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.541
+      }
+    ],
+    "best_pest_id": "PEST0039"
+  },
+  "Jassids": {
+    "crops": [
+      "Bottle Gourd",
+      "Brinjal",
+      "Coriander",
+      "Cotton",
+      "Fenugreek",
+      "Gongura",
+      "Okra",
+      "Potato"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "5. Vegetables_Crop_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0058",
+      "PEST0022",
+      "PEST0009"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0058",
+        "pest_name": "Aphids (Aphis gossypii)",
+        "category": "Cucurbits, Okra, Vegetables",
+        "score": 0.4333
+      },
+      {
+        "pest_id": "PEST0022",
+        "pest_name": "Aphids (Aphis craccivora)",
+        "category": "All Pulses, Cotton, Veg",
+        "score": 0.425
+      },
+      {
+        "pest_id": "PEST0009",
+        "pest_name": "Aphids (Rhopalosiphum maidis)",
+        "category": "Maize, Sorghum",
+        "score": 0.4
+      }
+    ],
+    "best_pest_id": "PEST0058"
+  },
+  "Lace wing bug": {
+    "crops": [
+      "Tulsi"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0015",
+      "PEST0044",
+      "PEST0072"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.4083
+      },
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.4083
+      },
+      {
+        "pest_id": "PEST0072",
+        "pest_name": "Lance Nematode (Hoplolaimus indicus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.2889
+      }
+    ],
+    "best_pest_id": "PEST0015"
+  },
+  "Leaf and Pod Caterpillar": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0033",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4571
+      },
+      {
+        "pest_id": "PEST0033",
+        "pest_name": "Sesame Leaf Roller (Antigastra catalaunalis)",
+        "category": "Sesame",
+        "score": 0.4101
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.3684
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Leaf Eating Caterpillar": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0018",
+      "PEST0026"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4615
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.4379
+      },
+      {
+        "pest_id": "PEST0026",
+        "pest_name": "Leaf Miner (Phytomyza atricornis)",
+        "category": "Chickpea",
+        "score": 0.4379
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Leaf Gall Thrips": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0053",
+      "PEST0019",
+      "PEST0023"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0053",
+        "pest_name": "Grape Thrips (Rhipiphorothrips cruentatus)",
+        "category": "Grape",
+        "score": 0.4548
+      },
+      {
+        "pest_id": "PEST0019",
+        "pest_name": "Thrips (Frankliniella sp.)",
+        "category": "Barnyard, Foxtail Millet",
+        "score": 0.4379
+      },
+      {
+        "pest_id": "PEST0023",
+        "pest_name": "Thrips (Caliothrips indicus)",
+        "category": "Chickpea, Soybean, Groundnut",
+        "score": 0.4379
+      }
+    ],
+    "best_pest_id": "PEST0053"
+  },
+  "Leaf Hopper": {
+    "crops": [
+      "Carrot",
+      "Castor",
+      "Cluster Bean",
+      "Cowpea",
+      "Field Bean",
+      "Gongura",
+      "Hedge Lucerne",
+      "Horse Gram",
+      "Stylosanthes",
+      "Sunflower"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0003",
+      "PEST0043",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0003",
+        "pest_name": "Leaf Folder (Cnaphalocrocis medinalis)",
+        "category": "Paddy",
+        "score": 0.5977
+      },
+      {
+        "pest_id": "PEST0043",
+        "pest_name": "Mango Hopper (Idioscopus nitidulus)",
+        "category": "Mango",
+        "score": 0.5772
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.5583
+      }
+    ],
+    "best_pest_id": "PEST0003"
+  },
+  "Leaf Roller": {
+    "crops": [
+      "Amla",
+      "Curry Leaf",
+      "Ginger",
+      "Tulsi",
+      "Turmeric"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0033",
+      "PEST0003",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0033",
+        "pest_name": "Sesame Leaf Roller (Antigastra catalaunalis)",
+        "category": "Sesame",
+        "score": 0.7431
+      },
+      {
+        "pest_id": "PEST0003",
+        "pest_name": "Leaf Folder (Cnaphalocrocis medinalis)",
+        "category": "Paddy",
+        "score": 0.6568
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.5583
+      }
+    ],
+    "best_pest_id": "PEST0033"
+  },
+  "Leaf roller": {
+    "crops": [
+      "Vetiver"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0033",
+      "PEST0003",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0033",
+        "pest_name": "Sesame Leaf Roller (Antigastra catalaunalis)",
+        "category": "Sesame",
+        "score": 0.7431
+      },
+      {
+        "pest_id": "PEST0003",
+        "pest_name": "Leaf Folder (Cnaphalocrocis medinalis)",
+        "category": "Paddy",
+        "score": 0.6568
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.5583
+      }
+    ],
+    "best_pest_id": "PEST0033"
+  },
+  "Leaf Webber": {
+    "crops": [
+      "Amaranthus"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0018",
+      "PEST0026",
+      "PEST0056"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.5583
+      },
+      {
+        "pest_id": "PEST0026",
+        "pest_name": "Leaf Miner (Phytomyza atricornis)",
+        "category": "Chickpea",
+        "score": 0.5583
+      },
+      {
+        "pest_id": "PEST0056",
+        "pest_name": "Leaf Miner (Tuta absoluta/Liriomyza sp.)",
+        "category": "Tomato, Chilli",
+        "score": 0.5583
+      }
+    ],
+    "best_pest_id": "PEST0018"
+  },
+  "Lemon Butterfly": {
+    "crops": [
+      "Citrus"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0051",
+      "PEST0001",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0051",
+        "pest_name": "Pomegranate Anar Butterfly (Deudorix isocrates)",
+        "category": "Pomegranate",
+        "score": 0.5055
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.312
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.312
+      }
+    ],
+    "best_pest_id": "PEST0051"
+  },
+  "Loopers": {
+    "crops": [
+      "Lettuce"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0043",
+      "PEST0020",
+      "PEST0030"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0043",
+        "pest_name": "Mango Hopper (Idioscopus nitidulus)",
+        "category": "Mango",
+        "score": 0.3421
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.325
+      },
+      {
+        "pest_id": "PEST0030",
+        "pest_name": "Castor Semi-Looper (Achaea janata)",
+        "category": "Castor",
+        "score": 0.312
+      }
+    ],
+    "best_pest_id": "PEST0043"
+  },
+  "Maggot": {
+    "crops": [
+      "Garlic"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0043",
+      "PEST0037",
+      "PEST0044"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0043",
+        "pest_name": "Mango Hopper (Idioscopus nitidulus)",
+        "category": "Mango",
+        "score": 0.2889
+      },
+      {
+        "pest_id": "PEST0037",
+        "pest_name": "Mealybug (Phenacoccus solenopsis)",
+        "category": "Mango, Cotton, Veg",
+        "score": 0.2786
+      },
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.2476
+      }
+    ],
+    "best_pest_id": "PEST0043"
+  },
+  "Mites": {
+    "crops": [
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0057",
+      "PEST0035",
+      "PEST0035"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0057",
+        "pest_name": "Mites (Tetranychus urticae)",
+        "category": "Okra, Beans, Vegetables",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Cotton, Tomato",
+        "score": 0.3
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Tomato, Okra, Vegetables",
+        "score": 0.3
+      }
+    ],
+    "best_pest_id": "PEST0057"
+  },
+  "Mustard Sawfly": {
+    "crops": [
+      "Cabbage",
+      "Mustard",
+      "Radish"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0031",
+      "PEST0008",
+      "PEST0012"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0031",
+        "pest_name": "Castor Whitefly (Trialeurodes ricini)",
+        "category": "Castor",
+        "score": 0.3586
+      },
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.3391
+      },
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.3391
+      }
+    ],
+    "best_pest_id": "PEST0031"
+  },
+  "Nematodes": {
+    "crops": [
+      "Banana"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0067",
+      "PEST0074",
+      "PEST0075"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0067",
+        "pest_name": "Cyst Nematode (Heterodera sacchari)",
+        "category": "Rice, Sugarcane",
+        "score": 0.4727
+      },
+      {
+        "pest_id": "PEST0074",
+        "pest_name": "Cyst Nematode (Heterodera cajani)",
+        "category": "Redgram (Pigeonpea)",
+        "score": 0.4727
+      },
+      {
+        "pest_id": "PEST0075",
+        "pest_name": "Cyst Nematode (Heterodera glycines)",
+        "category": "Soybean",
+        "score": 0.4727
+      }
+    ],
+    "best_pest_id": "PEST0067"
+  },
+  "Onion Maggot": {
+    "crops": [
+      "Onion"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0091",
+      "PEST0087",
+      "PEST0097"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0091",
+        "pest_name": "Root Lesion Nematode (Pratylenchus penetrans)",
+        "category": "Potato, Carrot, Onion",
+        "score": 0.3583
+      },
+      {
+        "pest_id": "PEST0087",
+        "pest_name": "Lesion Nematode (Pratylenchus coffeae)",
+        "category": "Banana, Coffee, Guava",
+        "score": 0.337
+      },
+      {
+        "pest_id": "PEST0097",
+        "pest_name": "Lesion Nematode (Pratylenchus loosi)",
+        "category": "Tea (Srikakulam dist.), Coffee",
+        "score": 0.337
+      }
+    ],
+    "best_pest_id": "PEST0091"
+  },
+  "Painted Bug": {
+    "crops": [
+      "Mustard"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0015",
+      "PEST0044",
+      "PEST0051"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.5386
+      },
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.475
+      },
+      {
+        "pest_id": "PEST0051",
+        "pest_name": "Pomegranate Anar Butterfly (Deudorix isocrates)",
+        "category": "Pomegranate",
+        "score": 0.2811
+      }
+    ],
+    "best_pest_id": "PEST0015"
+  },
+  "Pea Weevil": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0007",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.5772
+      },
+      {
+        "pest_id": "PEST0007",
+        "pest_name": "Spodoptera/FAW (Spodoptera frugiperda)",
+        "category": "Maize, Sorghum",
+        "score": 0.2708
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.26
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Pentatomid Bug": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0015",
+      "PEST0044",
+      "PEST0037"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.489
+      },
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.394
+      },
+      {
+        "pest_id": "PEST0037",
+        "pest_name": "Mealybug (Phenacoccus solenopsis)",
+        "category": "Mango, Cotton, Veg",
+        "score": 0.2955
+      }
+    ],
+    "best_pest_id": "PEST0015"
+  },
+  "Plume Moth": {
+    "crops": [
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0059",
+      "PEST0053",
+      "PEST0032"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0059",
+        "pest_name": "Diamond Back Moth (Plutella xylostella)",
+        "category": "Cabbage, Cauliflower, Broccoli",
+        "score": 0.4139
+      },
+      {
+        "pest_id": "PEST0053",
+        "pest_name": "Grape Thrips (Rhipiphorothrips cruentatus)",
+        "category": "Grape",
+        "score": 0.2955
+      },
+      {
+        "pest_id": "PEST0032",
+        "pest_name": "Sunflower Mite (Tetranychus urticae)",
+        "category": "Sunflower, Soybean",
+        "score": 0.2708
+      }
+    ],
+    "best_pest_id": "PEST0059"
+  },
+  "Pod Fly": {
+    "crops": [
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0008",
+      "PEST0012",
+      "PEST0020"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.5312
+      },
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.5312
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.45
+      }
+    ],
+    "best_pest_id": "PEST0008"
+  },
+  "Pollu Beetle": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0020",
+      "PEST0085"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.4412
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.3095
+      },
+      {
+        "pest_id": "PEST0085",
+        "pest_name": "Foliar Nematode (Aphelenchoides besseyi)",
+        "category": "Chilli, Strawberry",
+        "score": 0.2407
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Potato Tuber Moth": {
+    "crops": [
+      "Potato"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0095",
+      "PEST0059",
+      "PEST0021"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0095",
+        "pest_name": "Potato Cyst Nematode (Globodera pallida / G. rostochiensis)",
+        "category": "Potato",
+        "score": 0.5698
+      },
+      {
+        "pest_id": "PEST0059",
+        "pest_name": "Diamond Back Moth (Plutella xylostella)",
+        "category": "Cabbage, Cauliflower, Broccoli",
+        "score": 0.351
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.3441
+      }
+    ],
+    "best_pest_id": "PEST0095"
+  },
+  "Pseudostem Borer": {
+    "crops": [
+      "Banana"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0001",
+      "PEST0020",
+      "PEST0011"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.625
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.541
+      },
+      {
+        "pest_id": "PEST0011",
+        "pest_name": "Pearl Millet Stem Borer (Chilo partellus)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.525
+      }
+    ],
+    "best_pest_id": "PEST0001"
+  },
+  "Psyllids": {
+    "crops": [
+      "Hedge Lucerne"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0049",
+      "PEST0009",
+      "PEST0022"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0049",
+        "pest_name": "Citrus Psyllid (Diaphorina citri)",
+        "category": "Citrus",
+        "score": 0.4136
+      },
+      {
+        "pest_id": "PEST0009",
+        "pest_name": "Aphids (Rhopalosiphum maidis)",
+        "category": "Maize, Sorghum",
+        "score": 0.3714
+      },
+      {
+        "pest_id": "PEST0022",
+        "pest_name": "Aphids (Aphis craccivora)",
+        "category": "All Pulses, Cotton, Veg",
+        "score": 0.3714
+      }
+    ],
+    "best_pest_id": "PEST0049"
+  },
+  "Red Hairy Caterpillar": {
+    "crops": [
+      "Groundnut"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0046",
+      "PEST0038",
+      "PEST0028"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.4267
+      },
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.3079
+      },
+      {
+        "pest_id": "PEST0028",
+        "pest_name": "Groundnut Aphid (Aphis craccivora)",
+        "category": "Groundnut",
+        "score": 0.2806
+      }
+    ],
+    "best_pest_id": "PEST0046"
+  },
+  "Red Palm Weevil": {
+    "crops": [
+      "Coconut"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0013",
+      "PEST0046"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.4548
+      },
+      {
+        "pest_id": "PEST0013",
+        "pest_name": "Earhead Midge (Stenodiplosis sorghicola)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.2786
+      },
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.266
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Red Pumpkin Beetle": {
+    "crops": [
+      "Bitter Gourd",
+      "Bottle Gourd",
+      "Pumpkin",
+      "Ridge Gourd",
+      "Snake Gourd",
+      "Watermelon"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0047",
+      "PEST0013",
+      "PEST0018"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0047",
+        "pest_name": "Coconut Rhinoceros Beetle (Oryctes rhinoceros)",
+        "category": "Coconut, Palm",
+        "score": 0.3857
+      },
+      {
+        "pest_id": "PEST0013",
+        "pest_name": "Earhead Midge (Stenodiplosis sorghicola)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.2935
+      },
+      {
+        "pest_id": "PEST0018",
+        "pest_name": "Leaf Miner (Liriomyza sp.)",
+        "category": "Kodo, Little Millet",
+        "score": 0.2786
+      }
+    ],
+    "best_pest_id": "PEST0047"
+  },
+  "Root Borer": {
+    "crops": [
+      "Cardamom"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0054",
+      "PEST0020",
+      "PEST0001"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0054",
+        "pest_name": "Fruit Borer (Leucinodes orbonalis)",
+        "category": "Brinjal, Tomato",
+        "score": 0.6202
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.6039
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.58
+      }
+    ],
+    "best_pest_id": "PEST0054"
+  },
+  "Root Grub": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0061",
+      "PEST0066",
+      "PEST0061"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0061",
+        "pest_name": "Root Knot Nematode (Meloidogyne incognita)",
+        "category": "Vegetables (all)",
+        "score": 0.3657
+      },
+      {
+        "pest_id": "PEST0066",
+        "pest_name": "Root Knot Nematode (Meloidogyne graminicola)",
+        "category": "Rice (Paddy)",
+        "score": 0.3657
+      },
+      {
+        "pest_id": "PEST0061",
+        "pest_name": "Root Knot Nematode (Meloidogyne incognita)",
+        "category": "Pearl Millet, Finger Millet, Foxtail Millet",
+        "score": 0.3657
+      }
+    ],
+    "best_pest_id": "PEST0061"
+  },
+  "Root Maggot": {
+    "crops": [
+      "Radish"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0061",
+      "PEST0066",
+      "PEST0061"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0061",
+        "pest_name": "Root Knot Nematode (Meloidogyne incognita)",
+        "category": "Vegetables (all)",
+        "score": 0.4836
+      },
+      {
+        "pest_id": "PEST0066",
+        "pest_name": "Root Knot Nematode (Meloidogyne graminicola)",
+        "category": "Rice (Paddy)",
+        "score": 0.4836
+      },
+      {
+        "pest_id": "PEST0061",
+        "pest_name": "Root Knot Nematode (Meloidogyne incognita)",
+        "category": "Pearl Millet, Finger Millet, Foxtail Millet",
+        "score": 0.4836
+      }
+    ],
+    "best_pest_id": "PEST0061"
+  },
+  "Rust Fly": {
+    "crops": [
+      "Carrot"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0042",
+      "PEST0008",
+      "PEST0012"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0042",
+        "pest_name": "Fruit Fly (Bactrocera dorsalis)",
+        "category": "Mango, Guava, Citrus",
+        "score": 0.6603
+      },
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.5838
+      },
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.5838
+      }
+    ],
+    "best_pest_id": "PEST0042"
+  },
+  "Semilooper": {
+    "crops": [
+      "Chickpeas",
+      "Field Bean"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0030",
+      "PEST0001",
+      "PEST0043"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0030",
+        "pest_name": "Castor Semi-Looper (Achaea janata)",
+        "category": "Castor",
+        "score": 0.4643
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.39
+      },
+      {
+        "pest_id": "PEST0043",
+        "pest_name": "Mango Hopper (Idioscopus nitidulus)",
+        "category": "Mango",
+        "score": 0.3545
+      }
+    ],
+    "best_pest_id": "PEST0030"
+  },
+  "Shoot and Capsule Borer": {
+    "crops": [
+      "Cardamom"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0055",
+      "PEST0021",
+      "PEST0001"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.6898
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.4525
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.417
+      }
+    ],
+    "best_pest_id": "PEST0055"
+  },
+  "Shoot Borer": {
+    "crops": [
+      "Ashwagandha",
+      "Ginger",
+      "Jackfruit",
+      "Turmeric"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0055",
+      "PEST0001",
+      "PEST0020"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.6969
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.6202
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.58
+      }
+    ],
+    "best_pest_id": "PEST0055"
+  },
+  "Shoot Fly": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Kodo Millet",
+      "Maize",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0012",
+      "PEST0008",
+      "PEST0042"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.95
+      },
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0042",
+        "pest_name": "Fruit Fly (Bactrocera dorsalis)",
+        "category": "Mango, Guava, Citrus",
+        "score": 0.4861
+      }
+    ],
+    "best_pest_id": "PEST0012"
+  },
+  "Shot Hole Borer": {
+    "crops": [
+      "Coffee",
+      "Tea"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0001",
+      "PEST0021",
+      "PEST0055"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.5513
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.5302
+      },
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.4806
+      }
+    ],
+    "best_pest_id": "PEST0001"
+  },
+  "Slugs/Snails": {
+    "crops": [
+      "Lettuce"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0038",
+      "PEST0049",
+      "PEST0070"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.269
+      },
+      {
+        "pest_id": "PEST0049",
+        "pest_name": "Citrus Psyllid (Diaphorina citri)",
+        "category": "Citrus",
+        "score": 0.25
+      },
+      {
+        "pest_id": "PEST0070",
+        "pest_name": "Stunt Nematode (Tylenchorhynchus mashhoodi)",
+        "category": "Wheat, Barley",
+        "score": 0.25
+      }
+    ],
+    "best_pest_id": "PEST0038"
+  },
+  "Sphinx Moth": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0059",
+      "PEST0079",
+      "PEST0092"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0059",
+        "pest_name": "Diamond Back Moth (Plutella xylostella)",
+        "category": "Cabbage, Cauliflower, Broccoli",
+        "score": 0.45
+      },
+      {
+        "pest_id": "PEST0079",
+        "pest_name": "Sting Nematode (Belonolaimus gracilis)",
+        "category": "Groundnut (sandy soils of coastal AP)",
+        "score": 0.312
+      },
+      {
+        "pest_id": "PEST0092",
+        "pest_name": "Sting Nematode (Belonolaimus longicaudatus)",
+        "category": "Cucurbits, Beans, Peas",
+        "score": 0.312
+      }
+    ],
+    "best_pest_id": "PEST0059"
+  },
+  "Spindle Bug": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0044",
+      "PEST0015",
+      "PEST0069"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.425
+      },
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.4205
+      },
+      {
+        "pest_id": "PEST0069",
+        "pest_name": "Spiral Nematode (Helicotylenchus multicinctus)",
+        "category": "Maize, Sorghum, Pearl Millet",
+        "score": 0.3
+      }
+    ],
+    "best_pest_id": "PEST0044"
+  },
+  "Stem and Root Borer": {
+    "crops": [
+      "Cashew"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0055",
+      "PEST0001",
+      "PEST0021"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.6125
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.5733
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.4958
+      }
+    ],
+    "best_pest_id": "PEST0055"
+  },
+  "Stem Borer": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Kodo Millet",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0001",
+      "PEST0014",
+      "PEST0011"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.9
+      },
+      {
+        "pest_id": "PEST0014",
+        "pest_name": "Finger Millet Stem Borer (Sesamia inferens)",
+        "category": "Finger Millet",
+        "score": 0.6824
+      },
+      {
+        "pest_id": "PEST0011",
+        "pest_name": "Pearl Millet Stem Borer (Chilo partellus)",
+        "category": "Pearl Millet, Sorghum",
+        "score": 0.6773
+      }
+    ],
+    "best_pest_id": "PEST0001"
+  },
+  "Stem Fly": {
+    "crops": [
+      "Black Gram",
+      "Green Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0008",
+      "PEST0012",
+      "PEST0042"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0008",
+        "pest_name": "Shoot Fly (Atherigona soccata)",
+        "category": "Sorghum",
+        "score": 0.5838
+      },
+      {
+        "pest_id": "PEST0012",
+        "pest_name": "Shoot Fly (Atherigona approximata)",
+        "category": "Pearl Millet",
+        "score": 0.5838
+      },
+      {
+        "pest_id": "PEST0042",
+        "pest_name": "Fruit Fly (Bactrocera dorsalis)",
+        "category": "Mango, Guava, Citrus",
+        "score": 0.5074
+      }
+    ],
+    "best_pest_id": "PEST0008"
+  },
+  "Stem Nematode": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0093",
+      "PEST0092",
+      "PEST0067"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0093",
+        "pest_name": "Stem & Bulb Nematode (Ditylenchus dipsaci)",
+        "category": "Onion, Garlic",
+        "score": 0.7329
+      },
+      {
+        "pest_id": "PEST0092",
+        "pest_name": "Sting Nematode (Belonolaimus longicaudatus)",
+        "category": "Cucurbits, Beans, Peas",
+        "score": 0.688
+      },
+      {
+        "pest_id": "PEST0067",
+        "pest_name": "Cyst Nematode (Heterodera sacchari)",
+        "category": "Rice, Sugarcane",
+        "score": 0.675
+      }
+    ],
+    "best_pest_id": "PEST0093"
+  },
+  "Stem Weevil": {
+    "crops": [
+      "Amaranthus"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0001",
+      "PEST0093"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.5042
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.4964
+      },
+      {
+        "pest_id": "PEST0093",
+        "pest_name": "Stem & Bulb Nematode (Ditylenchus dipsaci)",
+        "category": "Onion, Garlic",
+        "score": 0.4008
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Stone Weevil": {
+    "crops": [
+      "Mango"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0031",
+      "PEST0038"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.541
+      },
+      {
+        "pest_id": "PEST0031",
+        "pest_name": "Castor Whitefly (Trialeurodes ricini)",
+        "category": "Castor",
+        "score": 0.337
+      },
+      {
+        "pest_id": "PEST0038",
+        "pest_name": "Sugarcane Pyrilla (Pyrilla perpusilla)",
+        "category": "Sugarcane",
+        "score": 0.269
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "Tea Mosquito Bug": {
+    "crops": [
+      "Cashew",
+      "Cocoa",
+      "Guava",
+      "Neem",
+      "Tea"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0015",
+      "PEST0044",
+      "PEST0050"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0015",
+        "pest_name": "Earhead Bug (Calocoris angustatus)",
+        "category": "Sorghum, Pearl Millet",
+        "score": 0.3722
+      },
+      {
+        "pest_id": "PEST0044",
+        "pest_name": "Mango Mealy Bug (Drosicha mangiferae)",
+        "category": "Mango, Sapota, Trees",
+        "score": 0.3349
+      },
+      {
+        "pest_id": "PEST0050",
+        "pest_name": "Guava Fruit Borer (Virachola isocrates)",
+        "category": "Guava, Pomegranate",
+        "score": 0.3258
+      }
+    ],
+    "best_pest_id": "PEST0015"
+  },
+  "Tea Tortrix": {
+    "crops": [
+      "Tea"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0001",
+      "PEST0003",
+      "PEST0054"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.3714
+      },
+      {
+        "pest_id": "PEST0003",
+        "pest_name": "Leaf Folder (Cnaphalocrocis medinalis)",
+        "category": "Paddy",
+        "score": 0.2955
+      },
+      {
+        "pest_id": "PEST0054",
+        "pest_name": "Fruit Borer (Leucinodes orbonalis)",
+        "category": "Brinjal, Tomato",
+        "score": 0.2955
+      }
+    ],
+    "best_pest_id": "PEST0001"
+  },
+  "Termites": {
+    "crops": [
+      "Chickpeas",
+      "Cloves",
+      "Stylosanthes",
+      "Sugarcane",
+      "Vetiver"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0057",
+      "PEST0019",
+      "PEST0023"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0057",
+        "pest_name": "Mites (Tetranychus urticae)",
+        "category": "Okra, Beans, Vegetables",
+        "score": 0.5
+      },
+      {
+        "pest_id": "PEST0019",
+        "pest_name": "Thrips (Frankliniella sp.)",
+        "category": "Barnyard, Foxtail Millet",
+        "score": 0.3714
+      },
+      {
+        "pest_id": "PEST0023",
+        "pest_name": "Thrips (Caliothrips indicus)",
+        "category": "Chickpea, Soybean, Groundnut",
+        "score": 0.3714
+      }
+    ],
+    "best_pest_id": "PEST0057"
+  },
+  "Tobacco Caterpillar": {
+    "crops": [
+      "Cauliflower"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0041",
+      "PEST0040",
+      "PEST0046"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0041",
+        "pest_name": "Tobacco Aphid (Myzus persicae)",
+        "category": "Tobacco, Chilli",
+        "score": 0.5719
+      },
+      {
+        "pest_id": "PEST0040",
+        "pest_name": "Tobacco Cutworm (Spodoptera litura)",
+        "category": "Tobacco",
+        "score": 0.5456
+      },
+      {
+        "pest_id": "PEST0046",
+        "pest_name": "Coconut Black Headed Caterpillar (Opisina arenosella)",
+        "category": "Coconut",
+        "score": 0.5328
+      }
+    ],
+    "best_pest_id": "PEST0041"
+  },
+  "Top Borer": {
+    "crops": [
+      "Sugarcane"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0020",
+      "PEST0001",
+      "PEST0054"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.6306
+      },
+      {
+        "pest_id": "PEST0001",
+        "pest_name": "Stem Borer (Scirpophaga incertulas)",
+        "category": "Paddy",
+        "score": 0.6039
+      },
+      {
+        "pest_id": "PEST0054",
+        "pest_name": "Fruit Borer (Leucinodes orbonalis)",
+        "category": "Brinjal, Tomato",
+        "score": 0.58
+      }
+    ],
+    "best_pest_id": "PEST0020"
+  },
+  "Top Shoot Borer": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0055",
+      "PEST0020",
+      "PEST0021"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0055",
+        "pest_name": "Shoot & Fruit Borer",
+        "category": "Brinjal, Chilli",
+        "score": 0.5639
+      },
+      {
+        "pest_id": "PEST0020",
+        "pest_name": "Pod Borer (Helicoverpa armigera)",
+        "category": "Chickpea, Redgram, Groundnut, Pulses",
+        "score": 0.4625
+      },
+      {
+        "pest_id": "PEST0021",
+        "pest_name": "Spotted Pod Borer (Maruca vitrata)",
+        "category": "Blackgram, Greengram, Cowpea",
+        "score": 0.449
+      }
+    ],
+    "best_pest_id": "PEST0055"
+  },
+  "Webworm": {
+    "crops": [
+      "Beetroot",
+      "Stylosanthes"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0065",
+      "PEST0034",
+      "PEST0060"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0065",
+        "pest_name": "Budworm (Helicoverpa armigera)",
+        "category": "Jasmine, Marigold",
+        "score": 0.4643
+      },
+      {
+        "pest_id": "PEST0034",
+        "pest_name": "Bollworm (Helicoverpa armigera)",
+        "category": "Cotton, Tomato, Chilli",
+        "score": 0.4333
+      },
+      {
+        "pest_id": "PEST0060",
+        "pest_name": "Cutworm (Spodoptera litura)",
+        "category": "Tomato, Cabbage, Onion",
+        "score": 0.3714
+      }
+    ],
+    "best_pest_id": "PEST0065"
+  },
+  "Weevil": {
+    "crops": [
+      "Cowpea"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0048",
+      "PEST0035",
+      "PEST0035"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0048",
+        "pest_name": "Banana Weevil (Cosmopolites sordidus)",
+        "category": "Banana",
+        "score": 0.6605
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Cotton, Tomato",
+        "score": 0.2786
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Tomato, Okra, Vegetables",
+        "score": 0.2786
+      }
+    ],
+    "best_pest_id": "PEST0048"
+  },
+  "White grub": {
+    "crops": [
+      "Vetiver"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ],
+    "closest_pest_ids": [
+      "PEST0035",
+      "PEST0035",
+      "PEST0025"
+    ],
+    "closest_pests": [
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Cotton, Tomato",
+        "score": 0.3611
+      },
+      {
+        "pest_id": "PEST0035",
+        "pest_name": "Whitefly (Bemisia tabaci)",
+        "category": "Tomato, Okra, Vegetables",
+        "score": 0.3611
+      },
+      {
+        "pest_id": "PEST0025",
+        "pest_name": "Whitefly on Pulses (Bemisia tabaci)",
+        "category": "Blackgram, Cowpea",
+        "score": 0.325
+      }
+    ],
+    "best_pest_id": "PEST0035"
+  }
+}

@@ -143,6 +143,7 @@ var CS2 = {
     step4Data: null,
     step5Data: null,
     step6Data: null,
+    step7Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -509,6 +510,91 @@ function cs_fetchPhase2Step6(){
     });
 }
 
+/* ── Fetch Phase 2 Step 7 from backend ───────────────────────── */
+function cs_fetchPhase2Step7(){
+    var crops = CS2.mainCrops;
+    if(!crops || !crops.length) return;
+    if(CS2.p2s7Loading) return;
+    CS2.p2s7Loading = true;
+
+    fetch("/api/method/rythulab.api.get_phase2_trap_crop_recommendations", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name};
+            })
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        var apiTrapList = Array.isArray(msg.trapList) ? msg.trapList : [];
+        var apiAssociateList = Array.isArray(msg.associateList) ? msg.associateList : [];
+
+        CS2.step7Data = {
+            selected_crop_ids: Array.isArray(msg.selected_crop_ids) ? msg.selected_crop_ids : [],
+            trap_crops: Array.isArray(msg.trap_crops) ? msg.trap_crops : [],
+            companion_crops_via_mf: Array.isArray(msg.companion_crops_via_mf) ? msg.companion_crops_via_mf : [],
+            recommended_trap_crops: Array.isArray(msg.recommended_trap_crops) ? msg.recommended_trap_crops : [],
+            recommended_companion_crops: Array.isArray(msg.recommended_companion_crops) ? msg.recommended_companion_crops : [],
+            trapList: apiTrapList,
+            associateList: apiAssociateList
+        };
+
+        if(apiTrapList.length){
+            apiTrapList.forEach(function(entry){
+                p2_mergeRecommendation(CS2.trapList, entry);
+            });
+        } else {
+            (CS2.step7Data.recommended_trap_crops || []).forEach(function(rec){
+                p2_mergeRecommendation(CS2.trapList, {
+                    crop: {
+                        id: rec.crop_id,
+                        name: rec.crop_name,
+                        mfp: ["trap_pest"],
+                        type: "Trap",
+                        family: "",
+                        desc: "",
+                        border: true,
+                        trap: true
+                    },
+                    reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
+                });
+            });
+        }
+
+        if(apiAssociateList.length){
+            apiAssociateList.forEach(function(entry){
+                p2_mergeRecommendation(CS2.associateList, entry);
+            });
+        } else {
+            (CS2.step7Data.recommended_companion_crops || []).forEach(function(rec){
+                p2_mergeRecommendation(CS2.associateList, {
+                    crop: {
+                        id: rec.crop_id,
+                        name: rec.crop_name,
+                        mfp: Array.isArray(rec.produces_mfs) ? rec.produces_mfs.slice() : [],
+                        type: "Associate",
+                        family: "",
+                        desc: "",
+                        border: false,
+                        trap: false
+                    },
+                    reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
+                });
+            });
+        }
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 7 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s7Loading = false;
+        if(CS2.step === 7) p2_renderStep(7);
+    });
+}
+
 /* ── Compute all recommendations upfront ─────────────────────── */
 function p2_computeAll(){
     var mc = CS2.mainCrops;
@@ -680,6 +766,25 @@ function p2_toggleSel(prefix, id, checked){
     if(checked){if(arr.indexOf(id)<0)arr.push(id);}
     else{var i=arr.indexOf(id);if(i>=0)arr.splice(i,1);}
     if(typeof cs_updateSelBox==="function") cs_updateSelBox();
+}
+
+function p2_mergeRecommendation(pool, entry){
+    var existing = pool.find(function(item){
+        return item.crop && entry.crop && item.crop.id === entry.crop.id;
+    });
+
+    if(!existing){
+        pool.push(entry);
+        return entry;
+    }
+
+    existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
+    (entry.reasons || []).forEach(function(reason){
+        if(existing.reasons.indexOf(reason) < 0){
+            existing.reasons.push(reason);
+        }
+    });
+    return existing;
 }
 
 /* ── Step 1: Missing MF — grouped by microfeature ───────────── */
@@ -1178,13 +1283,75 @@ function p2_s6(){
 
 /* ── Step 7: Trap Crops ──────────────────────────────────────── */
 function p2_s7(){
-    var html=CS2.trapList.length?
-        CS2.trapList.map(function(e){return p2_cropCard(e,CS2.selectedTrap,"trap");}).join(""):
-        '<div class="cs-empty">No trap crops identified for the current main crop pest profile.</div>';
+    if(!CS2.step7Data && !CS2.p2s7Loading){
+        cs_fetchPhase2Step7();
+    }
+
+    var trapSuggestions = [];
+    if(CS2.step7Data && Array.isArray(CS2.step7Data.trapList) && CS2.step7Data.trapList.length){
+        trapSuggestions = CS2.step7Data.trapList.map(function(entry){
+            return CS2.trapList.find(function(item){
+                return item.crop && entry.crop && item.crop.id === entry.crop.id;
+            }) || entry;
+        }).filter(Boolean);
+    } else if(CS2.step7Data && Array.isArray(CS2.step7Data.recommended_trap_crops)){
+        trapSuggestions = CS2.step7Data.recommended_trap_crops.map(function(rec){
+            return CS2.trapList.find(function(item){
+                return item.crop && item.crop.id === rec.crop_id;
+            });
+        }).filter(Boolean);
+    }
+    if(!trapSuggestions.length){
+        trapSuggestions = CS2.trapList.slice();
+    }
+
+    var companionSuggestions = [];
+    if(CS2.step7Data && Array.isArray(CS2.step7Data.associateList) && CS2.step7Data.associateList.length){
+        companionSuggestions = CS2.step7Data.associateList.map(function(entry){
+            return CS2.associateList.find(function(item){
+                return item.crop && entry.crop && item.crop.id === entry.crop.id;
+            }) || entry;
+        }).filter(Boolean);
+    } else if(CS2.step7Data && Array.isArray(CS2.step7Data.recommended_companion_crops)){
+        companionSuggestions = CS2.step7Data.recommended_companion_crops.map(function(rec){
+            return CS2.associateList.find(function(item){
+                return item.crop && item.crop.id === rec.crop_id;
+            });
+        }).filter(Boolean);
+    }
+
+    var analyzedPests = 0;
+    if(CS2.step7Data && Array.isArray(CS2.step7Data.companion_crops_via_mf)){
+        CS2.step7Data.companion_crops_via_mf.forEach(function(item){
+            analyzedPests += Array.isArray(item.high_severity_pests) ? item.high_severity_pests.length : 0;
+        });
+    }
+
+    var trapHtml = CS2.p2s7Loading && !CS2.step7Data
+        ? '<div class="cs-empty">Loading trap crop and pest-mitigation recommendations from backend...</div>'
+        : trapSuggestions.length
+        ? trapSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedTrap,"trap");}).join("")
+        : '<div class="cs-empty">No trap crops identified for the current main crop pest profile.</div>';
+
+    var companionHtml = CS2.p2s7Loading && !CS2.step7Data
+        ? ''
+        : companionSuggestions.length
+        ? '<div style="font-size:12px;font-weight:700;color:#2a3a1a;margin:14px 0 8px">Companion crops that produce pest-mitigating MFs:</div>'+
+            companionSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join("")
+        : '<div class="cs-empty">No additional pest-mitigating companion crops identified from high-severity pests.</div>';
+
     return p2_hd(7,"Trap crops",
-        "Trap crops lure the key pests of main crops away from the main field. They are planted in border rows or small patches and destroyed (with pests) before pests disperse.")+
-        html+
-        '<div class="cs-sf"><span class="cs-fn">'+CS2.trapList.length+' trap crop(s) identified.</span>'+
+        "Trap crops lure key pests away from the main field. This step also surfaces companion crops that produce microfeatures known to reduce risk from high-severity pests of the selected crops.")+
+        '<div class="cs-fcrd" style="margin-bottom:10px">'+
+        '<div class="cs-fcht">Backend pest analysis</div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl">Selected main crops</span><span class="cs-fcrv">'+((CS2.step7Data && CS2.step7Data.selected_crop_ids) ? CS2.step7Data.selected_crop_ids.length : (CS2.mainCrops || []).length)+'</span></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl">High-severity pests analyzed</span><span class="cs-fcrv">'+analyzedPests+'</span></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl">Trap crop recommendations</span><span class="cs-fcrv">'+trapSuggestions.length+'</span></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl">Companion crop recommendations</span><span class="cs-fcrv">'+companionSuggestions.length+'</span></div>'+
+        '</div>'+
+        trapHtml+
+        companionHtml+
+        '<div class="cs-sf"><span class="cs-fn">'+trapSuggestions.length+' trap crop(s) and '+companionSuggestions.length+' companion crop(s) identified.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(6)">← Back</button>'+
         '<button class="cs-btn pri" onclick="p2_next()">Review & confirm →</button></div>';
 }

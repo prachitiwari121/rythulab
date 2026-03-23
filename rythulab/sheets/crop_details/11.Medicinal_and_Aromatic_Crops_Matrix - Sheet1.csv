@@ -104,7 +104,7 @@ Preferred slope % (Range),0 - 10%,0 - 5%,0 - 45%,0 - 25%
 "Crop suitability to Drought Risk Soils (low, Medium, high)",High,Medium,Very High,Very High
 Threshold level of Calcium meq/100g (Range),02-May,02-Apr,02-May,02-Oct
 Threshold level of Bulk Density g/cc (Range),1.3 - 1.5,1.2 - 1.4,1.2 - 1.5,1.3 - 1.6
-"Mention 5 Major Pests and Severity (Low, Medium, High)","Hadda Beetle (Medium), Aphids (Low), Mites (Low), Shoot Borer (Low), Root-knot Nematode (Low)","Leaf Roller (Medium), Aphids (Low), Lace wing bug (Low), Thrips (Low), Whitefly (Low)","Termites (Low), Leaf roller (Low), Stem borer (Low), White grub (Low), Aphids (Low)","Tea Mosquito Bug (Low), Scale Insects (Low), Mealybug (Low), Leaf Miner (Low), Bark Eating Caterpillar (Low)"
+"Mention 5 Major Pests and Severity (Low, Medium, High)","PEST0047 (Medium), PEST0022 (Low), PEST0057 (Low), PEST0055 (Low), PEST0061 (Low)","PEST0033 (Medium), PEST0022 (Low), PEST0015 (Low), PEST0036 (Low), PEST0035 (Low)","PEST0057 (Low), PEST0033 (Low), PEST0001 (Low), PEST0035 (Low), PEST0022 (Low)","PEST0015 (Low), PEST0062 (Low), PEST0037 (Low), PEST0056 (Low), PEST0046 (Low)"
 "Mention 5 Major Diseases and Severity (Low, Medium, High)","DIS0091 (Medium), DIS0001 (Medium), DIS0130 (Low), DIS0053 (Medium), DIS0054 (Low)","DIS0091 (Medium), DIS0110 (Medium), DIS0123 (Low), DIS0129 (Medium), DIS0151 (Low)","DIS0091 (Low), DIS0069 (Low), DIS0123 (Low)","DIS0091 (Low), DIS0110 (Low), DIS0054 (Low), DIS0123 (Low), DIS0147 (Low)"
 Is trap Crop for,No,No,No,No
 Nutrient (Mineral) Deficiencies and Their Associated Syndrome,"N: Yellowing of leaves; Zn: Stunted growth, small leaves","N: Pale leaves, reduced aroma",N: Yellowing of leaf blades,N: Pale green leaves

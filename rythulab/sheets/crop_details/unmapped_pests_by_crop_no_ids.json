@@ -1,0 +1,744 @@
+{
+  "Aphids": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Apple Borer": {
+    "crops": [
+      "Cashew"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Bark Eating Caterpillar": {
+    "crops": [
+      "Amla",
+      "Guava",
+      "Neem"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Bihar Hairy Caterpillar": {
+    "crops": [
+      "Sunflower"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Black Bean Aphids": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Blister Beetle": {
+    "crops": [
+      "Field Bean",
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Bud Weevil": {
+    "crops": [
+      "Jackfruit"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Bud Worm": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Cabbage Butterfly": {
+    "crops": [
+      "Cabbage",
+      "Cauliflower"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Capsule Borer": {
+    "crops": [
+      "Castor"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Carrot Weevil": {
+    "crops": [
+      "Carrot"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Chocolate Spot": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Coffee Berry Borer": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Coffee White Stem Borer": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Epilachna Beetle": {
+    "crops": [
+      "Bitter Gourd",
+      "Brinjal",
+      "Pumpkin",
+      "Ridge Gourd"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Flea Beetle": {
+    "crops": [
+      "Beetroot",
+      "Radish"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Gall Fly": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Gall Midge": {
+    "crops": [
+      "Little Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Grasshoppers": {
+    "crops": [
+      "Amaranthus",
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Hedge Lucerne",
+      "Horse Gram",
+      "Kodo Millet",
+      "Little Millet",
+      "Napier Grass",
+      "Proso Millet",
+      "Stylosanthes"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv",
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Green Scale": {
+    "crops": [
+      "Coffee"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Hadda Beetle": {
+    "crops": [
+      "Ashwagandha"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Hairy Caterpillar": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Head Borer": {
+    "crops": [
+      "Cabbage"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Head Borer / Helicoverpa": {
+    "crops": [
+      "Sunflower"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Inflorescence Caterpillar": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Internode Borer": {
+    "crops": [
+      "Sugarcane"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Jassids": {
+    "crops": [
+      "Bottle Gourd",
+      "Brinjal",
+      "Coriander",
+      "Cotton",
+      "Fenugreek",
+      "Gongura",
+      "Okra",
+      "Potato"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "5. Vegetables_Crop_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Lace wing bug": {
+    "crops": [
+      "Tulsi"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf and Pod Caterpillar": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Leaf Eating Caterpillar": {
+    "crops": [
+      "Drumstick"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf Gall Thrips": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf Hopper": {
+    "crops": [
+      "Carrot",
+      "Castor",
+      "Cluster Bean",
+      "Cowpea",
+      "Field Bean",
+      "Gongura",
+      "Hedge Lucerne",
+      "Horse Gram",
+      "Stylosanthes",
+      "Sunflower"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf Roller": {
+    "crops": [
+      "Amla",
+      "Curry Leaf",
+      "Ginger",
+      "Tulsi",
+      "Turmeric"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf roller": {
+    "crops": [
+      "Vetiver"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Leaf Webber": {
+    "crops": [
+      "Amaranthus"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Lemon Butterfly": {
+    "crops": [
+      "Citrus"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Loopers": {
+    "crops": [
+      "Lettuce"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Maggot": {
+    "crops": [
+      "Garlic"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Mites": {
+    "crops": [
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Mustard Sawfly": {
+    "crops": [
+      "Cabbage",
+      "Mustard",
+      "Radish"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv",
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Nematodes": {
+    "crops": [
+      "Banana"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Onion Maggot": {
+    "crops": [
+      "Onion"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Painted Bug": {
+    "crops": [
+      "Mustard"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Pea Weevil": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Pentatomid Bug": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Plume Moth": {
+    "crops": [
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Pod Fly": {
+    "crops": [
+      "Red Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Pollu Beetle": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Potato Tuber Moth": {
+    "crops": [
+      "Potato"
+    ],
+    "sheets": [
+      "5. Vegetables_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Pseudostem Borer": {
+    "crops": [
+      "Banana"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Psyllids": {
+    "crops": [
+      "Hedge Lucerne"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Red Hairy Caterpillar": {
+    "crops": [
+      "Groundnut"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Red Palm Weevil": {
+    "crops": [
+      "Coconut"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Red Pumpkin Beetle": {
+    "crops": [
+      "Bitter Gourd",
+      "Bottle Gourd",
+      "Pumpkin",
+      "Ridge Gourd",
+      "Snake Gourd",
+      "Watermelon"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Root Borer": {
+    "crops": [
+      "Cardamom"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Root Grub": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Root Maggot": {
+    "crops": [
+      "Radish"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Rust Fly": {
+    "crops": [
+      "Carrot"
+    ],
+    "sheets": [
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Semilooper": {
+    "crops": [
+      "Chickpeas",
+      "Field Bean"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Shoot and Capsule Borer": {
+    "crops": [
+      "Cardamom"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Shoot Borer": {
+    "crops": [
+      "Ashwagandha",
+      "Ginger",
+      "Jackfruit",
+      "Turmeric"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Shoot Fly": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Kodo Millet",
+      "Maize",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Shot Hole Borer": {
+    "crops": [
+      "Coffee",
+      "Tea"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Slugs/Snails": {
+    "crops": [
+      "Lettuce"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Sphinx Moth": {
+    "crops": [
+      "Sesame"
+    ],
+    "sheets": [
+      "3.Oilseed_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Spindle Bug": {
+    "crops": [
+      "Arecanut"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Stem and Root Borer": {
+    "crops": [
+      "Cashew"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Stem Borer": {
+    "crops": [
+      "Barnyard Millet",
+      "Browntop Millet",
+      "Kodo Millet",
+      "Proso Millet"
+    ],
+    "sheets": [
+      "1.Cereals_and_Millets_Crop_Matrix - Sheet1.csv"
+    ]
+  },
+  "Stem Fly": {
+    "crops": [
+      "Black Gram",
+      "Green Gram"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Stem Nematode": {
+    "crops": [
+      "Broad Beans"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Stem Weevil": {
+    "crops": [
+      "Amaranthus"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Stone Weevil": {
+    "crops": [
+      "Mango"
+    ],
+    "sheets": [
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Tea Mosquito Bug": {
+    "crops": [
+      "Cashew",
+      "Cocoa",
+      "Guava",
+      "Neem",
+      "Tea"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv",
+      "9.Fruit_and_Plantation_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Tea Tortrix": {
+    "crops": [
+      "Tea"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Termites": {
+    "crops": [
+      "Chickpeas",
+      "Cloves",
+      "Stylosanthes",
+      "Sugarcane",
+      "Vetiver"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv",
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv",
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv",
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Tobacco Caterpillar": {
+    "crops": [
+      "Cauliflower"
+    ],
+    "sheets": [
+      "4.Leafy_and_Vegetable_Matrix - Sheet1.csv"
+    ]
+  },
+  "Top Borer": {
+    "crops": [
+      "Sugarcane"
+    ],
+    "sheets": [
+      "6.Commercial_and_Spices_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "Top Shoot Borer": {
+    "crops": [
+      "Pepper"
+    ],
+    "sheets": [
+      "7.Plantation_and_Spice_Crops_Matrix - Sheet1.csv"
+    ]
+  },
+  "Webworm": {
+    "crops": [
+      "Beetroot",
+      "Stylosanthes"
+    ],
+    "sheets": [
+      "10.Forage_Crops_Matrix - Sheet1.csv",
+      "8.Gourds_Melons_and_Roots_Matrix - Sheet1.csv"
+    ]
+  },
+  "Weevil": {
+    "crops": [
+      "Cowpea"
+    ],
+    "sheets": [
+      "2.Pulse_Crop_Matrix_Complete - Sheet1.csv"
+    ]
+  },
+  "White grub": {
+    "crops": [
+      "Vetiver"
+    ],
+    "sheets": [
+      "11.Medicinal_and_Aromatic_Crops_Matrix - Sheet1.csv"
+    ]
+  }
+}

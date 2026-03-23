@@ -1,0 +1,18 @@
+Crop,CropID,CommonPests,PestFamily,TrapCrop,TrapCropID,Diseases_Fungal,Diseases_BacterialViral; Def,NF_Interventions
+Rice,CRP0001,"Yellow stem borer, Leaf folder, GLH/BPH","Pyralidae (borer), Crambidae (folder), Delphacidae (hoppers)",Maize/Sorghum (border),CRP0002/CRP0003,"Blast, Sheath blight, Brown spot","Bacterial leaf blight, Tungro virus, Zn def",BEEJAMRUTHAM + foliar Bijamrutham; Mulch; Neem kashayam
+Maize,CRP0002,"Fall armyworm, Stem borer, Shootfly","Noctuidae (armyworm), Crambidae (borer)",Castor/Sorghum (strips),CRP0025/CRP0003,"Downy mildew, Banded leaf & sheath blight","Turcicum blight, Maize streak virus, N def",Jeevamrutham; Castor trap; Drava kashayam
+Sorghum,CRP0003,"Shootfly, Stem borer, Midge","Chloropidae (shootfly), Pyralidae",Maize (intercrop),CRP0002,"Ergot, Grain smut, Rust","Bacterial leaf streak, P def",Mulch biomass; Agni astra for shootfly
+Pearl Millet,CRP0004,"Shootfly, Stem borer","Chloropidae, Pyralidae",Maize,CRP0002,"Downy mildew, Ergot, Smut","Ergot (fungal but viral-like), K def",Biostimulants; Green manure
+Finger Millet,CRP0005,"Shootfly, Aphids","Chloropidae, Aphididae",Sorghum,CRP0003,"Blast, Rust","Downy mildew (oomycete), Fe def",Crop rotation; Mulch
+Cotton,CRP0029,"Helicoverpa, Pink bollworm, Thrips, Jassids","Noctuidae (borer), Gelechiidae, Thripidae, Cicadellidae",Okra/Marigold (rows),CRP0062/CRP0088,Fusarium wilt,"Bacterial blight, Leaf curl virus",Marigold intercrop; Panchagavya foliar
+Groundnut,CRP0023,"Spodoptera, Red hairy caterpillar, Leaf miner","Noctuidae, Erebidae, Agromyzidae",Castor/Sunflower (strips),CRP0025/CRP0024,"Tikka leaf spot, Rust","Stem rot (bact), Peanut bud necrosis virus, Ca def",Castor strips; Neemastra
+Redgram (Pigeonpea),CRP0013,"Helicoverpa pod borer, Plume moth","Noctuidae, Pterophoridae",Marigold (border),CRP0088,"Sterility mosaic, Wilt",Bacterial wilt,Marigold border; Jeevamrutham soil drench
+Greengram,CRP0015,"Yellow mosaic vector (whitefly), Aphids","Aleyrodidae, Aphididae",Sesame/Marigold,CRP0028/CRP0088,Web blight,"Yellow mosaic virus, Leaf crinkle virus",Sesame intercrop; Dashaparni kashayam
+Blackgram,CRP0014,"Yellow mosaic vector (whitefly), Aphids","Aleyrodidae, Aphididae",Sesame/Marigold,CRP0028/CRP0088,Web blight,"Yellow mosaic virus, Leaf crinkle virus",Sesame intercrop; Dashaparni kashayam
+Chillies,CRP0060,"Thrips, Shoot & fruit borer, Mites","Thripidae, Pyralidae, Tetranychidae",Mustard/Marigold (border),CRP0026/CRP0088,"Damping off, Leaf spot",Chilli leaf curl virus,Mustard border; Brahmastra for thrips
+Onion,CRP0063,"Thrips, Leaf miner","Thripidae, Agromyzidae",Marigold/Basil,CRP0088/CRP0085,"Purple blotch, Basal rot",Iris yellow spot virus (tospovirus),Marigold; Fermented buttermilk foliar
+Tomato,CRP0058,"Fruit borer, Whitefly","Noctuidae, Aleyrodidae",Marigold,CRP0088,"Early blight, Leaf spot","Tomato leaf curl virus, Bacterial wilt",Marigold; Cow urine + lime
+Brinjal,CRP0059,"Fruit borer, Whitefly","Noctuidae, Aleyrodidae",Marigold,CRP0088,"Early blight, Leaf spot","Tomato leaf curl virus, Bacterial wilt",Marigold; Cow urine + lime
+Castor,CRP0025,"Spodoptera, Semilooper","Noctuidae, Noctuidae",Sunflower,CRP0024,Leaf spot,Bacterial leaf spot,Sunflower; Mulch
+Sesame,CRP0028,"Hairy caterpillar, Gall fly","Erebidae, Cecidomyiidae",Castor,CRP0025,Phytophthora blight,Bacterial leaf spot,Castor; Agni astra
+Sunflower,CRP0024,Head borer,Noctuidae,Sorghum,CRP0003,Alternaria leaf spot,Head rot,Sorghum border; Jeevamrutham
