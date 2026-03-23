@@ -138,6 +138,7 @@ var CS2 = {
     mainCrops: [],
     missingMF: [],
     step1Data: null,
+    step2Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -178,6 +179,7 @@ function cs_phase2_init(){
     root.appendChild(lay);
     p2_renderSidebar(); p2_renderStep(CS2.step);
     cs_fetchPhase2Step1();
+    cs_fetchPhase2Step2();
 }
 
 /* ── Fetch Phase 2 Step 1 from backend ───────────────────────── */
@@ -238,6 +240,76 @@ function cs_fetchPhase2Step1(){
     .finally(function(){
         CS2.p2s1Loading = false;
         if(CS2.step === 1) p2_renderStep(1);
+    });
+}
+
+/* ── Fetch Phase 2 Step 2 from backend ───────────────────────── */
+function cs_fetchPhase2Step2(){
+    var crops = CS2.mainCrops;
+    if(!crops || !crops.length) return;
+    if(CS2.p2s2Loading) return;
+    CS2.p2s2Loading = true;
+    fetch("/api/method/rythulab.api.get_phase2_cross_compatibility", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name, type:c.type||"", a:c.a||0};
+            })
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+
+        CS2.step2Data = {
+            selected_crop_ids: Array.isArray(msg.selected_crop_ids) ? msg.selected_crop_ids : [],
+            selected_produced_mfs: Array.isArray(msg.selected_produced_mfs) ? msg.selected_produced_mfs : [],
+            selected_required_mfs: Array.isArray(msg.selected_required_mfs) ? msg.selected_required_mfs : [],
+            associated_crops: Array.isArray(msg.associated_crops) ? msg.associated_crops : []
+        };
+
+        (CS2.step2Data.associated_crops || []).forEach(function(rec){
+            var producedCodes = (rec.candidate_produced_mfs || []).map(function(mf){
+                return mf && mf.mf_code ? mf.mf_code : null;
+            }).filter(Boolean);
+
+            var already = CS2.associateList.find(function(e){
+                return e.crop && e.crop.id === rec.crop_id;
+            });
+
+            if(!already){
+                CS2.associateList.push({
+                    crop: {
+                        id: rec.crop_id,
+                        name: rec.crop_name,
+                        mfp: producedCodes,
+                        type: "Associate",
+                        family: "",
+                        desc: "",
+                        border: false,
+                        trap: false
+                    },
+                    reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
+                });
+                return;
+            }
+
+            already.crop.mfp = Array.from(new Set((already.crop.mfp || []).concat(producedCodes)));
+            (rec.reasons || []).forEach(function(reason){
+                if(already.reasons.indexOf(reason) < 0){
+                    already.reasons.push(reason);
+                }
+            });
+        });
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 2 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s2Loading = false;
+        if(CS2.step === 2) p2_renderStep(2);
     });
 }
 
@@ -525,9 +597,20 @@ function p2_s1(){
 
 /* ── Step 2: MF Cross-compatibility ──────────────────────────── */
 function p2_s2(){
-    var suggestions=CS2.associateList.filter(function(e){
-        return e.reasons.some(function(r){return r.indexOf("required by")>=0;});
-    });
+    var step2Associated = CS2.step2Data && Array.isArray(CS2.step2Data.associated_crops)
+        ? CS2.step2Data.associated_crops
+        : null;
+    var suggestions;
+    if(step2Associated){
+        var ids = step2Associated.map(function(item){ return item.crop_id; });
+        suggestions = ids.map(function(id){
+            return CS2.associateList.find(function(entry){ return entry.crop && entry.crop.id === id; });
+        }).filter(Boolean);
+    } else {
+        suggestions = CS2.associateList.filter(function(e){
+            return e.reasons.some(function(r){return r.indexOf("required by")>=0;});
+        });
+    }
     var html=suggestions.length?
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No additional cross-compatibility recommendations found — main crops already satisfy each other\'s MF requirements.</div>';

@@ -301,7 +301,7 @@ function cs_s1(){
             {k:"Temp",score:c.temperature_score,fallback:c.tm}
         ];
         return'<div class="cs-cc">'+
-            '<div class="cs-cc-top"><div class="cs-cc-nm">'+c.name+'</div><span class="cs-pill '+pc+'">'+c.sc+'%</span></div>'+
+            '<div class="cs-cc-top"><div class="cs-cc-nm">'+c.name+'</div><span class="cs-pill '+pc+'">'+c.sc+'</span></div>'+
             '<div class="cs-cc-tp">'+c.type+'</div>'+
             '<div class="cs-sbar2"><div class="'+fc+'" style="width:'+c.sc+'%"></div></div>'+
             '<div class="cs-tags">'+cks.map(function(k){

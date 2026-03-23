@@ -1072,3 +1072,32 @@ def get_phase2_missing_mfs(selected_crops=None):
         "required_mfs": result.get("required_mfs", []),
         "available_mfs": result.get("available_mfs", []),
     }
+
+
+@frappe.whitelist()
+def get_phase2_cross_compatibility(selected_crops=None):
+    from rythulab.phase_2_step_2 import find_cross_compatible_associate_crops
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if not isinstance(crop, dict):
+            continue
+        crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = find_cross_compatible_associate_crops(crop_ids)
+
+    return {
+        "ok": True,
+        "selected_crop_ids": result.get("selected_crop_ids", []),
+        "selected_produced_mfs": result.get("selected_produced_mfs", []),
+        "selected_required_mfs": result.get("selected_required_mfs", []),
+        "associated_crops": result.get("associated_crops", []),
+    }
