@@ -141,6 +141,7 @@ var CS2 = {
     step2Data: null,
     step3Data: null,
     step4Data: null,
+    step5Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -399,6 +400,7 @@ function cs_fetchPhase2Step3(){
 function cs_fetchPhase2Step4(){
     if(CS2.p2s4Loading) return;
     CS2.p2s4Loading = true;
+    var crops = CS2.mainCrops || [];
 
     var farmCfs = {};
     Object.keys(CS_FARM.cf || {}).forEach(function(key){
@@ -412,7 +414,12 @@ function cs_fetchPhase2Step4(){
     fetch("/api/method/rythulab.api.get_phase2_farm_context_support", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ farm_cfs: farmCfs })
+        body: JSON.stringify({
+            farm_cfs: farmCfs,
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name};
+            })
+        })
     })
     .then(function(r){ return r.json(); })
     .then(function(res){
@@ -432,6 +439,38 @@ function cs_fetchPhase2Step4(){
     .finally(function(){
         CS2.p2s4Loading = false;
         if(CS2.step === 4) p2_renderStep(4);
+    });
+}
+
+/* ── Fetch Phase 2 Step 5 from backend ───────────────────────── */
+function cs_fetchPhase2Step5(){
+    var crops = CS2.mainCrops;
+    if(!crops || !crops.length) return;
+    if(CS2.p2s5Loading) return;
+    CS2.p2s5Loading = true;
+
+    fetch("/api/method/rythulab.api.get_phase2_wind_barrier_crops", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: crops.map(function(c){
+                return {id:c.id, cropid:c.cropid||c.id, name:c.name};
+            })
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        CS2.step5Data = {
+            recommended_crops: Array.isArray(msg.recommended_crops) ? msg.recommended_crops : []
+        };
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 5 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s5Loading = false;
+        if(CS2.step === 5) p2_renderStep(5);
     });
 }
 
@@ -936,13 +975,42 @@ function p2_s4(){
 
 /* ── Step 5: Border crop (wind barrier) ──────────────────────── */
 function p2_s5(){
+    if(!CS2.step5Data && !CS2.p2s5Loading){
+        cs_fetchPhase2Step5();
+    }
+
     var wpCF=CS_FARM.cf.WP;
     var windWeak=wpCF&&wpCF.s<=3;
-    var html=CS2.borderList.filter(function(e){
-        return(e.crop.mfp||[]).indexOf("wind_break")>=0||e.reasons.some(function(r){return r.indexOf("wind")>=0;});
-    });
-    var cards=html.length?
-        html.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join(""):
+
+    var suggestions = [];
+    if(CS2.step5Data && Array.isArray(CS2.step5Data.recommended_crops)){
+        suggestions = CS2.step5Data.recommended_crops.map(function(rec){
+            return {
+                crop: {
+                    id: rec.crop_id,
+                    name: rec.crop_name,
+                    mfp: ["wind_break"],
+                    type: "Border",
+                    family: "",
+                    desc: "",
+                    border: true,
+                    trap: false
+                },
+                reasons: [rec.reason || "Produces MF11 (Wind Barrier)"]
+            };
+        });
+    }
+
+    if(!suggestions.length){
+        suggestions = CS2.borderList.filter(function(e){
+            return(e.crop.mfp||[]).indexOf("wind_break")>=0||e.reasons.some(function(r){return r.indexOf("wind")>=0;});
+        });
+    }
+
+    var cards = CS2.p2s5Loading && !CS2.step5Data
+        ? '<div class="cs-empty">Loading wind barrier recommendations from backend...</div>'
+        : suggestions.length?
+        suggestions.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join(""):
         '<div class="cs-empty">No wind-specific border crops needed — farm wind protection CF is adequate.</div>';
     return p2_hd(5,"Border crop (wind barrier)",
         "If the farm is at risk for high wind exposure (CF Wind Protection is weak/moderate), crops that produce wind break MF are recommended as border crops to act as wind barriers.")+
@@ -952,7 +1020,7 @@ function p2_s5(){
         '<div class="cs-vmsg">'+(windWeak?"Farm wind protection is "+wpCF.slab+" — border wind barrier crops are recommended.":"Farm wind protection is adequate — no urgent border wind barrier needed.")+'</div>'+
         '</div></div>'+
         cards+
-        '<div class="cs-sf"><span class="cs-fn">'+html.length+' border crop(s) suggested for wind barrier.</span>'+
+        '<div class="cs-sf"><span class="cs-fn">'+suggestions.length+' border crop(s) suggested for wind barrier.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(4)">← Back</button>'+
         '<button class="cs-btn pri" onclick="p2_next()">Border crop (Pest barrier Pollination promoter) →</button></div>';
 }

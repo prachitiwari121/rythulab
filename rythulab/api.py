@@ -1145,9 +1145,30 @@ def get_phase2_farm_context_support(farm_cfs=None):
 
     payload = frappe.request.get_json(silent=True) or {}
     farm_cfs = farm_cfs or payload.get("farm_cfs") or {}
+    selected_crops = payload.get("selected_crops") or payload.get("main_crops") or payload.get("crops") or []
 
     if isinstance(farm_cfs, str):
         farm_cfs = frappe.parse_json(farm_cfs)
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    selected_crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            selected_crop_ids.append(crop_id)
+
+    if "CRP0001" in selected_crop_ids and isinstance(farm_cfs, dict):
+        filtered_farm_cfs = {}
+        for key, value in (farm_cfs or {}).items():
+            normalized_key = str(key or "").strip().upper()
+            if normalized_key == "CF11" or normalized_key.startswith("CF11_"):
+                continue
+            filtered_farm_cfs[key] = value
+        farm_cfs = filtered_farm_cfs
 
     result = analyze_weak_cf_mitigating_crops(farm_cfs)
 
@@ -1206,5 +1227,42 @@ def get_phase2_farm_context_support(farm_cfs=None):
         "unsupported_inputs": result.get("unsupported_inputs", []),
         "farm_context_features": farm_context_features,
         "cf_analysis": result.get("cf_analysis", []),
+        "recommended_crops": recommended,
+    }
+
+
+@frappe.whitelist()
+def get_phase2_wind_barrier_crops(selected_crops=None):
+    from rythulab.phase_2_step_5 import get_crops_producing_wind_barrier
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    cropid_to_name = {}
+    try:
+        from rythulab.sheets.extraction_utils import get_cropid_to_name_map
+
+        cropid_to_name = get_cropid_to_name_map()
+    except Exception:
+        cropid_to_name = {}
+
+    recommended = []
+    for rec in get_crops_producing_wind_barrier() or []:
+        crop_id = str(rec.get("crop") or "").strip().upper()
+        if not crop_id:
+            continue
+        recommended.append(
+            {
+                "crop_id": crop_id,
+                "crop_name": cropid_to_name.get(crop_id, crop_id),
+                "reason": rec.get("reason") or "Produces MF11 (Wind Barrier)",
+            }
+        )
+
+    return {
+        "ok": True,
         "recommended_crops": recommended,
     }
