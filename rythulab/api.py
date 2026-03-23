@@ -1129,3 +1129,82 @@ def get_phase2_disease_mitigation(selected_crops=None):
         "selected_crop_ids": result.get("selected_crop_ids", []),
         "crop_disease_mitigations": result.get("crop_disease_mitigations", []),
     }
+
+
+@frappe.whitelist()
+def get_phase2_farm_context_support(farm_cfs=None):
+    from rythulab.phase_2_step_4 import (
+        CF_FARM_FEATURES_PATH,
+        CF_MF_IMPACT_MATRIX_PATH,
+        _normalize_farm_cf_values,
+        analyze_weak_cf_mitigating_crops,
+        build_cf_mf_impact_map,
+    )
+    from rythulab.sheets.cf_label_extract import annotate_cf_code
+    from rythulab.sheets.mf_labels.mf_label_extract import annotate_mf_codes
+
+    payload = frappe.request.get_json(silent=True) or {}
+    farm_cfs = farm_cfs or payload.get("farm_cfs") or {}
+
+    if isinstance(farm_cfs, str):
+        farm_cfs = frappe.parse_json(farm_cfs)
+
+    result = analyze_weak_cf_mitigating_crops(farm_cfs)
+
+    farm_context_features = []
+    try:
+        cf_mf_impact_map = build_cf_mf_impact_map(CF_MF_IMPACT_MATRIX_PATH)
+        normalized_farm_cfs, _ = _normalize_farm_cf_values(
+            farm_cfs,
+            cf_mf_impact_map,
+            CF_FARM_FEATURES_PATH,
+        )
+
+        weak_codes = {
+            str((cf_item or {}).get("cf_code") or "").strip().upper()
+            for cf_item in (result.get("weak_cfs") or [])
+            if isinstance(cf_item, dict)
+        }
+
+        for full_cf_code, status in normalized_farm_cfs.items():
+            if str(full_cf_code).strip().upper() not in weak_codes:
+                continue
+            cf_meta = annotate_cf_code(full_cf_code, CF_FARM_FEATURES_PATH)
+            farm_context_features.append(
+                {
+                    "cf": cf_meta,
+                    "status": status,
+                    "is_weak": str(full_cf_code).strip().upper() in weak_codes,
+                    "improving_mfs": annotate_mf_codes(cf_mf_impact_map.get(full_cf_code, [])),
+                }
+            )
+    except Exception:
+        farm_context_features = []
+
+    cropid_to_name = {}
+    try:
+        from rythulab.sheets.extraction_utils import get_cropid_to_name_map
+
+        cropid_to_name = get_cropid_to_name_map()
+    except Exception:
+        cropid_to_name = {}
+
+    recommended = []
+    for rec in result.get("recommended_crops", []) or []:
+        crop_id = str(rec.get("crop") or "").strip().upper()
+        recommended.append(
+            {
+                "crop_id": crop_id,
+                "crop_name": cropid_to_name.get(crop_id, crop_id),
+                "supports": rec.get("supports", []),
+            }
+        )
+
+    return {
+        "ok": True,
+        "weak_cfs": result.get("weak_cfs", []),
+        "unsupported_inputs": result.get("unsupported_inputs", []),
+        "farm_context_features": farm_context_features,
+        "cf_analysis": result.get("cf_analysis", []),
+        "recommended_crops": recommended,
+    }

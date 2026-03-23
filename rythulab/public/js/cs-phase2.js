@@ -140,6 +140,7 @@ var CS2 = {
     step1Data: null,
     step2Data: null,
     step3Data: null,
+    step4Data: null,
     associateList: [],
     borderList: [],
     trapList: [],
@@ -158,6 +159,12 @@ var CS2_STEPS = [
     {n:7, name:"Trap crops"},
     {n:8, name:"Select & confirm"}
 ];
+
+var P2_CF_NUMBER_MAP = {
+    N:"CF1", P:"CF2", K:"CF3", SOC:"CF4", pH:"CF5", EC:"CF6", TXT:"CF7", ESD:"CF8",
+    WHC:"CF9", BD:"CF10", DR:"CF11", ER:"CF12", GW:"CF13", IA:"CF14", RR:"CF15",
+    TMP:"CF16", HSD:"CF17", FR:"CF18", WP:"CF19", PP:"CF21"
+};
 
 /* ── Entry point ─────────────────────────────────────────────── */
 function cs_phase2_init(){
@@ -385,6 +392,46 @@ function cs_fetchPhase2Step3(){
     .finally(function(){
         CS2.p2s3Loading = false;
         if(CS2.step === 3) p2_renderStep(3);
+    });
+}
+
+/* ── Fetch Phase 2 Step 4 from backend ───────────────────────── */
+function cs_fetchPhase2Step4(){
+    if(CS2.p2s4Loading) return;
+    CS2.p2s4Loading = true;
+
+    var farmCfs = {};
+    Object.keys(CS_FARM.cf || {}).forEach(function(key){
+        var mapped = P2_CF_NUMBER_MAP[key];
+        var cf = CS_FARM.cf[key] || {};
+        if(mapped && cf && cf.slab){
+            farmCfs[mapped] = cf.slab;
+        }
+    });
+
+    fetch("/api/method/rythulab.api.get_phase2_farm_context_support", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ farm_cfs: farmCfs })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        CS2.step4Data = {
+            farm_context_features: Array.isArray(msg.farm_context_features) ? msg.farm_context_features : [],
+            cf_analysis: Array.isArray(msg.cf_analysis) ? msg.cf_analysis : [],
+            recommended_crops: Array.isArray(msg.recommended_crops) ? msg.recommended_crops : []
+        };
+        if(msg && msg.ok === false){
+            console.warn("Phase 2 Step 4 returned no recommendations:", msg.error || "No recommendation candidates");
+        }
+    })
+    .catch(function(err){
+        console.warn("Phase 2 Step 4 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS2.p2s4Loading = false;
+        if(CS2.step === 4) p2_renderStep(4);
     });
 }
 
@@ -809,24 +856,76 @@ function p2_s3(){
 
 /* ── Step 4: Farm context features ───────────────────────────── */
 function p2_s4(){
-    var weakCFs=CS_CF_ORDER.filter(function(k){return CS_FARM.cf[k]&&CS_FARM.cf[k].s<=3;});
-    var cfRows=weakCFs.map(function(k){
-        var cf=CS_FARM.cf[k];
-        var mfsHelp=Object.keys(P2_MF_CF).filter(function(mf){return P2_MF_CF[mf].indexOf(k)>=0;});
-        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+cf.l+'</td>'+
-            '<td><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+cf.slab+'</span></td>'+
-            '<td style="font-size:11px;color:#3a4a2a">'+mfsHelp.map(cs_mfl).join(", ")+'</td></tr>';
-    }).join("");
-    var suggestions=CS2.associateList.filter(function(e){
-        return e.reasons.some(function(r){return r.indexOf("Improves weak CF")>=0;});
-    });
-    var html=suggestions.length?
+    if(!CS2.step4Data && !CS2.p2s4Loading){
+        cs_fetchPhase2Step4();
+    }
+
+    var backend = CS2.step4Data;
+    var cfRows = "";
+    if(backend && Array.isArray(backend.farm_context_features) && backend.farm_context_features.length){
+        cfRows = backend.farm_context_features.map(function(item){
+            var cf = item.cf || {};
+            var improving = (item.improving_mfs || []).map(function(mf){
+                return mf && mf.mf_label ? mf.mf_label : (mf && mf.mf_code ? mf.mf_code : "");
+            }).filter(Boolean).join(", ");
+            return '<tr><td style="font-weight:700;color:var(--text-dark)">'+(cf.cf_label || cf.cf_code || "")+'</td>'+
+                '<td><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+(item.status || "")+'</span></td>'+
+                '<td style="font-size:11px;color:#3a4a2a">'+(improving || "—")+'</td></tr>';
+        }).join("");
+    } else if(backend && Array.isArray(backend.cf_analysis)){
+        cfRows = backend.cf_analysis.map(function(item){
+            var cf = item.cf || {};
+            var improving = (item.improving_mfs || []).map(function(mf){
+                return mf && mf.mf_label ? mf.mf_label : (mf && mf.mf_code ? mf.mf_code : "");
+            }).filter(Boolean).join(", ");
+            return '<tr><td style="font-weight:700;color:var(--text-dark)">'+(cf.cf_label || cf.cf_code || "")+'</td>'+
+                '<td><span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+(item.status || "")+'</span></td>'+
+                '<td style="font-size:11px;color:#3a4a2a">'+(improving || "—")+'</td></tr>';
+        }).join("");
+    }
+
+    if(!cfRows && CS2.p2s4Loading){
+        cfRows = '<tr><td colspan="3" style="color:#aaa;font-style:italic;padding:10px;text-align:center">Loading farm context features from backend...</td></tr>';
+    } else if(!cfRows){
+        cfRows = '<tr><td colspan="3" style="color:#aaa;font-style:italic;padding:10px;text-align:center">No backend farm context data found.</td></tr>';
+    }
+
+    var suggestions = [];
+    if(backend && Array.isArray(backend.recommended_crops)){
+        suggestions = backend.recommended_crops.map(function(rec){
+            var reasons = [];
+            var mfp = [];
+            (rec.supports || []).forEach(function(s){
+                (s.reasons || []).forEach(function(r){ if(reasons.indexOf(r)<0) reasons.push(r); });
+                (s.produces_mfs || []).forEach(function(mf){
+                    if(mf && mf.mf_code && mfp.indexOf(mf.mf_code)<0) mfp.push(mf.mf_code);
+                });
+            });
+            return {
+                crop: {
+                    id: rec.crop_id,
+                    name: rec.crop_name,
+                    mfp: mfp,
+                    type: "Associate",
+                    family: "",
+                    desc: "",
+                    border: false,
+                    trap: false
+                },
+                reasons: reasons
+            };
+        });
+    }
+
+    var html = CS2.p2s4Loading && !backend
+        ? '<div class="cs-empty">Loading backend recommendations...</div>'
+        : suggestions.length?
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No CF-specific associate crop recommendations for current farm profile.</div>';
     return p2_hd(4,"Farm context features",
         "Checking for vulnerable context features of the farm (poor/moderate values) and crops that produce MFs which improve these context features via the MF-CF interaction table.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
-        '<div class="cs-fcht">Weak / moderate CFs that need support</div>'+
+        '<div class="cs-fcht">Weak / Very Weak CFs that need support</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Context Feature</th><th>Current Status</th><th>MFs that improve it</th></tr></thead><tbody>'+cfRows+'</tbody></table>'+
         '</div>'+
         html+
