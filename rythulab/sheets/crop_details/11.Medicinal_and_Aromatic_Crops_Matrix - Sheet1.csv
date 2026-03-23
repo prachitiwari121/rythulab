@@ -1,4 +1,4 @@
-﻿Parameter,Ashwagandha,Tulsi,Vetiver,Neem
+Parameter,Ashwagandha,Tulsi,Vetiver,Neem
 CropID,CRP0084,CRP0085,CRP0087,CRP0098
 Crop Common Name,Ashwagandha,Tulsi,Vetiver,Neem
 Crop Scientific Name,Withania somnifera,Ocimum sanctum,Chrysopogon zizanioides,Azadirachta indica
@@ -105,6 +105,6 @@ Preferred slope % (Range),0 - 10%,0 - 5%,0 - 45%,0 - 25%
 Threshold level of Calcium meq/100g (Range),02-May,02-Apr,02-May,02-Oct
 Threshold level of Bulk Density g/cc (Range),1.3 - 1.5,1.2 - 1.4,1.2 - 1.5,1.3 - 1.6
 "Mention 5 Major Pests and Severity (Low, Medium, High)","Hadda Beetle (Medium), Aphids (Low), Mites (Low), Shoot Borer (Low), Root-knot Nematode (Low)","Leaf Roller (Medium), Aphids (Low), Lace wing bug (Low), Thrips (Low), Whitefly (Low)","Termites (Low), Leaf roller (Low), Stem borer (Low), White grub (Low), Aphids (Low)","Tea Mosquito Bug (Low), Scale Insects (Low), Mealybug (Low), Leaf Miner (Low), Bark Eating Caterpillar (Low)"
-"Mention 5 Major Diseases and Severity (Low, Medium, High)","Leaf Spot (Medium), Alternaria Blight (Medium), Seedling Wilt (Low), Damping Off (Medium), Dieback (Low)","Leaf Spot (Medium), Powdery Mildew (Medium), Root Rot (Low), Seedling Blight (Medium), Wilt (Low)","Leaf Spot (Low), Fusarium Wilt (Low), Root Rot (Low)","Leaf Spot (Low), Powdery Mildew (Low), Dieback (Low), Root Rot (Low), Twig Blight (Low)"
+"Mention 5 Major Diseases and Severity (Low, Medium, High)","DIS0091 (Medium), DIS0001 (Medium), DIS0130 (Low), DIS0053 (Medium), DIS0054 (Low)","DIS0091 (Medium), DIS0110 (Medium), DIS0123 (Low), DIS0129 (Medium), DIS0151 (Low)","DIS0091 (Low), DIS0069 (Low), DIS0123 (Low)","DIS0091 (Low), DIS0110 (Low), DIS0054 (Low), DIS0123 (Low), DIS0147 (Low)"
 Is trap Crop for,No,No,No,No
 Nutrient (Mineral) Deficiencies and Their Associated Syndrome,"N: Yellowing of leaves; Zn: Stunted growth, small leaves","N: Pale leaves, reduced aroma",N: Yellowing of leaf blades,N: Pale green leaves
