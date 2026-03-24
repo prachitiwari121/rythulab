@@ -1,82 +1,6 @@
 /* ═══ Phase 3: Biodiversity Crop Selection ════════════════════ */
 
-var P3_CROPS = [
-    {id:"moth_bean",  name:"Moth Bean",         family:"Fabaceae",   group:"Legume",
-     rootD:"Shallow", canopy:"Low",  h:0.3,
-     mfp:["nitrogen_fixation","ground_cover","pollinator_habitat"],
-     cfImprove:["N","SOC","ER"],
-     desc:"Drought-hardy low-growing legume; excellent ground cover; N fixation"},
-    {id:"horse_gram", name:"Horse Gram",         family:"Fabaceae",   group:"Legume",
-     rootD:"Medium",  canopy:"Low",  h:0.4,
-     mfp:["nitrogen_fixation","ground_cover","beneficial_insects"],
-     cfImprove:["N","SOC"],
-     desc:"Hardy pulse for poor soils; N fixation; improves soil structure"},
-    {id:"lablab",     name:"Lablab (Field bean)", family:"Fabaceae",   group:"Legume",
-     rootD:"Medium",  canopy:"Mid",  h:1.5,
-     mfp:["nitrogen_fixation","pollinator_habitat","ground_cover"],
-     cfImprove:["N","SOC","PA"],
-     desc:"Climbing/spreading legume; excellent pollinator plant; N fixation"},
-    {id:"amaranth",   name:"Amaranth (grain)",    family:"Amaranthaceae",group:"Broad-leaf",
-     rootD:"Deep",    canopy:"Mid",  h:1.8,
-     mfp:["deep_root_aeration","biomass_mulch","beneficial_insects"],
-     cfImprove:["SOC","BD","ESD"],
-     desc:"Deep-rooted broad-leaf; loosens subsoil; high biomass mulch producer"},
-    {id:"soybean",    name:"Soybean",             family:"Fabaceae",   group:"Legume",
-     rootD:"Medium",  canopy:"Mid",  h:0.8,
-     mfp:["nitrogen_fixation","ground_cover","pollinator_habitat"],
-     cfImprove:["N","SOC","PA"],
-     desc:"High-value N-fixing legume; improves soil N for following crops"},
-    {id:"winged_bean",name:"Winged Bean",         family:"Fabaceae",   group:"Legume",
-     rootD:"Deep",    canopy:"Climbing",h:2.0,
-     mfp:["nitrogen_fixation","deep_root_aeration","pollinator_habitat"],
-     cfImprove:["N","ESD","BD"],
-     desc:"Climbing legume with deep roots; unique canopy layer; N fixation"},
-    {id:"sweet_potato",name:"Sweet Potato",       family:"Convolvulaceae",group:"Root/Tuber",
-     rootD:"Shallow", canopy:"Creeping",h:0.3,
-     mfp:["ground_cover","erosion_control","pollinator_habitat"],
-     cfImprove:["ER","SOC","PA"],
-     desc:"Excellent creeping ground cover; suppresses weeds; prevents erosion"},
-    {id:"tapioca",    name:"Tapioca (Cassava)",   family:"Euphorbiaceae",group:"Root/Tuber",
-     rootD:"Deep",    canopy:"Mid",  h:2.0,
-     mfp:["deep_root_aeration","canopy_shade","biomass_mulch"],
-     cfImprove:["ESD","BD","SOC"],
-     desc:"Deep roots break hardpan; canopy shade; high biomass from prunings"},
-    {id:"buckwheat",  name:"Buckwheat",           family:"Polygonaceae",group:"Broad-leaf",
-     rootD:"Shallow", canopy:"Low",  h:0.8,
-     mfp:["pollinator_habitat","beneficial_insects","ground_cover","p_cycling"],
-     cfImprove:["PA","PP","P","SOC"],
-     desc:"Fast growing; exceptional pollinator habitat; solubilises soil phosphorus"},
-    {id:"phacelia",   name:"Phacelia (cover)",    family:"Boraginaceae",group:"Cover crop",
-     rootD:"Shallow", canopy:"Low",  h:0.5,
-     mfp:["pollinator_habitat","beneficial_insects","ground_cover"],
-     cfImprove:["PA","PP","ER"],
-     desc:"Outstanding pollinator plant; attracts hoverflies and parasitic wasps"},
-    {id:"sudan_grass",name:"Sudan Grass",         family:"Poaceae",    group:"Grass",
-     rootD:"Deep",    canopy:"Tall", h:2.5,
-     mfp:["deep_root_aeration","biomass_mulch","wind_break","ground_cover"],
-     cfImprove:["BD","SOC","ER","ESD"],
-     desc:"Deep fibrous roots; massive biomass; breaks soil compaction"},
-    {id:"pearl_millet_cover",name:"Pearl Millet (cover)",family:"Poaceae",group:"Grass",
-     rootD:"Deep",    canopy:"Tall", h:2.0,
-     mfp:["wind_break","biomass_mulch","deep_root_aeration"],
-     cfImprove:["WP","SOC","BD"],
-     desc:"Dense tall grass; wind break; high biomass cover crop"},
-    {id:"radish_daikon",name:"Radish (tillage)",  family:"Brassicaceae",group:"Root/Tuber",
-     rootD:"Deep",    canopy:"Low",  h:0.4,
-     mfp:["deep_root_aeration","biomass_mulch","beneficial_insects","p_cycling"],
-     cfImprove:["BD","ESD","SOC","P"],
-     desc:"Large taproot physically breaks compaction; winter-killed mulch; P cycling"},
-    {id:"vetiver_bd",  name:"Vetiver (biodiversity)",family:"Poaceae",  group:"Grass",
-     rootD:"Very Deep",canopy:"Mid", h:1.5,
-     mfp:["erosion_control","deep_root_aeration","ground_cover","water_retention"],
-     cfImprove:["ER","BD","ESD","WHC"],
-     desc:"Exceptionally deep roots (3m+); permanent erosion barrier; water retention"},
-    {id:"lentil",      name:"Lentil",              family:"Fabaceae",   group:"Legume",
-     rootD:"Shallow",  canopy:"Low", h:0.4,
-     mfp:["nitrogen_fixation","ground_cover","beneficial_insects"],
-     cfImprove:["N","SOC"],
-     desc:"Cool season N-fixing legume; improves biodiversity in cereal-dominated systems"}
-];
+var P3_CROPS = [];
 
 var P3_GROUPS = ["Legume","Grass","Broad-leaf","Root/Tuber","Cover crop"];
 var P3_MF_BIODIVERSITY = ["pollinator_habitat","beneficial_insects","p_cycling","ground_cover","nitrogen_fixation","biomass_mulch","deep_root_aeration","erosion_control","water_retention"];
@@ -90,7 +14,9 @@ var CS3 = {
     step1Step2Data: null,
     p3s12Loading: false,
     step3Data: null,
-    p3s3Loading: false
+    p3s3Loading: false,
+    step4Data: null,
+    p3s4Loading: false
 };
 
 /* ── Entry point ─────────────────────────────────────────────── */
@@ -240,6 +166,87 @@ function cs_fetchPhase3Step3(){
     })
     .finally(function(){
         CS3.p3s3Loading = false;
+    });
+}
+
+function cs_fetchPhase3Step4(){
+    if(CS3.p3s4Loading) return;
+    CS3.p3s4Loading = true;
+
+    var farmCfs = {};
+    (CS_CF_ORDER || []).forEach(function(k, index){
+        var cf = CS_FARM && CS_FARM.cf ? CS_FARM.cf[k] : null;
+        if(!cf || !cf.slab) return;
+        var cfCode = "CF" + String(index + 1);
+        farmCfs[cfCode] = cf.slab;
+    });
+
+    fetch("/api/method/rythulab.api.get_phase3_cf_improvement_crops", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: p3_collectAllSelectedCrops(),
+            farm_cfs: farmCfs
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+
+        CS3.step4Data = msg;
+
+        function isFunctionalGroupReason(reason){
+            return (reason || "").toLowerCase().indexOf("functional group") >= 0;
+        }
+
+        function isBiodiversityReason(reason){
+            var text = (reason || "").toLowerCase();
+            return text.indexOf("biodiversity") >= 0 ||
+                text.indexOf("pollinator") >= 0 ||
+                text.indexOf("phosphorus") >= 0 ||
+                text.indexOf("leaf litter") >= 0;
+        }
+
+        function isWeakCfReason(reason){
+            return (reason || "").toLowerCase().indexOf("weak cf") >= 0;
+        }
+
+        var preserved = (CS3.recommendations || []).map(function(entry){
+            if(!entry || !entry.crop || !Array.isArray(entry.reasons)) return null;
+
+            var keptReasons = entry.reasons.filter(function(reason){
+                return !isWeakCfReason(reason) && (isFunctionalGroupReason(reason) || isBiodiversityReason(reason));
+            });
+
+            if(!keptReasons.length) return null;
+
+            return {
+                crop: {
+                    id: entry.crop.id,
+                    name: entry.crop.name,
+                    family: entry.crop.family,
+                    group: entry.crop.group,
+                    h: entry.crop.h,
+                    rootD: entry.crop.rootD,
+                    mfp: Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
+                    cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
+                    desc: entry.crop.desc
+                },
+                reasons: keptReasons
+            };
+        }).filter(Boolean);
+
+        CS3.recommendations = preserved;
+        p3_upsertRecommendations(Array.isArray(msg.recommendations) ? msg.recommendations : []);
+
+        if(CS3.step === 4) p3_renderStep(4);
+    })
+    .catch(function(err){
+        console.warn("Phase 3 Step 4 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS3.p3s4Loading = false;
     });
 }
 
@@ -645,24 +652,41 @@ function p3_s3(){
 
 /* ── Step 4: CF Improvement Crops ────────────────────────────── */
 function p3_s4(){
+    if(!CS3.step4Data && !CS3.p3s4Loading){
+        cs_fetchPhase3Step4();
+    }
+
+    if(CS3.p3s4Loading && !CS3.step4Data){
+        return p3_hd(4,"CF improvement crops",
+            "Loading weak/very-weak context-feature support from backend...")+
+            '<div class="cs-empty">Checking selected crops against weak context features and fetching gap-filling crops...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching CF support analysis.</span>'+
+            '<button class="cs-btn sec" onclick="p3_goto(3)">← Back</button>'+
+            '<button class="cs-btn pri" disabled>Review & confirm →</button></div>';
+    }
+
     var recs=CS3.recommendations.filter(function(r){
-        return r.reasons.some(function(x){return x.indexOf("weak CF")>=0;});
+        return r.reasons.some(function(x){return (x||"").toLowerCase().indexOf("weak cf")>=0;});
     });
-    var weakCFs=CS_CF_ORDER.filter(function(k){return CS_FARM.cf[k]&&CS_FARM.cf[k].s<=3;});
-    var cfRows=weakCFs.map(function(k){
-        var cf=CS_FARM.cf[k];
-        var helping=CS3.recommendations.filter(function(r){
-            return CS3.selected.indexOf(r.crop.id)>=0&&(r.crop.cfImprove||[]).indexOf(k)>=0;
-        }).map(function(r){return r.crop.name;});
-        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+cf.l+'</td>'+
-            '<td><span style="font-size:11px;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+cf.slab+'</span></td>'+
-            '<td style="font-size:11px;color:'+(helping.length?"var(--csg600)":"var(--csr600)")+'">'+( helping.length?helping.join(", "):"None selected yet")+'</td></tr>';
+    var cfAnalysis = (CS3.step4Data && Array.isArray(CS3.step4Data.cf_analysis)) ? CS3.step4Data.cf_analysis : [];
+    var cfRows=cfAnalysis.map(function(item){
+        var cf = item.cf || {};
+        var helpingList = (item.selected_crops_helping || []).map(function(c){
+            return c.crop_name || c.crop_id;
+        });
+        var helpingText = helpingList.length ? helpingList.join(", ") : "None selected yet";
+        return'<tr><td style="font-weight:700;color:var(--text-dark)">'+(cf.cf_label || cf.cf_code || "")+'</td>'+
+            '<td><span style="font-size:11px;padding:2px 8px;border-radius:8px;background:#fff3cd;color:#7a4400">'+(item.status || "")+'</span></td>'+
+            '<td style="font-size:11px;color:'+(helpingList.length?"var(--csg600)":"var(--csr600)")+'">'+helpingText+'</td></tr>';
     }).join("");
+    if(!cfRows){
+        cfRows = '<tr><td colspan="3" style="font-size:11px;color:var(--text-mid)">No weak/very-weak context features detected.</td></tr>';
+    }
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">No additional CF-improvement crops found for current farm profile.</div>';
     return p3_hd(4,"CF improvement crops",
-        "Adding crops with microfeatures that support or improve the farm's poor to moderate context features.")+
-        '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Weak / moderate CFs and which selected biodiversity crops help them</div>'+
+        "Adding crops with microfeatures that support or improve weak or very weak farm context features.")+
+        '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Weak / Very Weak CFs and which selected crops help them</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Context Feature</th><th>Status</th><th>Helped by</th></tr></thead><tbody>'+cfRows+'</tbody></table></div>'+
         html+
         '<div class="cs-sf"><span class="cs-fn">'+recs.length+' crop(s) suggested.</span>'+

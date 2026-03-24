@@ -1400,3 +1400,41 @@ def get_phase3_mf_biodiversity_crops(selected_crops=None, mf_codes=None):
         "mf_coverage": result.get("mf_coverage", []),
         "recommendations": result.get("recommendations", []),
     }
+
+
+@frappe.whitelist()
+def get_phase3_cf_improvement_crops(selected_crops=None, farm_cfs=None):
+    from rythulab.phase_3_step_4 import build_frontend_payload
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+    farm_cfs = farm_cfs or payload.get("farm_cfs") or payload.get("context_features") or {}
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+    if isinstance(farm_cfs, str):
+        farm_cfs = frappe.parse_json(farm_cfs)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = build_frontend_payload(
+        selected_crop_ids=crop_ids,
+        farm_cf_values=farm_cfs if isinstance(farm_cfs, dict) else {},
+    )
+
+    return {
+        "ok": True,
+        "selected_crop_ids": result.get("selected_crop_ids", []),
+        "unsupported_inputs": result.get("unsupported_inputs", []),
+        "weak_cfs": result.get("weak_cfs", []),
+        "cf_analysis": result.get("cf_analysis", []),
+        "recommended_crops": result.get("recommended_crops", []),
+        "recommendations": result.get("recommendations", []),
+    }
