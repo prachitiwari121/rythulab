@@ -2,18 +2,19 @@ import frappe
 from frappe import _
 import csv
 import re
+from typing import Any, Dict, List
 
 # ---------------- FARMER REGISTER ---------------- #
 
 @frappe.whitelist(allow_guest=True)
 def register_farmer(
-    full_name: str = None,
-    email: str = None,
-    phone: str = None,
-    land_name: str = None,
-    land_area: str = None,
-    password: str = None
-):
+    full_name: str | None = None,
+    email: str | None = None,
+    phone: str | None = None,
+    land_name: str | None = None,
+    land_area: str | None = None,
+    password: str | None = None
+) -> Dict[str, Any]:
     required = {
         "full_name": full_name,
         "email":     email,
@@ -96,7 +97,7 @@ def register_farmer(
 # ---------------- LOGIN REDIRECT ---------------- #
 
 @frappe.whitelist()
-def login_redirect():
+def login_redirect() -> str:
     user = frappe.session.user
 
     if user == "Administrator":
@@ -118,7 +119,7 @@ def login_redirect():
 # ---------------- GET CROPS ---------------- #
 
 @frappe.whitelist()
-def get_crops():
+def get_crops() -> List[Dict[str, Any]]:
     crops = frappe.get_all(
         "Crop",
         fields=[
@@ -137,7 +138,7 @@ def get_crops():
 # ---------------- GET MY MODELS ---------------- #
 
 @frappe.whitelist()
-def get_my_models():
+def get_my_models() -> List[Dict[str, Any]]:
     user = frappe.session.user
     is_admin = "System Manager" in frappe.get_roles(user) or user == "Administrator"
     filters = {} if is_admin else {"farmer": user}
@@ -158,18 +159,18 @@ def get_my_models():
 
 @frappe.whitelist()
 def save_crop_model(
-    model_name: str = None,
-    season: str = None,
-    date: str = None,
-    comment: str = None,
-    version: str = None,
-    model_data: str = None,
-    main_crop_reason: str = None,
-    associated_crop_reason: str = None,
-    trap_crop_reason: str = None,
-    spacing_reason: str = None,
-    existing_name: str = None
-):
+    model_name: str | None = None,
+    season: str | None = None,
+    date: str | None = None,
+    comment: str | None = None,
+    version: str | None = None,
+    model_data: str | None = None,
+    main_crop_reason: str | None = None,
+    associated_crop_reason: str | None = None,
+    trap_crop_reason: str | None = None,
+    spacing_reason: str | None = None,
+    existing_name: str | None = None
+) -> Dict[str, Any]:
     user = frappe.session.user
 
     if not model_name:
@@ -201,7 +202,7 @@ def save_crop_model(
     return {"ok": True, "name": doc.name}
 
 @frappe.whitelist()
-def delete_crop_model(model_name: str = None):
+def delete_crop_model(model_name: str | None = None) -> Dict[str, Any]:
     if not model_name:
         frappe.throw("Model name required.")
     doc = frappe.get_doc("Crop Model", model_name)
@@ -627,20 +628,20 @@ def _build_cropid_map_from_sheet():
 
 @frappe.whitelist()
 def get_feasible_crops(
-    area: int = None,
-    zone: str = None,
-    season: str = None,
-    soil: str = None,
-    waterAvail: str = None,
-    waterSupply: str = None,
-    wind: str = None,
-    minTemp: str = None,
-    maxTemp: str = None,
-    season_weight: str = None,
-    water_weight: str = None,
-    soil_weight: str = None,
-    temperature_weight: str = None,
-):
+    area: int | None = None,
+    zone: str | None = None,
+    season: str | None = None,
+    soil: str | None = None,
+    waterAvail: str | None = None,
+    waterSupply: str | None = None,
+    wind: str | None = None,
+    minTemp: str | None = None,
+    maxTemp: str | None = None,
+    season_weight: str | None = None,
+    water_weight: str | None = None,
+    soil_weight: str | None = None,
+    temperature_weight: str | None = None,
+) -> Dict[str, Any]:
     from rythulab.phase_1_step_1 import get_suitable_crops_by_conditions
     from rythulab.phase_1_step_3 import get_crop_water_demand_min
 
@@ -753,13 +754,13 @@ def get_feasible_crops(
 
 
 @frappe.whitelist()
-def get_phase1_crops(**kwargs):
+def get_phase1_crops(**kwargs: Any) -> Dict[str, Any]:
     # Backward-compatible alias for frontend code already calling this endpoint.
     return get_feasible_crops(**kwargs)
 
 
 @frappe.whitelist()
-def get_phase1_crop_characteristics():
+def get_phase1_crop_characteristics() -> Dict[str, Any]:
     """
     Return agronomic characteristics for a list of crop IDs, shaped to match
     the cs_s5 frontend field names exactly (temp, pH_r, hum, rootD, rd, h,
@@ -779,7 +780,11 @@ def get_phase1_crop_characteristics():
 
 
 @frappe.whitelist()
-def get_phase1_farm_feasibility(selected_crops=None, farm_cfs=None, farm_context=None):
+def get_phase1_farm_feasibility(
+    selected_crops: Any = None,
+    farm_cfs: Any = None,
+    farm_context: Any = None,
+) -> Dict[str, Any]:
     from rythulab.phase_1_step_6 import check_critical_parameters
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -835,7 +840,11 @@ def get_phase1_farm_feasibility(selected_crops=None, farm_cfs=None, farm_context
 
 
 @frappe.whitelist()
-def get_phase1_resource_pressure(selected_crops=None, farm_cfs=None, farm_context=None):
+def get_phase1_resource_pressure(
+    selected_crops: Any = None,
+    farm_cfs: Any = None,
+    farm_context: Any = None,
+) -> Dict[str, Any]:
     from rythulab.phase_1_step_7 import check_resource_pressure
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -889,7 +898,11 @@ def get_phase1_resource_pressure(selected_crops=None, farm_cfs=None, farm_contex
 
 
 @frappe.whitelist()
-def get_phase1_ecosystem_impact(selected_crops=None, farm_cfs=None, farm_context=None):
+def get_phase1_ecosystem_impact(
+    selected_crops: Any = None,
+    farm_cfs: Any = None,
+    farm_context: Any = None,
+) -> Dict[str, Any]:
     from rythulab.phase_1_step_8 import check_produced_mf_deterioration_warning
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -953,7 +966,7 @@ def get_phase1_ecosystem_impact(selected_crops=None, farm_cfs=None, farm_context
 
 
 @frappe.whitelist()
-def get_phase1_intercrop_competition(selected_crops=None):
+def get_phase1_intercrop_competition(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_1_step_9 import check_crop_competition
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1019,7 +1032,7 @@ def get_phase1_intercrop_competition(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase1_microfeature_conflicts(selected_crops=None):
+def get_phase1_microfeature_conflicts(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_1_step_10 import check_microfeature_conflicts
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1065,7 +1078,7 @@ def get_phase1_microfeature_conflicts(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase2_missing_mfs(selected_crops=None):
+def get_phase2_missing_mfs(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_1 import find_missing_mfs_and_producers
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1095,7 +1108,7 @@ def get_phase2_missing_mfs(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase2_cross_compatibility(selected_crops=None):
+def get_phase2_cross_compatibility(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_2 import find_cross_compatible_associate_crops
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1124,7 +1137,7 @@ def get_phase2_cross_compatibility(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase2_disease_mitigation(selected_crops=None):
+def get_phase2_disease_mitigation(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_3 import find_disease_mitigating_crops
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1152,7 +1165,7 @@ def get_phase2_disease_mitigation(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase2_farm_context_support(farm_cfs=None):
+def get_phase2_farm_context_support(farm_cfs: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_4 import (
         CF_FARM_FEATURES_PATH,
         CF_MF_IMPACT_MATRIX_PATH,
@@ -1252,7 +1265,7 @@ def get_phase2_farm_context_support(farm_cfs=None):
 
 
 @frappe.whitelist()
-def get_phase2_wind_barrier_crops(selected_crops=None):
+def get_phase2_wind_barrier_crops(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_5 import get_crops_producing_wind_barrier
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1289,7 +1302,7 @@ def get_phase2_wind_barrier_crops(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase2_zone_pest_mitigation(agro_climatic_zone=None):
+def get_phase2_zone_pest_mitigation(agro_climatic_zone: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_6 import find_zone_pest_mitigating_crops
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1325,7 +1338,7 @@ def get_phase2_zone_pest_mitigation(agro_climatic_zone=None):
 
 
 @frappe.whitelist()
-def get_phase2_trap_crop_recommendations(selected_crops=None):
+def get_phase2_trap_crop_recommendations(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_2_step_7 import build_frontend_payload
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1358,7 +1371,7 @@ def get_phase2_trap_crop_recommendations(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase3_biodiversity_gap_analysis(selected_crops=None):
+def get_phase3_biodiversity_gap_analysis(selected_crops: Any = None) -> Dict[str, Any]:
     from rythulab.phase_3_step_1 import build_frontend_gap_payload
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1390,7 +1403,10 @@ def get_phase3_biodiversity_gap_analysis(selected_crops=None):
 
 
 @frappe.whitelist()
-def get_phase3_mf_biodiversity_crops(selected_crops=None, mf_codes=None):
+def get_phase3_mf_biodiversity_crops(
+    selected_crops: Any = None,
+    mf_codes: Any = None,
+) -> Dict[str, Any]:
     from rythulab.phase_3_step_3 import build_frontend_payload
 
     payload = frappe.request.get_json(silent=True) or {}
@@ -1423,7 +1439,10 @@ def get_phase3_mf_biodiversity_crops(selected_crops=None, mf_codes=None):
 
 
 @frappe.whitelist()
-def get_phase3_cf_improvement_crops(selected_crops=None, farm_cfs=None):
+def get_phase3_cf_improvement_crops(
+    selected_crops: Any = None,
+    farm_cfs: Any = None,
+) -> Dict[str, Any]:
     from rythulab.phase_3_step_4 import build_frontend_payload
 
     payload = frappe.request.get_json(silent=True) or {}
