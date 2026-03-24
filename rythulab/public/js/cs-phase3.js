@@ -85,7 +85,10 @@ var CS3 = {
     step: 1,
     selected: [],
     gaps: {},
-    recommendations: []
+    recommendations: [],
+    step2BackendRecs: [],
+    step1Step2Data: null,
+    p3s12Loading: false
 };
 
 /* ── Entry point ─────────────────────────────────────────────── */
@@ -98,6 +101,130 @@ function cs_phase3_init(){
     lay.innerHTML='<div class="cs-sbar" id="cs-sbar"></div><div class="cs-sc" id="cs-content"></div>';
     root.appendChild(lay);
     p3_renderSidebar(); p3_renderStep(CS3.step);
+    cs_fetchPhase3Step1Step2();
+}
+
+function p3_collectAllSelectedCrops(){
+    var combined = [];
+    var seen = {};
+
+    function addCrop(crop){
+        if(!crop) return;
+        var cropId = (crop.cropid || crop.id || "").toString().trim();
+        if(!cropId || seen[cropId]) return;
+        seen[cropId] = true;
+        combined.push({
+            id: crop.id || cropId,
+            cropid: cropId,
+            name: crop.name || crop.crop_name || cropId
+        });
+    }
+
+    if(typeof cs_full === "function"){
+        (cs_full() || []).forEach(addCrop);
+    }
+
+    if(typeof CS2 !== "undefined"){
+        (CS2.selectedAssoc || []).forEach(function(id){
+            var entry = (CS2.associateList || []).find(function(item){ return item.crop && item.crop.id === id; });
+            addCrop(entry && entry.crop);
+        });
+        (CS2.selectedBorder || []).forEach(function(id){
+            var entry = (CS2.borderList || []).find(function(item){ return item.crop && item.crop.id === id; });
+            addCrop(entry && entry.crop);
+        });
+        (CS2.selectedTrap || []).forEach(function(id){
+            var entry = (CS2.trapList || []).find(function(item){ return item.crop && item.crop.id === id; });
+            addCrop(entry && entry.crop);
+        });
+    }
+
+    (CS3.selected || []).forEach(function(id){
+        var entry = (CS3.recommendations || []).find(function(item){ return item.crop && item.crop.id === id; });
+        addCrop(entry && entry.crop);
+    });
+
+    return combined;
+}
+
+function cs_fetchPhase3Step1Step2(){
+    if(CS3.p3s12Loading) return;
+    CS3.p3s12Loading = true;
+
+    var selected = p3_collectAllSelectedCrops();
+
+    fetch("/api/method/rythulab.api.get_phase3_biodiversity_gap_analysis", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ selected_crops: selected })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+
+        CS3.step1Step2Data = msg;
+
+        var apiGaps = msg.gaps || {};
+        CS3.gaps = {
+            missingGroups: Array.isArray(apiGaps.missingGroups) ? apiGaps.missingGroups : (CS3.gaps.missingGroups || []),
+            families: apiGaps.families && typeof apiGaps.families === "object" ? apiGaps.families : (CS3.gaps.families || {}),
+            missingLayers: Array.isArray(apiGaps.missingLayers) ? apiGaps.missingLayers : (CS3.gaps.missingLayers || []),
+            missingRoots: Array.isArray(apiGaps.missingRoots) ? apiGaps.missingRoots : (CS3.gaps.missingRoots || []),
+            coveredGroups: apiGaps.coveredGroups && typeof apiGaps.coveredGroups === "object" ? apiGaps.coveredGroups : (CS3.gaps.coveredGroups || {}),
+            allGroups: Array.isArray(apiGaps.allGroups) ? apiGaps.allGroups : (CS3.gaps.allGroups || P3_GROUPS.slice()),
+            allLayers: Array.isArray(apiGaps.allLayers) ? apiGaps.allLayers : (CS3.gaps.allLayers || ["Low","Mid","Tall"]),
+            allRoots: Array.isArray(apiGaps.allRoots) ? apiGaps.allRoots : (CS3.gaps.allRoots || ["Shallow","Medium","Deep"])
+        };
+
+        var backendRecs = Array.isArray(msg.recommended_crops) ? msg.recommended_crops : [];
+        CS3.step2BackendRecs = backendRecs.map(function(rec){
+            return {
+                crop: {
+                    id: rec.crop_id,
+                    name: rec.crop_name,
+                    family: rec.family || "",
+                    group: rec.functional_group || "",
+                    h: "",
+                    rootD: rec.root_depth_class || "",
+                    mfp: [],
+                    cfImprove: [],
+                    desc: ""
+                },
+                reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
+            };
+        });
+
+        (CS3.step2BackendRecs || []).forEach(function(entry){
+            var existing = CS3.recommendations.find(function(item){
+                return item.crop && entry.crop && item.crop.id === entry.crop.id;
+            });
+
+            if(!existing){
+                CS3.recommendations.push(entry);
+                return;
+            }
+
+            existing.crop.name = existing.crop.name || entry.crop.name;
+            existing.crop.family = existing.crop.family || entry.crop.family;
+            existing.crop.group = existing.crop.group || entry.crop.group;
+            existing.crop.rootD = existing.crop.rootD || entry.crop.rootD;
+            existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
+            (entry.reasons || []).forEach(function(reason){
+                if(existing.reasons.indexOf(reason) < 0){
+                    existing.reasons.push(reason);
+                }
+            });
+        });
+
+        if(CS3.step === 1 || CS3.step === 2) p3_renderStep(CS3.step);
+    })
+    .catch(function(err){
+        console.warn("Phase 3 Step 1/2 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS3.p3s12Loading = false;
+    });
 }
 
 /* ── Compute gaps ────────────────────────────────────────────── */
@@ -132,7 +259,16 @@ function p3_computeGaps(){
     allCrops.forEach(function(c){if(c.rd||c.rootD){var r=c.rd||c.rootD;if(r.indexOf("Shallow")>=0)roots.Shallow=true;else if(r.indexOf("Deep")>=0)roots.Deep=true;else roots.Medium=true;}});
     var missingRoots=Object.keys(roots).filter(function(r){return!roots[r];});
 
-    CS3.gaps={missingGroups:missingGroups,families:families,missingLayers:missingLayers,missingRoots:missingRoots,coveredGroups:coveredGroups};
+    CS3.gaps={
+        missingGroups:missingGroups,
+        families:families,
+        missingLayers:missingLayers,
+        missingRoots:missingRoots,
+        coveredGroups:coveredGroups,
+        allGroups:P3_GROUPS.slice(),
+        allLayers:["Low","Mid","Tall"],
+        allRoots:["Shallow","Medium","Deep"]
+    };
 
     var recs=[];
     P3_CROPS.forEach(function(bc){
@@ -265,50 +401,101 @@ function p3_toggleSel(id,checked){
 /* ── Step 1: Gap Analysis ────────────────────────────────────── */
 function p3_s1(){
     var g=CS3.gaps;
+    if((!g || !g.allGroups) && !CS3.p3s12Loading){
+        cs_fetchPhase3Step1Step2();
+    }
+
+    if(CS3.p3s12Loading && (!g || !Array.isArray(g.allGroups) || !g.allGroups.length)){
+        return p3_hd(1,"Biodiversity gap analysis",
+            "Loading biodiversity coverage from backend...")+
+            '<div class="cs-empty">Loading gap analysis for functional groups, families, canopy layers and root depth classes...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching current coverage.</span>'+
+            '<button class="cs-btn pri" disabled>Functional group coverage →</button></div>';
+    }
+
+    var groupLabels = (g && Array.isArray(g.allGroups) && g.allGroups.length) ? g.allGroups : P3_GROUPS;
+    var layerLabels = (g && Array.isArray(g.allLayers) && g.allLayers.length) ? g.allLayers : ["Low","Mid","Tall"];
+    var rootLabels = (g && Array.isArray(g.allRoots) && g.allRoots.length) ? g.allRoots : ["Shallow","Medium","Deep"];
+    var familyCoverage = (CS3.step1Step2Data && CS3.step1Step2Data.coverage && CS3.step1Step2Data.coverage.family) ? CS3.step1Step2Data.coverage.family : {};
+    var familyAll = Array.isArray(familyCoverage.all_values) ? familyCoverage.all_values : Object.keys(g.families||{});
+    var familyCoveredSet = {};
+    (Array.isArray(familyCoverage.covered) ? familyCoverage.covered : Object.keys(g.families||{})).forEach(function(f){ familyCoveredSet[f]=true; });
+    var familyMissing = Array.isArray(familyCoverage.not_covered)
+        ? familyCoverage.not_covered
+        : familyAll.filter(function(f){ return !familyCoveredSet[f]; });
+
     function statusBadge(ok){
         return ok?'<span style="background:var(--csg100);color:var(--csg800);font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px">Covered ✓</span>':
                   '<span style="background:var(--csr50);color:var(--csr600);font-size:11px;font-weight:700;padding:2px 9px;border-radius:8px">Gap ✗</span>';
     }
-    var groupRows=P3_GROUPS.map(function(grp){
+    var groupRows=groupLabels.map(function(grp){
         var covered=!!g.coveredGroups[grp];
         return'<tr><td style="font-weight:700;color:var(--text-dark)">'+grp+'</td><td>'+statusBadge(covered)+'</td></tr>';
     }).join("");
-    var layerRows=["Low (<0.6m)","Mid (0.6–1.8m)","Tall (>1.8m)"].map(function(l,i){
-        var lk=["Low","Mid","Tall"][i];
-        var covered=g.missingLayers.indexOf(lk)<0;
-        return'<tr><td style="color:var(--text-dark)">'+l+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    var layerRows=layerLabels.map(function(layerLabel){
+        var covered=g.missingLayers.indexOf(layerLabel)<0;
+        return'<tr><td style="color:var(--text-dark)">'+layerLabel+'</td><td>'+statusBadge(covered)+'</td></tr>';
     }).join("");
-    var rootRows=["Shallow","Medium","Deep"].map(function(r){
-        var covered=g.missingRoots.indexOf(r)<0;
-        return'<tr><td style="color:var(--text-dark)">'+r+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    var rootRows=rootLabels.map(function(rootLabel){
+        var covered=g.missingRoots.indexOf(rootLabel)<0;
+        return'<tr><td style="color:var(--text-dark)">'+rootLabel+'</td><td>'+statusBadge(covered)+'</td></tr>';
+    }).join("");
+    var familyRows=familyAll.map(function(familyLabel){
+        var covered=!!familyCoveredSet[familyLabel];
+        return'<tr><td style="color:var(--text-dark)">'+familyLabel+'</td><td>'+statusBadge(covered)+'</td></tr>';
     }).join("");
     var famCount=Object.keys(g.families||{}).length;
+    var totalGaps=(g.missingGroups.length+g.missingLayers.length+g.missingRoots.length+familyMissing.length);
     return p3_hd(1,"Biodiversity gap analysis",
         "Checking the current crop system (main crops + associate crops from Phase 2) for gaps in functional group diversity, crop family diversity, canopy layers, and root depths.")+
-        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
         '<div class="cs-fcrd"><div class="cs-fcht">Functional groups</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Group</th><th>Status</th></tr></thead><tbody>'+groupRows+'</tbody></table>'+
         '<div style="font-size:11px;color:var(--csr600);margin-top:6px">Missing: '+(g.missingGroups.length?g.missingGroups.join(", "):"None ✓")+'</div></div>'+
+        '<div class="cs-fcrd"><div class="cs-fcht">Family groups</div>'+
+        '<table class="cs-dtbl"><thead><tr><th>Family</th><th>Status</th></tr></thead><tbody>'+familyRows+'</tbody></table>'+
+        '<div style="font-size:11px;color:var(--csr600);margin-top:6px">Missing: '+(familyMissing.length?familyMissing.join(", "):"None ✓")+'</div>'+
+        '<div style="font-size:11px;color:var(--csg600);margin-top:4px">Families covered: '+famCount+'</div></div>'+
         '<div class="cs-fcrd"><div class="cs-fcht">Canopy layers</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Layer</th><th>Status</th></tr></thead><tbody>'+layerRows+'</tbody></table>'+
         '<div style="font-size:11px;color:var(--csr600);margin-top:6px">Missing: '+(g.missingLayers.length?g.missingLayers.join(", "):"None ✓")+'</div></div>'+
         '<div class="cs-fcrd"><div class="cs-fcht">Root depths</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Depth</th><th>Status</th></tr></thead><tbody>'+rootRows+'</tbody></table>'+
-        '<div style="font-size:11px;color:var(--csg600);margin-top:6px">Crop families covered: '+famCount+'</div></div></div>'+
-        '<div class="cs-sf"><span class="cs-fn">'+(g.missingGroups.length+g.missingLayers.length+g.missingRoots.length)+' gap(s) detected in biodiversity coverage.</span>'+
+        '<div style="font-size:11px;color:var(--csg600);margin-top:6px">Root-depth classes covered: '+(rootLabels.length-g.missingRoots.length)+'</div></div></div>'+
+        '<div class="cs-sf"><span class="cs-fn">'+totalGaps+' gap(s) detected in biodiversity coverage.</span>'+
         '<button class="cs-btn pri" onclick="p3_next()">Functional group coverage →</button></div>';
 }
 
 /* ── Step 2: Functional Group Coverage ──────────────────────── */
 function p3_s2(){
+    if((!CS3.gaps || !CS3.gaps.allGroups) && !CS3.p3s12Loading){
+        cs_fetchPhase3Step1Step2();
+    }
     var g=CS3.gaps;
+    var groupLabels = (g && Array.isArray(g.allGroups) && g.allGroups.length) ? g.allGroups : P3_GROUPS;
+
+    if(CS3.p3s12Loading && (!g || !Array.isArray(g.allGroups) || !g.allGroups.length)){
+        return p3_hd(2,"Functional group coverage",
+            "Loading functional group labels and coverage from backend...")+
+            '<div class="cs-empty">Loading backend recommendations...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching missing functional groups.</span>'+
+            '<button class="cs-btn sec" onclick="p3_goto(1)">← Back</button>'+
+            '<button class="cs-btn pri" disabled>MF biodiversity crops →</button></div>';
+    }
+
     var recs=CS3.recommendations.filter(function(r){
-        return r.reasons.some(function(x){return x.indexOf("functional group")>=0;});
+        return r.reasons.some(function(x){return x.toLowerCase().indexOf("functional group")>=0;});
     });
+    if(CS3.step2BackendRecs && CS3.step2BackendRecs.length){
+        recs = CS3.step2BackendRecs.filter(function(r){
+            return r.reasons.some(function(x){return x.toLowerCase().indexOf("functional group")>=0;});
+        });
+    }
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">All functional groups are already covered by your current crop system. ✓</div>';
     return p3_hd(2,"Functional group coverage",
-        "Ensuring at least one species is represented from each functional group — Legume, Grass, Broad-leaf, Root/Tuber, Cover crop. Gaps identified in Step 1 are filled here.")+
+        "Ensuring at least one species is represented from each functional group. Functional-group labels come from backend metadata. Gaps identified in Step 1 are filled here.")+
+        '<div style="font-size:11px;color:#3a4a2a;margin-bottom:8px">Functional groups in current metadata: '+groupLabels.join(", ")+'</div>'+
         (g.missingGroups.length?
             '<div class="cs-vcrd cs-vc-warn"><div class="cs-vci cs-vci-warn">!</div><div>'+
             '<div class="cs-vttl">Missing functional groups: '+g.missingGroups.join(", ")+'</div>'+

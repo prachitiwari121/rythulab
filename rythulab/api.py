@@ -1335,3 +1335,35 @@ def get_phase2_trap_crop_recommendations(selected_crops=None):
         "trapList": result.get("trapList", []),
         "associateList": result.get("associateList", []),
     }
+
+
+@frappe.whitelist()
+def get_phase3_biodiversity_gap_analysis(selected_crops=None):
+    from rythulab.phase_3_step_1 import build_frontend_gap_payload
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = build_frontend_gap_payload(crop_ids)
+
+    return {
+        "ok": True,
+        "selected_crop_ids": result.get("selected_crop_ids", crop_ids),
+        "known_crop_ids": result.get("known_crop_ids", []),
+        "unknown_crop_ids": result.get("unknown_crop_ids", []),
+        "gaps": result.get("gaps", {}),
+        "coverage": result.get("coverage", {}),
+        "recommended_crops": result.get("recommended_crops", []),
+    }
