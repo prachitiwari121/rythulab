@@ -766,6 +766,8 @@ function p2_toggleSel(prefix, id, checked){
     if(checked){if(arr.indexOf(id)<0)arr.push(id);}
     else{var i=arr.indexOf(id);if(i>=0)arr.splice(i,1);}
     if(typeof cs_updateSelBox==="function") cs_updateSelBox();
+    // Re-render current step to update checkbox and card styling
+    //p2_renderStep(CS2.step);
 }
 
 function p2_mergeRecommendation(pool, entry){
@@ -1080,7 +1082,7 @@ function p2_s4(){
                     if(mf && mf.mf_code && mfp.indexOf(mf.mf_code)<0) mfp.push(mf.mf_code);
                 });
             });
-            return {
+            var entry = {
                 crop: {
                     id: rec.crop_id,
                     name: rec.crop_name,
@@ -1093,6 +1095,9 @@ function p2_s4(){
                 },
                 reasons: reasons
             };
+            // Add to associateList so it appears in sidebar when selected
+            p2_mergeRecommendation(CS2.associateList, entry);
+            return entry;
         });
     }
 

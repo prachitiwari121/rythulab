@@ -320,7 +320,7 @@ def build_frontend_payload(crop_ids: list[str]) -> dict:
             if support_crop_name and support_crop_name not in existing["supports_crops"]:
                 existing["supports_crops"].append(support_crop_name)
             reason = (
-                f"Recommended for {support_crop_name} ({support_crop_id}) as a trap crop to divert key pests."
+                f"Recommended for {support_crop_name} as a trap crop to divert key pests."
             )
             if reason not in existing["reasons"]:
                 existing["reasons"].append(reason)
