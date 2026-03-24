@@ -288,7 +288,7 @@ function cs_fetchPhase3Step1Step2(){
                     name: rec.crop_name,
                     family: rec.family || "",
                     group: rec.functional_group || "",
-                    h: "",
+                    h: rec.canopy_layer_class || "",
                     rootD: rec.root_depth_class || "",
                     mfp: [],
                     cfImprove: [],
@@ -311,6 +311,7 @@ function cs_fetchPhase3Step1Step2(){
             existing.crop.name = existing.crop.name || entry.crop.name;
             existing.crop.family = existing.crop.family || entry.crop.family;
             existing.crop.group = existing.crop.group || entry.crop.group;
+            existing.crop.h = existing.crop.h || entry.crop.h;
             existing.crop.rootD = existing.crop.rootD || entry.crop.rootD;
             existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
             (entry.reasons || []).forEach(function(reason){
@@ -485,7 +486,7 @@ function p3_cropCard(entry){
             ' onchange="p3_toggleSel(\''+bc.id+'\',this.checked)">'+
         '<div style="flex:1">'+
         '<div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px">'+bc.name+'</div>'+
-        '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.family+' · '+bc.group+' · Height: '+bc.h+'m · Root: '+(bc.rootD||bc.rd||"N/A")+'</div>'+
+        '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.family+' · '+bc.group+' · Height: '+bc.h+' · Root: '+(bc.rootD||bc.rd||"N/A")+'</div>'+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.desc+'</div>'+
         '<div style="margin-bottom:6px">'+tags+'</div>'+
         '<div style="background:white;border-radius:6px;padding:7px 10px">'+
@@ -702,7 +703,7 @@ function p3_s5(){
         return'<tr><td style="font-weight:700;color:var(--text-dark)">'+bc.name+'</td>'+
             '<td style="color:#3a4a2a">'+bc.group+'</td>'+
             '<td>'+bc.family+'</td>'+
-            '<td>'+bc.h+'m</td>'+
+            '<td>'+bc.h+'</td>'+
             '<td>'+(bc.rootD||bc.rd||"—")+'</td>'+
             '<td style="font-size:10px">'+(bc.mfp||[]).map(cs_mfl).join(", ")+'</td></tr>';
     }).join("");

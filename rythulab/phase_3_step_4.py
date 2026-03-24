@@ -89,7 +89,7 @@ def _to_frontend_crop(crop_id: str, catalog: Dict[str, Dict[str, str]], cropid_t
 		"name": cropid_to_name.get(crop_id, meta.get("crop_name") or crop_id),
 		"family": meta.get("family") or "",
 		"group": meta.get("functional_group") or "",
-		"h": "",
+		"h": meta.get("canopy_layer_class") or "",
 		"rootD": meta.get("root_depth_class") or "",
 		"mfp": [],
 		"cfImprove": [],
@@ -155,16 +155,16 @@ def analyze_weak_cf_support_and_recommendations(
 			}
 		)
 
-		if not missing_mfs:
+		if selected_support:
 			continue
 
-		missing_set = set(missing_mfs)
+		improving_set = set(improving_mfs)
 		for crop_id, produced_mfs in (produced_by_cropid or {}).items():
 			if crop_id in selected_set:
 				continue
 
-			matched_missing = sorted(set(produced_mfs or []) & missing_set)
-			if not matched_missing:
+			matched_improving = sorted(set(produced_mfs or []) & improving_set)
+			if not matched_improving:
 				continue
 
 			entry = crop_recommendation_map.setdefault(
@@ -180,7 +180,7 @@ def analyze_weak_cf_support_and_recommendations(
 			)
 
 			cf_meta = annotate_cf_code(full_cf_code, CF_FARM_FEATURES_PATH)
-			mf_meta = annotate_mf_codes(matched_missing)
+			mf_meta = annotate_mf_codes(matched_improving)
 			entry["supports"].append(
 				{
 					"cf": cf_meta,
@@ -189,7 +189,7 @@ def analyze_weak_cf_support_and_recommendations(
 					"reasons": [
 						(
 							f'Produces MF "{(mf or {}).get("mf_label") or (mf or {}).get("mf_code") or ""}", '
-							f'which helps weak CF "{cf_meta.get("cf_label") or full_cf_code}"'
+							f'which improves weak CF "{cf_meta.get("cf_label") or full_cf_code}"'
 						)
 						for mf in mf_meta
 					],

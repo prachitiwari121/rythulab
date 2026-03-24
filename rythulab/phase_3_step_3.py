@@ -117,6 +117,7 @@ def get_crops_producing_priority_biodiversity_mfs(
 				"crop_name": crop_labels.get(crop_id, crop_id),
 				"family": crop_meta.get("family") or "",
 				"functional_group": crop_meta.get("functional_group") or "",
+				"canopy_layer_class": crop_meta.get("canopy_layer_class") or "",
 				"root_depth_class": crop_meta.get("root_depth_class") or "",
 				"matched_mfs": annotate_mf_codes(matched_codes),
 			}
@@ -153,7 +154,7 @@ def build_frontend_payload(
 					"name": item.get("crop_name") or item.get("crop_id"),
 					"family": item.get("family") or "",
 					"group": item.get("functional_group") or "",
-					"h": "",
+					"h": item.get("canopy_layer_class") or "",
 					"rootD": item.get("root_depth_class") or "",
 					"mfp": [mf.get("mf_code") for mf in matched if mf.get("mf_code")],
 					"cfImprove": [],
