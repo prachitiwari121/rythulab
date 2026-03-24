@@ -1,85 +1,30 @@
 """
 phase_1_step_6.py
 
-Evaluates critical agronomic parameters for a crop against supplied CF
-(Crop Factor) values. Each crop's rules are written explicitly as Python
-conditions translated from the critical-parameters sheet.
-
-The public API returns both failed and passed checks. For CF-based inputs,
-human-readable labels are resolved via sheets.cf_label_extract.
+Generic farm-feasibility evaluator for Phase 1 Step 6.
+Rule logic:
+- For each crop parameter where sensitivity is High/Very High,
+- Read the crop's recommended threshold/range from crop details,
+- Check whether current farm context (CF values) is within that recommendation.
 """
 
 from __future__ import annotations
 
 import re
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 try:
+    from rythulab.phase_1_step_5 import get_crop_characteristics
     from rythulab.sheets.cf_label_extract import get_cf_label
 except ModuleNotFoundError:
+    from phase_1_step_5 import get_crop_characteristics
     from sheets.cf_label_extract import get_cf_label
 
 
 RuleResult = Dict[str, Any]
-RuleFunction = Callable[[Dict[str, Any], RuleResult], None]
 
-_BIOINDEX_ORDER = ["Low", "Medium", "High", "Very High"]
-
-_LABEL_OVERRIDES = {
-    "TempC": "Temperature",
-    "CF_TempC": "Temperature",
-    "Water_Regime": "Water Regime",
-    "CF_Water": "Water Regime",
-    "Water": "Water Regime",
-    "CF11_Drainage": "Drainage",
-    "Drainage": "Drainage",
-    "CF14_Irrigation": "Irrigation",
-    "Irrigation": "Irrigation",
-    "CF8_Depth": "Soil Depth",
-    "Depth_cm": "Soil Depth",
-    "Depth": "Soil Depth",
-    "Soil_Depth": "Soil Depth",
-    "CF25_DroughtRisk": "Drought Risk",
-    "DroughtRisk": "Drought Risk",
-    "CF13_GW": "Groundwater Depth",
-    "GWDepth": "Groundwater Depth",
-    "CF17_HeatDays": "Heat Stress Days",
-    "HeatDays": "Heat Stress Days",
-    "CF23_Slope": "Slope",
-    "Slope_pct": "Slope",
-    "Slope": "Slope",
-    "CF18_FrostRisk": "Frost Risk",
-    "FrostRisk": "Frost Risk",
-    "CF24_FloodRisk": "Flood Risk",
-    "FloodRisk": "Flood Risk",
-    "CF7_Texture": "Soil Texture",
-    "Texture": "Soil Texture",
-    "CF5_pH": "Soil pH",
-    "pH": "Soil pH",
-    "CF20_BioIndex": "BioIndex",
-    "BioIndex": "BioIndex",
-    "CF21_DayLength": "Day Length",
-    "DayLength": "Day Length",
-    "CF4_N": "Available Nitrogen",
-    "Fertility": "Available Nitrogen",
-    "N": "Available Nitrogen",
-    "Rainfall_mm": "Rainfall",
-    "Rainfall": "Rainfall",
-    "RH": "Relative Humidity",
-    "WetDays": "Wet Days",
-    "CF_Support": "Support",
-    "Support": "Support",
-    "CF_Light": "Light",
-    "Light": "Light",
-    "Sun": "Sunlight",
-}
-
-
-def _bioindex_gt(value: str, threshold: str) -> bool:
-    try:
-        return _BIOINDEX_ORDER.index(value) > _BIOINDEX_ORDER.index(threshold)
-    except ValueError:
-        return False
+_HIGH_SENS = {"high", "very high"}
+_RISK_ORDER = ["none", "low", "medium", "high", "very high"]
 
 
 def _empty_result(crop_id: str) -> RuleResult:
@@ -100,79 +45,86 @@ def _finalize_result(result: RuleResult) -> RuleResult:
     return result
 
 
+def _canonical_label(label: Any) -> str:
+    text = str(label or "").strip().lower()
+    text = text.replace("moderate", "medium")
+    text = text.replace("very weak", "very high")
+    text = text.replace("weak", "high")
+    text = text.replace("good", "low")
+    return re.sub(r"\s+", " ", text)
+
+
 def _extract_numeric(value: Any) -> Optional[float]:
     if isinstance(value, (int, float)):
         return float(value)
-
-    match = re.search(r"-?\d+(?:\.\d+)?", str(value))
+    match = re.search(r"\d+(?:\.\d+)?", str(value or ""))
     if not match:
         return None
     return float(match.group(0))
 
 
-def _resolve_input(cfs: Dict[str, Any], *keys: str) -> Tuple[Optional[str], Optional[Any]]:
-    for key in keys:
-        variants = [key]
-
-        stripped_num = re.sub(r"^CF\d+_", "", key)
-        if stripped_num != key:
-            variants.append(stripped_num)
-
-        stripped_cf = re.sub(r"^CF_", "", key)
-        if stripped_cf != key:
-            variants.append(stripped_cf)
-
-        for variant in variants:
-            if variant in cfs:
-                return variant, cfs[variant]
-
-            lower_variant = variant.lower()
-            for supplied_key, supplied_value in cfs.items():
-                if supplied_key.lower() == lower_variant:
-                    return supplied_key, supplied_value
-
-    return None, None
+def _extract_all_numbers(text: Any) -> List[float]:
+    return [float(v) for v in re.findall(r"\d+(?:\.\d+)?", str(text or ""))]
 
 
-def _canonical_cf_keys(keys: List[str]) -> List[str]:
-    return [key for key in keys if re.match(r"^CF\d+", key, re.IGNORECASE)]
+def _extract_cf_value(cfs: Dict[str, Any], cf_code: str) -> Tuple[List[str], Any, Any]:
+    """
+    Returns: (input_keys, raw_actual_value, numeric_if_any)
+    Accepts cfs payload shape from api._build_phase1_step6_farm_cfs:
+      { "CF5": {"val": 6.8, "slab": "Good", ...}, ... }
+    """
+    target = (cf_code or "").upper()
+    for key, value in (cfs or {}).items():
+        key_text = str(key or "").strip().upper()
+        if not key_text.startswith(target):
+            continue
+
+        if isinstance(value, dict):
+            raw = value.get("val")
+            if raw in (None, ""):
+                raw = value.get("slab") or value.get("status")
+            numeric = _extract_numeric(raw)
+            return [str(key)], raw, numeric
+
+        numeric = _extract_numeric(value)
+        return [str(key)], value, numeric
+
+    return [], None, None
 
 
-def _resolve_parameter_label(keys: List[str], parameter_name: Optional[str] = None) -> str:
-    if parameter_name:
-        return parameter_name
-
-    for key in keys:
-        if key in _LABEL_OVERRIDES:
-            return _LABEL_OVERRIDES[key]
-
-        if re.match(r"^CF\d+", key, re.IGNORECASE):
-            label = get_cf_label(key)
-            if label != key:
-                return label
-
-    return keys[0].replace("_", " ")
+def _risk_index(value: Any) -> Optional[int]:
+    normalized = _canonical_label(value)
+    if normalized not in _RISK_ORDER:
+        return None
+    return _RISK_ORDER.index(normalized)
 
 
-def _build_check_entry(
-    keys: List[str],
-    actual_keys: List[str],
+def _store_check(result: RuleResult, entry: Dict[str, Any]) -> None:
+    result["checks"].append(entry)
+    if entry["passed"]:
+        result["passed_checks"].append(entry)
+        return
+    result["failed_checks"].append(entry)
+    result["warnings"].append(entry["message"])
+    result["all_passed"] = False
+
+
+def _build_entry(
+    parameter: str,
+    cf_code: str,
+    input_keys: List[str],
     actual_value: Any,
     expected: str,
     passed: bool,
     reason: str,
-    severity: str,
-    parameter_name: Optional[str] = None,
+    severity: str = "severe",
 ) -> Dict[str, Any]:
-    cf_codes = _canonical_cf_keys(keys)
-    parameter = _resolve_parameter_label(keys, parameter_name)
-    cf_labels = [get_cf_label(code) for code in cf_codes]
-
+    cf_label = get_cf_label(cf_code)
     return {
         "parameter": parameter,
-        "cf_codes": cf_codes,
-        "cf_labels": cf_labels if cf_labels else [parameter],
-        "input_keys": actual_keys,
+        "cf_codes": [cf_code],
+        "cf_labels": [cf_label if cf_label != cf_code else parameter],
+        "input_keys": input_keys,
         "actual_value": actual_value,
         "expected": expected,
         "passed": passed,
@@ -181,493 +133,257 @@ def _build_check_entry(
     }
 
 
-def _store_check(result: RuleResult, entry: Dict[str, Any]) -> None:
-    result["checks"].append(entry)
-
-    if entry["passed"]:
-        result["passed_checks"].append(entry)
-        return
-
-    result["failed_checks"].append(entry)
-    result["warnings"].append(entry["message"])
-    result["all_passed"] = False
+def _is_high_sensitivity(value: Any) -> bool:
+    return _canonical_label(value) in _HIGH_SENS
 
 
-def _check_in(
+def _check_numeric_range(
     result: RuleResult,
     cfs: Dict[str, Any],
-    keys: List[str],
-    allowed: Tuple[Any, ...],
+    *,
+    parameter: str,
+    cf_code: str,
+    recommended: Any,
     reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
 ) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
+    nums = _extract_all_numbers(recommended)
+    if not nums:
         return
 
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected="one of " + ", ".join(repr(item) for item in allowed),
-        passed=actual_value in allowed,
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
+    if len(nums) >= 2:
+        low, high = min(nums[0], nums[1]), max(nums[0], nums[1])
+        expected = f"between {low} and {high}"
+        mode = "between"
+    else:
+        # For strings like "< 20 kmph"
+        text = str(recommended or "").strip()
+        if "<" in text:
+            low, high = None, nums[0]
+            expected = f"<= {high}"
+            mode = "max"
+        elif ">" in text:
+            low, high = nums[0], None
+            expected = f">= {low}"
+            mode = "min"
+        else:
+            # single value fallback: treat as upper bound for tolerance-style fields
+            low, high = None, nums[0]
+            expected = f"<= {high}"
+            mode = "max"
 
-
-def _check_equals(
-    result: RuleResult,
-    cfs: Dict[str, Any],
-    keys: List[str],
-    expected_value: Any,
-    reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
-) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
+    input_keys, raw_actual, numeric_actual = _extract_cf_value(cfs, cf_code)
+    if raw_actual is None or numeric_actual is None:
         return
 
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected=repr(expected_value),
-        passed=actual_value == expected_value,
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
+    if mode == "between":
+        passed = low <= numeric_actual <= high
+    elif mode == "max":
+        passed = numeric_actual <= high
+    else:
+        passed = numeric_actual >= low
 
-
-def _check_min(
-    result: RuleResult,
-    cfs: Dict[str, Any],
-    keys: List[str],
-    minimum: float,
-    reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
-) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
-        return
-
-    numeric_value = _extract_numeric(actual_value)
-    if numeric_value is None:
-        return
-
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected=f">= {minimum}",
-        passed=numeric_value >= minimum,
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
-
-
-def _check_max(
-    result: RuleResult,
-    cfs: Dict[str, Any],
-    keys: List[str],
-    maximum: float,
-    reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
-) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
-        return
-
-    numeric_value = _extract_numeric(actual_value)
-    if numeric_value is None:
-        return
-
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected=f"<= {maximum}",
-        passed=numeric_value <= maximum,
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
-
-
-def _check_between(
-    result: RuleResult,
-    cfs: Dict[str, Any],
-    keys: List[str],
-    minimum: float,
-    maximum: float,
-    reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
-) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
-        return
-
-    numeric_value = _extract_numeric(actual_value)
-    if numeric_value is None:
-        return
-
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected=f"between {minimum} and {maximum}",
-        passed=minimum <= numeric_value <= maximum,
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
-
-
-def _check_bioindex_gt(
-    result: RuleResult,
-    cfs: Dict[str, Any],
-    keys: List[str],
-    threshold: str,
-    reason: str,
-    severity: str = "warning",
-    parameter_name: Optional[str] = None,
-) -> None:
-    actual_key, actual_value = _resolve_input(cfs, *keys)
-    if actual_key is None:
-        return
-
-    entry = _build_check_entry(
-        keys=keys,
-        actual_keys=[actual_key],
-        actual_value=actual_value,
-        expected=f"> {threshold}",
-        passed=_bioindex_gt(str(actual_value), threshold),
-        reason=reason,
-        severity=severity,
-        parameter_name=parameter_name,
-    )
-    _store_check(result, entry)
-
-
-def _check_rh_or_wetdays(result: RuleResult, cfs: Dict[str, Any]) -> None:
-    rh_key, rh_value = _resolve_input(cfs, "RH")
-    wet_key, wet_value = _resolve_input(cfs, "WetDays")
-
-    if rh_key is None and wet_key is None:
-        return
-
-    rh_numeric = _extract_numeric(rh_value) if rh_key is not None else None
-    wet_numeric = _extract_numeric(wet_value) if wet_key is not None else None
-    if rh_key is not None and rh_numeric is None:
-        return
-    if wet_key is not None and wet_numeric is None:
-        return
-
-    passed = False
-    if rh_numeric is not None and rh_numeric < 70:
-        passed = True
-    if wet_numeric is not None and wet_numeric < 5:
-        passed = True
-
-    actual_keys = []
-    actual_value = {}
-    if rh_key is not None:
-        actual_keys.append(rh_key)
-        actual_value["RH"] = rh_value
-    if wet_key is not None:
-        actual_keys.append(wet_key)
-        actual_value["WetDays"] = wet_value
-
-    entry = _build_check_entry(
-        keys=["RH", "WetDays"],
-        actual_keys=actual_keys,
-        actual_value=actual_value,
-        expected="RH < 70 OR WetDays < 5",
+    entry = _build_entry(
+        parameter=parameter,
+        cf_code=cf_code,
+        input_keys=input_keys,
+        actual_value=raw_actual,
+        expected=expected,
         passed=passed,
-        reason="Flowering humidity control; blossom drop risk.",
-        severity="warning",
-        parameter_name="Relative Humidity / Wet Days",
+        reason=reason,
     )
     _store_check(result, entry)
 
 
-def _rules_paddy(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF24_FloodRisk", "FloodRisk"], ("Medium", "High"), "Delta-adapted crop needs standing water; total failure without.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Poor", "Puddled wetland required; root rot in aerobic soils.")
-    _check_in(result, cfs, ["Water_Regime"], ("Copious-Irrigation", "Controlled-Irrigation"), "1500+ mm/season; yield below 20% under rainfed conditions.")
+def _check_categorical_risk(
+    result: RuleResult,
+    cfs: Dict[str, Any],
+    *,
+    parameter: str,
+    cf_code: str,
+    recommended: Any,
+    reason: str,
+) -> None:
+    rec_index = _risk_index(recommended)
+    if rec_index is None:
+        return
+
+    input_keys, raw_actual, _ = _extract_cf_value(cfs, cf_code)
+    if raw_actual is None:
+        return
+
+    actual_index = _risk_index(raw_actual)
+    if actual_index is None:
+        return
+
+    # Suitability labels represent maximum tolerable risk level
+    passed = actual_index <= rec_index
+
+    entry = _build_entry(
+        parameter=parameter,
+        cf_code=cf_code,
+        input_keys=input_keys,
+        actual_value=raw_actual,
+        expected=f"risk <= {str(recommended).strip()}",
+        passed=passed,
+        reason=reason,
+    )
+    _store_check(result, entry)
 
 
-def _rules_maize(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 18, 32, "Required temperature range for optimal growth.", parameter_name="Temperature")
-    _check_in(result, cfs, ["CF14_Irrigation", "Irrigation"], ("Protective", "Assured"), "Silking-stage moisture is required; 50-70% yield loss otherwise.")
-    _check_min(result, cfs, ["CF8_Depth", "Depth_cm", "Depth"], 60, "Deep feeder roots need deeper soil; shallow soils increase lodging.")
+def _check_rain_reliability(
+    result: RuleResult,
+    cfs: Dict[str, Any],
+    *,
+    recommended: Any,
+    reason: str,
+) -> None:
+    """
+    CF15 is rainfall variability (CV%). Lower is better.
+    Crop recommendation comes as reliability class: Low/Medium/High.
+    We map that to max-allowed CV thresholds.
+    """
+    rec = _canonical_label(recommended)
+    max_cv_by_reliability = {
+        "high": 25.0,
+        "medium": 35.0,
+        "low": 50.0,
+    }
+    max_cv = max_cv_by_reliability.get(rec)
+    if max_cv is None:
+        return
+
+    input_keys, raw_actual, numeric_actual = _extract_cf_value(cfs, "CF15")
+    if raw_actual is None or numeric_actual is None:
+        return
+
+    passed = numeric_actual <= max_cv
+    expected = f"rain variability (CV%) <= {max_cv} for {str(recommended).strip()} reliability"
+
+    entry = _build_entry(
+        parameter="Rain Reliability",
+        cf_code="CF15",
+        input_keys=input_keys,
+        actual_value=raw_actual,
+        expected=expected,
+        passed=passed,
+        reason=reason,
+    )
+    _store_check(result, entry)
 
 
-def _rules_bajra(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], ("High", "Very High"), "Drought-escape crop; fails in irrigated areas.")
-    _check_in(result, cfs, ["CF7_Texture", "Texture"], ("Sandy", "SandyLoam"), "Millet signature texture; smut risk in heavy soils.")
-    _check_min(result, cfs, ["CF13_GW", "GWDepth"], 1.500001, "Avoid waterlogging; root rot risk.", parameter_name="Groundwater Depth")
+def _evaluate_generic_rules(crop_id: str, cfs: Dict[str, Any], result: RuleResult) -> None:
+    crop_map = get_crop_characteristics([crop_id])
+    crop = crop_map.get(crop_id)
+    if not crop:
+        raise ValueError(f"'{crop_id}' has no critical parameters defined.")
 
+    sens = crop.get("sens") or {}
+    sens_detail = crop.get("sens_detail") or {}
 
-def _rules_jowar(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_max(result, cfs, ["CF17_HeatDays", "HeatDays"], 25, "Heat tolerant but not extreme; grain shrivel after prolonged heat.")
-    _check_in(result, cfs, ["CF11_Drainage", "Drainage"], ("Good", "Moderate"), "Sterile hybrids are sensitive; waterlogging kills.")
+    # Parameter mappings: (sens_key, cf_code, recommended_field, check_type, label, reason)
+    mappings = [
+        ("ph", "CF5", "pH_r", "range", "Soil pH", "High pH sensitivity: farm pH must be within crop recommended pH range."),
+        ("temp", "CF16", "temp", "range", "Temperature", "High temperature sensitivity: farm temperature must be within crop recommended range."),
+        ("water", "CF9", "whcRange", "range", "Water Holding Capacity", "High water sensitivity: farm WHC must be within crop recommended range."),
+        ("heat", "CF17", "heatTol", "range", "Heat Stress Days", "High heat sensitivity: farm heat-stress days must not exceed crop tolerance."),
+        ("airflow", "CF19", "windTol", "range", "Wind Speed", "High wind sensitivity: farm wind should be within crop tolerance."),
+        ("frost", "CF18", "frostSens", "risk", "Frost Risk", "High frost sensitivity: farm frost risk must be within crop suitability level."),
+        ("subm", "CF24", "floodSuit", "risk", "Flood Risk", "High submergence sensitivity: flood risk must be within crop suitability level."),
+        ("extreme", "CF25", "droughtSuit", "risk", "Drought Risk", "High extreme-weather sensitivity: drought risk must be within crop suitability level."),
+    ]
 
+    for sens_key, cf_code, rec_field, check_type, label, reason in mappings:
+        if not _is_high_sensitivity(sens.get(sens_key)):
+            continue
 
-def _rules_red_gram(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 8, "Rhizobium inoculation operations fail at high slope; nodulation failure above 10%.")
-    _check_equals(result, cfs, ["CF14_Irrigation", "Irrigation"], "Protective", "Pod filling moisture required; around 60% pod drop otherwise.")
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 25, 35, "Flowering temperature sensitive; flower drop outside the range.", parameter_name="Temperature")
+        recommended = crop.get(rec_field)
+        if not recommended:
+            continue
 
+        if check_type == "range":
+            _check_numeric_range(
+                result,
+                cfs,
+                parameter=label,
+                cf_code=cf_code,
+                recommended=recommended,
+                reason=reason,
+            )
+        else:
+            _check_categorical_risk(
+                result,
+                cfs,
+                parameter=label,
+                cf_code=cf_code,
+                recommended=recommended,
+                reason=reason,
+            )
 
-def _rules_bengal_gram(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_equals(result, cfs, ["CF18_FrostRisk", "FrostRisk"], "None", "Rabi frost causes total loss.")
-    _check_in(result, cfs, ["Water_Regime"], ("Rain-Fed-High", "Controlled-Irrigation"), "Cool moist pod set required; shriveling risk otherwise.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.5, 8.0, "Rhizobium works best in this range; nitrogen-fixation failure outside it.")
+    # Additional demand-value/range checks for other sensitive parameters
+    demand_mappings = [
+        ("nitrogen", "CF1", "thr_n", "Available Nitrogen", "High nitrogen sensitivity: farm N must be within crop demand range."),
+        ("phosphorus", "CF2", "thr_p", "Available Phosphorus", "High phosphorus sensitivity: farm P must be within crop demand range."),
+        ("potassium", "CF3", "thr_k", "Available Potassium", "High potassium sensitivity: farm K must be within crop demand range."),
+        ("organic", "CF4", "thr_soc", "Soil Organic Carbon", "High organic-carbon sensitivity: farm SOC must be within crop demand range."),
+        ("ec", "CF6", "thr_ec", "Soil Salinity (EC)", "High EC sensitivity: farm salinity must be within crop tolerance range."),
+        ("depth", "CF8", "thr_depth", "Effective Soil Depth", "High soil-depth sensitivity: effective depth must meet crop range."),
+        ("groundwater", "CF13", "thr_gw", "Groundwater Depth", "High groundwater-depth sensitivity: farm depth must match crop tolerance."),
+        ("slope", "CF23", "thr_slope", "Slope", "High slope sensitivity: farm slope must be within preferred range."),
+        ("calcium", "CF26", "thr_calcium", "Available Calcium", "High calcium sensitivity: farm Ca must be within crop demand range."),
+        ("bulk", "CF27", "thr_bulk", "Bulk Density", "High bulk-density sensitivity: farm bulk density must match crop tolerance range."),
+    ]
 
+    for sens_key, cf_code, rec_field, label, reason in demand_mappings:
+        if not _is_high_sensitivity(sens_detail.get(sens_key)):
+            continue
 
-def _rules_blackgram(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF14_Irrigation", "Irrigation"], ("Protective", "Assured"), "Podding-stage moisture required; pod shatter risk otherwise.")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 5, "Inoculation logistics degrade on higher slopes; poor nodulation risk.")
-    _check_rh_or_wetdays(result, cfs)
+        recommended = crop.get(rec_field)
+        if not recommended:
+            continue
 
+        _check_numeric_range(
+            result,
+            cfs,
+            parameter=label,
+            cf_code=cf_code,
+            recommended=recommended,
+            reason=reason,
+        )
 
-def _rules_greengram(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF11_Drainage", "Drainage"], ("Good", "Moderate"), "Avoid water stagnation; root rot risk.")
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 22, 32, "Narrow temperature window; sterility outside the range.", parameter_name="Temperature")
-
-
-def _rules_lentil(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_equals(result, cfs, ["CF18_FrostRisk", "FrostRisk"], "None", "Cool but frost-free flowering is required; pod abortion risk otherwise.")
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 25, "Rabi cool-season crop; heat sterility above 28 C.", parameter_name="Temperature")
-    _check_in(result, cfs, ["Water_Regime"], ("Rain-Fed-High", "Controlled-Irrigation"), "Moderate moisture required; drought increases wilt risk.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.5, "Rhizobium activity drops outside the range; poor nodulation follows.")
-
-
-def _rules_groundnut(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF7_Texture", "Texture"], ("SandyLoam", "Sandy"), "Peg development requires light texture; peg rot in clay soils.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Avoid waterlogging; collar rot can cause major loss.")
-    _check_in(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], ("High", "Very High"), "Pod setting suits drought-prone conditions; empty pod risk otherwise.")
-    _check_min(result, cfs, ["CF13_GW", "GWDepth"], 1.500001, "Shallow water table is unsuitable; disease pressure rises.", parameter_name="Groundwater Depth")
-
-
-def _rules_sesame(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 27, 38, "Capsule setting requires warm conditions; shriveled seeds outside the range.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Dry flowering condition required; capsule drop under poor drainage.")
-    _check_in(result, cfs, ["Water_Regime"], ("Rain-Fed-Low", "Supplemental"), "Dry regime required; phyllody virus risk otherwise.")
-
-
-def _rules_sunflower(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_bioindex_gt(result, cfs, ["CF20_BioIndex", "BioIndex"], "Medium", "Allelopathy management needs higher bioindex; soil sickness risk otherwise.")
-    _check_equals(result, cfs, ["CF14_Irrigation", "Irrigation"], "Protective", "Button-stage moisture required; head deformity otherwise.")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 5, "Wind protection is needed; lodging risk on higher slope.")
-
-
-def _rules_castor(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_in(result, cfs, ["CF11_Drainage", "Drainage"], ("Good", "Moderate"), "Deep taproot hates waterlogging; root rot risk.")
-    _check_in(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], ("Medium", "High"), "Semi-arid adaptation fits these conditions; irrigated settings can increase capsule shatter.")
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 25, 38, "Capsule set requires heat; poor seed fill below 25 C.", parameter_name="Temperature")
-    _check_min(result, cfs, ["CF8_Depth", "Depth", "Soil_Depth"], 60, "Taproot requires at least 60 cm soil depth; stunted growth otherwise.")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 10, "Tall stems need wind protection; mechanical damage risk on higher slope.")
-
-
-def _rules_chilli(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 24, 32, "Flowering and fruit set require this range; flower drop above 35 C.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["Water_Regime"], "Irrigated-Moderate", "Moderate irrigation helps avoid blossom-end issues; fruit cracking risk otherwise.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.0, "Nutrient uptake is best in this range; leaf curl risk rises outside it.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Wet conditions increase thrips and virus pressure; total failure risk.")
-
-
-def _rules_turmeric(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_max(result, cfs, ["TempC", "CF_TempC"], 32, "Rhizome bulking benefits from shade and cooler conditions; sunburn and yield loss otherwise.", parameter_name="Temperature")
-    _check_between(result, cfs, ["Rainfall_mm", "Rainfall"], 1500, 2500, "Rhizome expansion needs this rainfall band; dry rot risk outside it.")
-    _check_equals(result, cfs, ["CF7_Texture", "Texture"], "Loam", "Organic-matter-supporting loam is preferred; curcumin quality drops otherwise.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces rhizome rot and waterlogging loss.")
-
-
-def _rules_coriander(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 25, "Seed filling requires cool conditions; bolting increases in heat.", parameter_name="Temperature")
-    _check_max(result, cfs, ["CF21_DayLength", "DayLength"], 12, "Vegetative growth requires short day length; stem gall risk otherwise.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces powdery mildew and seed mould risk.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 8.0, "Oil content and yield are best in this pH range.")
-
-
-def _rules_fenugreek(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 18, 25, "Leaf and seed set are best in this range; pod shatter in heat.", parameter_name="Temperature")
-    _check_in(result, cfs, ["CF7_Texture", "Texture"], ("Loam", "SandyLoam"), "Preferred texture avoids root rot and supports nodulation.")
-    _check_equals(result, cfs, ["CF14_Irrigation", "Irrigation"], "Protective", "Protective irrigation reduces wilt during dry spells.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.0, "Rhizobium and protein outcomes are best in this range.")
-
-
-def _rules_ginger(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_max(result, cfs, ["TempC", "CF_TempC"], 32, "Shade-driven cooling is needed; leaf scorch above the limit.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage prevents rhizome rot.")
-    _check_equals(result, cfs, ["CF_Water", "Water_Regime", "Water"], "High", "High moisture regime is required; dry failure otherwise.", parameter_name="Water Regime")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 5, "Lower slope protects against erosion and washout.")
-
-
-def _rules_cumin(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 25, "Cool rabi temperature is required; bolting in heat.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Excellent", "Excellent drainage avoids mildew and seed loss.")
-    _check_equals(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], "High", "Dry capsule condition is preferred; humid fungal risk otherwise.")
-    _check_equals(result, cfs, ["CF7_Texture", "Texture"], "SandyLoam", "Light root zone required; waterlogging risk in clay.")
-
-
-def _rules_mustard(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 10, 25, "Cool siliqua set is needed; shattering increases in heat.", parameter_name="Temperature")
-    _check_min(result, cfs, ["CF13_GW", "GWDepth"], 2.000001, "Mustard needs dry feet; root rot risk with shallower groundwater.", parameter_name="Groundwater Depth")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces blight and rot risk.")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 3, "Lower slope helps prevent wind lodging and yield loss.")
-
-
-def _rules_curry_leaves(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_max(result, cfs, ["TempC", "CF_TempC"], 32, "Leaf quality declines with heat; burn risk above the limit.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF_Water", "Water_Regime", "Water"], "Moderate", "Moderate water regime helps oil retention and avoids wilt.", parameter_name="Water Regime")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.5, "Nutrient uptake is best in this pH band; chlorosis risk otherwise.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Perennial roots decline in poorly drained conditions.")
-
-
-def _rules_mint(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_equals(result, cfs, ["CF14_Irrigation", "Irrigation"], "Frequent", "Frequent irrigation supports oil quality; low menthol otherwise.")
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 18, 28, "Cooler conditions support volatiles; bolting risk in heat.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Moderate", "Moderate drainage supports airflow; defoliation risk otherwise.")
-    _check_equals(result, cfs, ["CF4_N", "Fertility", "N"], "High", "High nitrogen supports biomass; thin yield otherwise.", parameter_name="Available Nitrogen")
-
-
-def _rules_garlic(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 10, 25, "Cool rabi temperature supports bulb formation; bolting risk in heat.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Excellent", "Excellent drainage prevents clove rot and wet loss.")
-    _check_equals(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], "Low-Medium", "Moderate vernalization moisture is needed; bulbs stay small in dry conditions.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.0, "Nutrient uptake and pink-rot control are best in this pH range.")
-
-
-def _rules_fennel(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 28, "Seed set is best in this range; sterility in extremes.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces Fusarium wilt and seed drop risk.")
-    _check_equals(result, cfs, ["CF_Water", "Water_Regime", "Water"], "Rain-Fed-Medium", "Dry flowering regime is preferred; poor fill otherwise.", parameter_name="Water Regime")
-    _check_in(result, cfs, ["CF7_Texture", "Texture"], ("Loam", "SandyLoam", "Loam-SandyLoam"), "Taproot development is better in loam to sandy-loam textures.")
-
-
-def _rules_ajwain(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 18, 30, "Seed oil and thymol quality are best in this range.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Excellent", "Excellent drainage prevents root rot and seedling death.")
-    _check_equals(result, cfs, ["CF25_DroughtRisk", "DroughtRisk"], "Medium-High", "Dry-adapted crop; fungal risk under wetter conditions.")
-    _check_max(result, cfs, ["CF23_Slope", "Slope_pct", "Slope"], 5, "Lower slope helps preserve airflow and reduce rust risk.")
-
-
-def _rules_tomato(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 21, 30, "Fruit set requires this range; blossom drop outside it.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces wilt and rot loss.")
-    _check_equals(result, cfs, ["CF_Support", "Support"], "Stake", "Staking improves airflow and reduces gray mold risk.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 6.8, "This pH range reduces blossom-end problems and catfacing.")
-
-
-def _rules_brinjal(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 23, 32, "Fruit enlargement is best in this range; drop risk in heat.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF_Water", "Water_Regime", "Water"], "Regular", "Regular moisture supports fruit quality and reduces dry split.", parameter_name="Water Regime")
-    _check_equals(result, cfs, ["CF_Light", "Light", "Sun"], "Full", "Full light is required for best yield; shade causes leggy growth.", parameter_name="Light")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces shoot borer and root rot risk.")
-
-
-def _rules_okra(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 25, 35, "Tender pods require this range; pods turn tough under heat stress.", parameter_name="Temperature")
-    _check_equals(result, cfs, ["CF14_Irrigation", "Irrigation"], "Frequent", "Frequent irrigation supports pod quality; dry conditions increase fibrousness.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 6.0, 7.0, "This pH band reduces yellow-vein and mosaic risk.")
-    _check_equals(result, cfs, ["CF7_Texture", "Texture"], "SandyLoam", "Deep root growth is best in sandy-loam soils.")
-
-
-def _rules_onion(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 25, "Bulb swell is best in cool rabi temperatures; bolting risk in heat.", parameter_name="Temperature")
-    _check_min(result, cfs, ["CF21_DayLength", "DayLength"], 12.000001, "Bulbing needs day length above 12 hours.", parameter_name="Day Length")
-    _check_equals(result, cfs, ["CF4_N", "Fertility", "N"], "High", "High nitrogen supports size; low N increases neck rot risk.", parameter_name="Available Nitrogen")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Excellent", "Excellent drainage reduces purple blotch and smudge.")
-
-
-def _rules_potato(cfs: Dict[str, Any], result: RuleResult) -> None:
-    _check_between(result, cfs, ["TempC", "CF_TempC"], 15, 25, "Tuber set requires cool conditions; heat promotes sprouting.", parameter_name="Temperature")
-    _check_min(result, cfs, ["CF8_Depth", "Depth", "Soil_Depth"], 50, "Tuber development needs at least 50 cm soil depth.")
-    _check_equals(result, cfs, ["CF11_Drainage", "Drainage"], "Good", "Good drainage reduces late blight and total rot risk.")
-    _check_between(result, cfs, ["CF5_pH", "pH"], 5.5, 6.5, "This pH range limits scab and wart disease risk.")
-
-
-_CROP_ID_RULES: Dict[str, RuleFunction] = {
-    "CRP0001": _rules_paddy,
-    "CRP0002": _rules_maize,
-    "CRP0003": _rules_jowar,
-    "CRP0004": _rules_bajra,
-    "CRP0013": _rules_red_gram,
-    "CRP0014": _rules_blackgram,
-    "CRP0015": _rules_greengram,
-    "CRP0019": _rules_bengal_gram,
-    "CRP0020": _rules_lentil,
-    "CRP0023": _rules_groundnut,
-    "CRP0024": _rules_sunflower,
-    "CRP0025": _rules_castor,
-    "CRP0026": _rules_mustard,
-    "CRP0028": _rules_sesame,
-    "CRP0031": _rules_turmeric,
-    "CRP0032": _rules_ginger,
-    "CRP0033": _rules_garlic,
-    "CRP0034": _rules_chilli,
-    "CRP0040": _rules_fenugreek,
-    "CRP0044": _rules_coriander,
-    "CRP0045": _rules_curry_leaves,
-    "CRP0058": _rules_tomato,
-    "CRP0059": _rules_brinjal,
-    "CRP0060": _rules_chilli,
-    "CRP0061": _rules_potato,
-    "CRP0062": _rules_okra,
-    "CRP0063": _rules_onion,
-}
-
-_CROP_NAME_RULES: Dict[str, RuleFunction] = {
-    "cumin": _rules_cumin,
-    "mint": _rules_mint,
-    "fennel": _rules_fennel,
-    "ajwain": _rules_ajwain,
-    "ajwain (carom seeds)": _rules_ajwain,
-}
+    if _is_high_sensitivity(sens_detail.get("rain")):
+        rain_recommended = crop.get("hum")
+        if rain_recommended:
+            _check_rain_reliability(
+                result,
+                cfs,
+                recommended=rain_recommended,
+                reason="High rain-reliability sensitivity: farm rainfall variability must satisfy crop reliability requirement.",
+            )
 
 
 def check_critical_parameters(crop_id: str, cfs: Dict[str, Any]) -> RuleResult:
     """
-    Evaluate critical parameters for a crop against the supplied CF values.
-
-    Returns a structured payload containing:
-      - warnings: failed-check messages
-      - failed_checks: detailed failed checks
-      - passed_checks: detailed checks that passed
-      - all_passed / failed_count / passed_count
+    Generic evaluator:
+    - Identify parameters where crop sensitivity is High/Very High
+    - Check those parameters against farm context values using crop recommended ranges
     """
     if not crop_id:
         raise ValueError("crop_id must not be empty")
 
-    rule_fn = _CROP_ID_RULES.get(crop_id)
-    if rule_fn is None:
-        rule_fn = _CROP_NAME_RULES.get(crop_id.lower().strip())
+    crop_id = crop_id.strip().upper()
+    result = _empty_result(crop_id)
+    _evaluate_generic_rules(crop_id, cfs or {}, result)
 
-    if rule_fn is None:
-        raise ValueError(
-            f"'{crop_id}' has no critical parameters defined. "
-            f"Supported IDs: {sorted(_CROP_ID_RULES)} | "
-            f"Supported names: {sorted(_CROP_NAME_RULES)}"
+    # A crop may be valid, but no check can be produced when:
+    # - none of its sensitivities are High/Very High, or
+    # - high-sensitivity parameters don't yet have mapped rules, or
+    # - required CF inputs are missing in payload.
+    # This should not be treated as "no critical parameters defined".
+    if not result["checks"]:
+        result["warnings"].append(
+            "No high-sensitivity critical checks could be evaluated from current farm CF inputs."
         )
 
-    result = _empty_result(crop_id)
-    rule_fn(cfs, result)
     return _finalize_result(result)
 
 
@@ -675,9 +391,14 @@ if __name__ == "__main__":
     sample = check_critical_parameters(
         "CRP0001",
         {
-            "CF24_FloodRisk": "Low",
-            "CF11_Drainage": "Poor",
-            "Water_Regime": "Copious-Irrigation",
+            "CF5": {"val": 6.5, "slab": "Good"},
+            "CF16": {"val": 30, "slab": "Good"},
+            "CF9": {"val": 62, "slab": "Good"},
+            "CF17": {"val": 3, "slab": "Good"},
+            "CF19": {"val": 18, "slab": "Good"},
+            "CF18": {"val": "Low", "slab": "Low"},
+            "CF24": {"val": "Low", "slab": "Low"},
+            "CF25": {"val": "High", "slab": "High"},
         },
     )
     print(sample)

@@ -75,6 +75,24 @@ _ROW_PATTERNS: List[tuple[str, re.Pattern]] = [
     ("windTol",      re.compile(r"threshold level of wind speed", re.IGNORECASE)),
     # Salinity / EC threshold
     ("sal",          re.compile(r"threshold level of electrical conductivity", re.IGNORECASE)),
+    # Heat tolerance threshold
+    ("heatTol",      re.compile(r"number of consecutive heat days crop can tolerate", re.IGNORECASE)),
+    # Soil water-holding capacity threshold
+    ("whcRange",     re.compile(r"threshold level of water holding capacity", re.IGNORECASE)),
+    # Nutrient and soil threshold ranges (for generic step-6 checks)
+    ("thr_n",        re.compile(r"threshold level of nitrogen", re.IGNORECASE)),
+    ("thr_p",        re.compile(r"threshold level of phosphorus", re.IGNORECASE)),
+    ("thr_k",        re.compile(r"threshold level of potassium", re.IGNORECASE)),
+    ("thr_soc",      re.compile(r"threshold level of organic carbon", re.IGNORECASE)),
+    ("thr_ec",       re.compile(r"threshold level of electrical conductivity", re.IGNORECASE)),
+    ("thr_depth",    re.compile(r"effective rooting depth", re.IGNORECASE)),
+    ("thr_gw",       re.compile(r"threshold level of groundwater depth", re.IGNORECASE)),
+    ("thr_slope",    re.compile(r"preferred slope", re.IGNORECASE)),
+    ("thr_calcium",  re.compile(r"threshold level of calcium", re.IGNORECASE)),
+    ("thr_bulk",     re.compile(r"threshold level of bulk density", re.IGNORECASE)),
+    # Flood/Drought suitability
+    ("floodSuit",    re.compile(r"crop suitability to flood risk soils", re.IGNORECASE)),
+    ("droughtSuit",  re.compile(r"crop suitability to drought risk soils", re.IGNORECASE)),
     # Crop family
     ("family",       re.compile(r"crop family name", re.IGNORECASE)),
     # Major pests (raw string with PEST IDs)
@@ -158,6 +176,51 @@ def _match_row_key(param: str) -> Optional[str]:
         if pattern.search(param):
             return key
     return None
+
+
+_MONTH_NUMBERS = {
+    "jan": "1",
+    "feb": "2",
+    "mar": "3",
+    "apr": "4",
+    "may": "5",
+    "jun": "6",
+    "jul": "7",
+    "aug": "8",
+    "sep": "9",
+    "oct": "10",
+    "nov": "11",
+    "dec": "12",
+}
+
+
+def _normalize_threshold_value(key: str, value: str) -> str:
+    """
+    Normalize spreadsheet-export quirks in threshold cells.
+
+    Calcium threshold rows sometimes come through Excel-like date strings such as:
+    - 02-Apr -> 2-4
+    - 03-Jun -> 3-6
+    - Oct-20 -> 10-20
+    """
+    cleaned = _clean_value(value)
+    if key != "thr_calcium" or not cleaned:
+        return cleaned
+
+    match = re.fullmatch(r"([A-Za-z]{3})-(\d{1,2})|(\d{1,2})-([A-Za-z]{3})", cleaned)
+    if not match:
+        return cleaned
+
+    if match.group(1) and match.group(2):
+        left = _MONTH_NUMBERS.get(match.group(1).lower())
+        right = str(int(match.group(2)))
+    else:
+        left = str(int(match.group(3)))
+        right = _MONTH_NUMBERS.get(match.group(4).lower())
+
+    if not left or not right:
+        return cleaned
+    return f"{left}-{right}"
 
 
 # Ordered list of (internal_key, short_label) for all sensitivity parameters.
@@ -301,6 +364,7 @@ def get_crop_characteristics(crop_ids: List[str]) -> Dict[str, dict]:
             for cid, idx in col_map.items():
                 if key not in raw[cid]:  # first match wins (more specific patterns first)
                     val = _clean_value(row[idx]) if idx < len(row) else ""
+                    val = _normalize_threshold_value(key, val)
                     raw[cid][key] = val
 
         # Build structured output for each matched crop
@@ -322,6 +386,20 @@ def get_crop_characteristics(crop_ids: List[str]) -> Dict[str, dict]:
                 "shadeTol": 0,                       # not in current sheets
                 "windTol":  data.get("windTol", ""),
                 "sal":      data.get("sal", ""),
+                "heatTol":  data.get("heatTol", ""),
+                "whcRange": data.get("whcRange", ""),
+                "thr_n":    data.get("thr_n", ""),
+                "thr_p":    data.get("thr_p", ""),
+                "thr_k":    data.get("thr_k", ""),
+                "thr_soc":  data.get("thr_soc", ""),
+                "thr_ec":   data.get("thr_ec", ""),
+                "thr_depth": data.get("thr_depth", ""),
+                "thr_gw":   data.get("thr_gw", ""),
+                "thr_slope": data.get("thr_slope", ""),
+                "thr_calcium": data.get("thr_calcium", ""),
+                "thr_bulk": data.get("thr_bulk", ""),
+                "floodSuit": data.get("floodSuit", ""),
+                "droughtSuit": data.get("droughtSuit", ""),
                 "family":   data.get("family", ""),
                 "pests":    _parse_pest_string(data.get("pests_raw", ""), pest_map),
                 "frostSens": data.get("frostSens", ""),
@@ -335,6 +413,27 @@ def get_crop_characteristics(crop_ids: List[str]) -> Dict[str, dict]:
                     "airflow": data.get("sens_airflow", ""),
                     "subm":    data.get("sens_subm", ""),
                     "extreme": data.get("sens_extreme", ""),
+                },
+                "sens_detail": {
+                    "nitrogen": data.get("sens_nitrogen", ""),
+                    "phosphorus": data.get("sens_phosphorus", ""),
+                    "potassium": data.get("sens_potassium", ""),
+                    "organic": data.get("sens_organic", ""),
+                    "ec": data.get("sens_ec", ""),
+                    "texture": data.get("sens_texture", ""),
+                    "depth": data.get("sens_depth", ""),
+                    "whc": data.get("sens_whc", ""),
+                    "compaction": data.get("sens_compaction", ""),
+                    "drainage": data.get("sens_drainage", ""),
+                    "erosion": data.get("sens_erosion", ""),
+                    "groundwater": data.get("sens_groundwater", ""),
+                    "irrigation": data.get("sens_irrigation", ""),
+                    "rain": data.get("sens_rain", ""),
+                    "pest": data.get("sens_pest", ""),
+                    "earthworm": data.get("sens_earthworm", ""),
+                    "slope": data.get("sens_slope", ""),
+                    "calcium": data.get("sens_calcium", ""),
+                    "bulk": data.get("sens_bulk", ""),
                 },
             }
             remaining.discard(cid)
