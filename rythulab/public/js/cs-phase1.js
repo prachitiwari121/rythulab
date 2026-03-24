@@ -1,7 +1,8 @@
 var CS = {
     step:1, farmOpen:true,
     sel:[],
-    wc:null, an:null
+    wc:null, an:null,
+    s5Data:null, s5Loading:false
 };
 var CS_STEPS=[
     {n:1,name:"Feasibility screening"},{n:2,name:"Crop selection & area"},
@@ -446,9 +447,59 @@ function cs_s4(){
         '<button class="cs-btn pri" onclick="cs_runAnalysis()">Run full analysis →</button></div>';
 }
 
+/* ── Fetch Phase 1 Step 5 crop characteristics from backend ─── */
+function cs_fetchS5(){
+    if(CS.s5Loading) return;
+    CS.s5Loading = true;
+    var ids = CS.sel.map(function(s){ return s.id; });
+    fetch("/api/method/rythulab.api.get_phase1_crop_characteristics", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({crop_ids: ids})
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(msg.ok && msg.characteristics){
+            CS.s5Data = msg.characteristics;
+        }
+    })
+    .catch(function(err){
+        console.warn("Phase 1 Step 5 characteristics fetch failed:", err);
+    })
+    .finally(function(){
+        CS.s5Loading = false;
+        if(CS.step === 5) cs_renderStep(5);
+    });
+}
+
 /* ── STEP 5 — frozen first row ───────────────────────────────── */
 function cs_s5(){
-    var crops=cs_full();
+    if(!CS.s5Data && !CS.s5Loading) cs_fetchS5();
+
+    var charMap = CS.s5Data || {};
+    var crops = cs_full().map(function(c){
+        var ch = charMap[c.id] || {};
+        var baseSens = {ph:'',temp:'',water:'',heat:'',frost:'',airflow:'',subm:'',extreme:''};
+        return Object.assign(
+            {temp:'',pH_r:'',hum:'',rootD:'',rd:'',cSpread:'',cNature:'',gHabit:'',
+             crit:'',alelo:'',nFix:'',shadeTol:0,windTol:'',sal:'',family:'',
+             pests:[],frostSens:'',sens:baseSens},
+            c,
+            ch,
+            {sens: Object.assign({}, baseSens, c.sens||{}, ch.sens||{})}
+        );
+    });
+
+    if(!CS.s5Data && CS.s5Loading){
+        return cs_hd(5,"Crop characteristics",
+            "All agronomic characteristics for selected crops. Sensitivity levels — High / Very High: highly vulnerable (red), Medium: moderate risk (amber), Low: tolerant (green).")+
+            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">Loading crop characteristics from database…</div>'+
+            '<div class="cs-sf"><span class="cs-fn"></span>'+
+            '<button class="cs-btn sec" onclick="cs_goto(4)">← Back</button>'+
+            '<button class="cs-btn pri" onclick="cs_next()">Run feasibility check →</button></div>';
+    }
+
     function sv(v){
         if(!v||v==="-")return'<span style="color:#2a3a1a">—</span>';
         var hi=v==="High"||v==="Very High";

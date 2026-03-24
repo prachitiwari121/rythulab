@@ -759,6 +759,26 @@ def get_phase1_crops(**kwargs):
 
 
 @frappe.whitelist()
+def get_phase1_crop_characteristics():
+    """
+    Return agronomic characteristics for a list of crop IDs, shaped to match
+    the cs_s5 frontend field names exactly (temp, pH_r, hum, rootD, rd, h,
+    cSpread, cNature, gHabit, crit, alelo, nFix, shadeTol, windTol, sal,
+    family, pests, frostSens, res, sens.*).
+    """
+    from rythulab.phase_1_step_5 import get_crop_characteristics
+
+    payload = frappe.request.get_json(silent=True) or {}
+    crop_ids = payload.get("crop_ids") or []
+
+    if isinstance(crop_ids, str):
+        crop_ids = frappe.parse_json(crop_ids)
+
+    characteristics = get_crop_characteristics([str(c) for c in crop_ids if c])
+    return {"ok": True, "characteristics": characteristics}
+
+
+@frappe.whitelist()
 def get_phase1_farm_feasibility(selected_crops=None, farm_cfs=None, farm_context=None):
     from rythulab.phase_1_step_6 import check_critical_parameters
 
