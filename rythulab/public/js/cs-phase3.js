@@ -88,7 +88,9 @@ var CS3 = {
     recommendations: [],
     step2BackendRecs: [],
     step1Step2Data: null,
-    p3s12Loading: false
+    p3s12Loading: false,
+    step3Data: null,
+    p3s3Loading: false
 };
 
 /* ── Entry point ─────────────────────────────────────────────── */
@@ -145,6 +147,100 @@ function p3_collectAllSelectedCrops(){
     });
 
     return combined;
+}
+
+function p3_upsertRecommendations(entries){
+    (entries || []).forEach(function(entry){
+        if(!entry || !entry.crop || !entry.crop.id) return;
+
+        var existing = CS3.recommendations.find(function(item){
+            return item.crop && item.crop.id === entry.crop.id;
+        });
+
+        if(!existing){
+            CS3.recommendations.push(entry);
+            return;
+        }
+
+        existing.crop.name = existing.crop.name || entry.crop.name;
+        existing.crop.family = existing.crop.family || entry.crop.family;
+        existing.crop.group = existing.crop.group || entry.crop.group;
+        existing.crop.h = existing.crop.h || entry.crop.h;
+        existing.crop.rootD = existing.crop.rootD || entry.crop.rootD;
+        existing.crop.desc = existing.crop.desc || entry.crop.desc;
+        existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
+        existing.crop.cfImprove = Array.from(new Set((existing.crop.cfImprove || []).concat(entry.crop.cfImprove || [])));
+        (entry.reasons || []).forEach(function(reason){
+            if(existing.reasons.indexOf(reason) < 0){
+                existing.reasons.push(reason);
+            }
+        });
+    });
+}
+
+function cs_fetchPhase3Step3(){
+    if(CS3.p3s3Loading) return;
+    CS3.p3s3Loading = true;
+
+    fetch("/api/method/rythulab.api.get_phase3_mf_biodiversity_crops", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            selected_crops: p3_collectAllSelectedCrops(),
+            mf_codes: ["MF18","MF19","MF20","MF24","MF29"]
+        })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+        var msg = res && res.message ? res.message : {};
+        if(!msg.ok) return;
+
+        CS3.step3Data = msg;
+
+        function isFunctionalGroupReason(reason){
+            return (reason || "").indexOf("functional group") >= 0;
+        }
+
+        function isWeakCfReason(reason){
+            return (reason || "").indexOf("weak CF") >= 0;
+        }
+
+        var preserved = (CS3.recommendations || []).map(function(entry){
+            if(!entry || !entry.crop || !Array.isArray(entry.reasons)) return null;
+
+            var keptReasons = entry.reasons.filter(function(reason){
+                return isFunctionalGroupReason(reason) || isWeakCfReason(reason);
+            });
+
+            if(!keptReasons.length) return null;
+
+            return {
+                crop: {
+                    id: entry.crop.id,
+                    name: entry.crop.name,
+                    family: entry.crop.family,
+                    group: entry.crop.group,
+                    h: entry.crop.h,
+                    rootD: entry.crop.rootD,
+                    mfp: Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
+                    cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
+                    desc: entry.crop.desc
+                },
+                reasons: keptReasons
+            };
+        }).filter(Boolean);
+
+        CS3.recommendations = preserved;
+        p3_upsertRecommendations(Array.isArray(msg.recommendations) ? msg.recommendations : []);
+
+        if(CS3.step === 3) p3_renderStep(3);
+    })
+    .catch(function(err){
+        console.warn("Phase 3 Step 3 backend fetch failed:", err);
+    })
+    .finally(function(){
+        CS3.p3s3Loading = false;
+    });
 }
 
 function cs_fetchPhase3Step1Step2(){
@@ -509,21 +605,32 @@ function p3_s2(){
 
 /* ── Step 3: MF Biodiversity Crops ──────────────────────────── */
 function p3_s3(){
+    if(!CS3.step3Data && !CS3.p3s3Loading){
+        cs_fetchPhase3Step3();
+    }
+
+    if(CS3.p3s3Loading && !CS3.step3Data){
+        return p3_hd(3,"MF biodiversity crops",
+            "Loading biodiversity MF-producing crops from backend...")+
+            '<div class="cs-empty">Loading backend recommendations for MF18, MF19, MF20, MF24 and MF29...</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching biodiversity MF recommendations.</span>'+
+            '<button class="cs-btn sec" onclick="p3_goto(2)">← Back</button>'+
+            '<button class="cs-btn pri" disabled>CF improvement crops →</button></div>';
+    }
+
     var recs=CS3.recommendations.filter(function(r){
         return r.reasons.some(function(x){return x.indexOf("biodiversity")>=0||x.indexOf("Pollinator")>=0||x.indexOf("Phosphorus")>=0||x.indexOf("leaf litter")>=0;});
     });
-    var mfList=[
-        {mf:"pollinator_habitat",  label:"Pollinator support"},
-        {mf:"beneficial_insects",  label:"Beneficial insect habitat"},
-        {mf:"p_cycling",           label:"Phosphorus (P) cycling"},
-        {mf:"ground_cover",        label:"Ground cover / leaf litter"},
-        {mf:"nitrogen_fixation",   label:"Soil nutrient cycling (N fixation)"},
-        {mf:"biomass_mulch",       label:"Biomass mulch"}
-    ];
-    var mfCoverage=mfList.map(function(m){
-        var hasMF=CS3.recommendations.some(function(r){return(r.crop.mfp||[]).indexOf(m.mf)>=0&&CS3.selected.indexOf(r.crop.id)>=0;});
-        return'<div class="cs-fcr"><span class="cs-fcrl">'+m.label+'</span>'+
-            '<span style="font-size:11px;font-weight:700;color:'+(hasMF?"var(--csg600)":"var(--csr600)")+'">'+( hasMF?"Covered ✓":"Not covered ✗")+'</span></div>';
+    var mfCoverageData = (CS3.step3Data && Array.isArray(CS3.step3Data.mf_coverage))
+        ? CS3.step3Data.mf_coverage : [];
+    var mfCoverage = mfCoverageData.map(function(m){
+        var label = m.mf_label || m.mf_code || "";
+        var coveredBy = Array.isArray(m.covered_by) && m.covered_by.length
+            ? " (by " + m.covered_by.join(", ") + ")" : "";
+        return '<div class="cs-fcr"><span class="cs-fcrl">'+label+'</span>'+
+            '<span style="font-size:11px;font-weight:700;color:'+(m.covered?"var(--csg600)":"var(--csr600)")+'">'+
+            (m.covered?"Covered ✓"+coveredBy:"Not covered ✗")+
+            '</span></div>';
     }).join("");
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">All key biodiversity MFs are covered by current selection.</div>';

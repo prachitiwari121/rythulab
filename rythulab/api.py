@@ -1367,3 +1367,36 @@ def get_phase3_biodiversity_gap_analysis(selected_crops=None):
         "coverage": result.get("coverage", {}),
         "recommended_crops": result.get("recommended_crops", []),
     }
+
+
+@frappe.whitelist()
+def get_phase3_mf_biodiversity_crops(selected_crops=None, mf_codes=None):
+    from rythulab.phase_3_step_3 import build_frontend_payload
+
+    payload = frappe.request.get_json(silent=True) or {}
+    selected_crops = selected_crops or payload.get("selected_crops") or payload.get("crops") or []
+    mf_codes = mf_codes or payload.get("mf_codes") or []
+
+    if isinstance(selected_crops, str):
+        selected_crops = frappe.parse_json(selected_crops)
+    if isinstance(mf_codes, str):
+        mf_codes = frappe.parse_json(mf_codes)
+
+    crop_ids = []
+    for crop in selected_crops or []:
+        if isinstance(crop, dict):
+            crop_id = (crop.get("cropid") or crop.get("id") or "").strip().upper()
+        else:
+            crop_id = str(crop or "").strip().upper()
+        if crop_id:
+            crop_ids.append(crop_id)
+
+    result = build_frontend_payload(mf_codes=mf_codes or None, selected_crop_ids=crop_ids)
+
+    return {
+        "ok": True,
+        "selected_crop_ids": crop_ids,
+        "target_mfs": result.get("target_mfs", []),
+        "mf_coverage": result.get("mf_coverage", []),
+        "recommendations": result.get("recommendations", []),
+    }
