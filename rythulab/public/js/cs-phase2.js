@@ -531,6 +531,47 @@ function cs_fetchPhase2Step7(){
         var msg = res && res.message ? res.message : {};
         var apiTrapList = Array.isArray(msg.trapList) ? msg.trapList : [];
         var apiAssociateList = Array.isArray(msg.associateList) ? msg.associateList : [];
+        var backendTrapDisplayList = [];
+
+        function addToBackendTrapDisplay(entry, defaults){
+            if(!entry || !entry.crop) return;
+            var normalized = {
+                crop: {
+                    id: entry.crop.id,
+                    name: entry.crop.name,
+                    mfp: Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
+                    type: (entry.crop.type || (defaults && defaults.type) || "Trap"),
+                    family: entry.crop.family || "",
+                    desc: entry.crop.desc || "",
+                    border: !!entry.crop.border,
+                    trap: entry.crop.trap !== false
+                },
+                reasons: Array.isArray(entry.reasons) ? entry.reasons.slice() : []
+            };
+
+            if(defaults){
+                if(defaults.type) normalized.crop.type = defaults.type;
+                if(typeof defaults.border === "boolean") normalized.crop.border = defaults.border;
+                if(typeof defaults.trap === "boolean") normalized.crop.trap = defaults.trap;
+            }
+
+            var existing = backendTrapDisplayList.find(function(item){
+                return item.crop && item.crop.id === normalized.crop.id;
+            });
+
+            if(!existing){
+                backendTrapDisplayList.push(normalized);
+                return normalized;
+            }
+
+            existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(normalized.crop.mfp || [])));
+            (normalized.reasons || []).forEach(function(reason){
+                if(existing.reasons.indexOf(reason) < 0){
+                    existing.reasons.push(reason);
+                }
+            });
+            return existing;
+        }
 
         CS2.step7Data = {
             selected_crop_ids: Array.isArray(msg.selected_crop_ids) ? msg.selected_crop_ids : [],
@@ -539,16 +580,18 @@ function cs_fetchPhase2Step7(){
             recommended_trap_crops: Array.isArray(msg.recommended_trap_crops) ? msg.recommended_trap_crops : [],
             recommended_companion_crops: Array.isArray(msg.recommended_companion_crops) ? msg.recommended_companion_crops : [],
             trapList: apiTrapList,
-            associateList: apiAssociateList
+            associateList: apiAssociateList,
+            displayTrapList: []
         };
 
         if(apiTrapList.length){
             apiTrapList.forEach(function(entry){
-                p2_mergeRecommendation(CS2.trapList, entry);
+                var merged = p2_mergeRecommendation(CS2.trapList, entry);
+                addToBackendTrapDisplay(merged || entry, {type:"Trap", border:true, trap:true});
             });
         } else {
             (CS2.step7Data.recommended_trap_crops || []).forEach(function(rec){
-                p2_mergeRecommendation(CS2.trapList, {
+                var mergedTrap = p2_mergeRecommendation(CS2.trapList, {
                     crop: {
                         id: rec.crop_id,
                         name: rec.crop_name,
@@ -561,30 +604,48 @@ function cs_fetchPhase2Step7(){
                     },
                     reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                 });
+                addToBackendTrapDisplay(mergedTrap, {type:"Trap", border:true, trap:true});
             });
         }
 
         if(apiAssociateList.length){
             apiAssociateList.forEach(function(entry){
-                p2_mergeRecommendation(CS2.associateList, entry);
+                var trapEntry = {
+                    crop: {
+                        id: entry.crop && entry.crop.id,
+                        name: entry.crop && entry.crop.name,
+                        mfp: entry.crop && Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
+                        type: "Trap",
+                        family: entry.crop && entry.crop.family ? entry.crop.family : "",
+                        desc: entry.crop && entry.crop.desc ? entry.crop.desc : "",
+                        border: true,
+                        trap: true
+                    },
+                    reasons: Array.isArray(entry.reasons) ? entry.reasons.slice() : []
+                };
+                var mergedCompanion = p2_mergeRecommendation(CS2.trapList, trapEntry);
+                addToBackendTrapDisplay(mergedCompanion || trapEntry, {type:"Trap", border:true, trap:true});
             });
         } else {
             (CS2.step7Data.recommended_companion_crops || []).forEach(function(rec){
-                p2_mergeRecommendation(CS2.associateList, {
+                var mergedCompanionFallback = p2_mergeRecommendation(CS2.trapList, {
                     crop: {
                         id: rec.crop_id,
                         name: rec.crop_name,
                         mfp: Array.isArray(rec.produces_mfs) ? rec.produces_mfs.slice() : [],
-                        type: "Associate",
+                        type: "Trap",
                         family: "",
                         desc: "",
-                        border: false,
-                        trap: false
+                        border: true,
+                        trap: true
                     },
                     reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                 });
+                addToBackendTrapDisplay(mergedCompanionFallback, {type:"Trap", border:true, trap:true});
             });
         }
+
+        CS2.step7Data.displayTrapList = backendTrapDisplayList;
     })
     .catch(function(err){
         console.warn("Phase 2 Step 7 backend fetch failed:", err);
@@ -1293,36 +1354,14 @@ function p2_s7(){
     }
 
     var trapSuggestions = [];
-    if(CS2.step7Data && Array.isArray(CS2.step7Data.trapList) && CS2.step7Data.trapList.length){
-        trapSuggestions = CS2.step7Data.trapList.map(function(entry){
+    if(CS2.step7Data && Array.isArray(CS2.step7Data.displayTrapList) && CS2.step7Data.displayTrapList.length){
+        trapSuggestions = CS2.step7Data.displayTrapList.map(function(entry){
             return CS2.trapList.find(function(item){
                 return item.crop && entry.crop && item.crop.id === entry.crop.id;
             }) || entry;
         }).filter(Boolean);
-    } else if(CS2.step7Data && Array.isArray(CS2.step7Data.recommended_trap_crops)){
-        trapSuggestions = CS2.step7Data.recommended_trap_crops.map(function(rec){
-            return CS2.trapList.find(function(item){
-                return item.crop && item.crop.id === rec.crop_id;
-            });
-        }).filter(Boolean);
-    }
-    if(!trapSuggestions.length){
+    } else if(!CS2.step7Data) {
         trapSuggestions = CS2.trapList.slice();
-    }
-
-    var companionSuggestions = [];
-    if(CS2.step7Data && Array.isArray(CS2.step7Data.associateList) && CS2.step7Data.associateList.length){
-        companionSuggestions = CS2.step7Data.associateList.map(function(entry){
-            return CS2.associateList.find(function(item){
-                return item.crop && entry.crop && item.crop.id === entry.crop.id;
-            }) || entry;
-        }).filter(Boolean);
-    } else if(CS2.step7Data && Array.isArray(CS2.step7Data.recommended_companion_crops)){
-        companionSuggestions = CS2.step7Data.recommended_companion_crops.map(function(rec){
-            return CS2.associateList.find(function(item){
-                return item.crop && item.crop.id === rec.crop_id;
-            });
-        }).filter(Boolean);
     }
 
     var analyzedPests = 0;
@@ -1338,25 +1377,16 @@ function p2_s7(){
         ? trapSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedTrap,"trap");}).join("")
         : '<div class="cs-empty">No trap crops identified for the current main crop pest profile.</div>';
 
-    var companionHtml = CS2.p2s7Loading && !CS2.step7Data
-        ? ''
-        : companionSuggestions.length
-        ? '<div style="font-size:12px;font-weight:700;color:#2a3a1a;margin:14px 0 8px">Companion crops that produce pest-mitigating MFs:</div>'+
-            companionSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join("")
-        : '<div class="cs-empty">No additional pest-mitigating companion crops identified from high-severity pests.</div>';
-
     return p2_hd(7,"Trap crops",
-        "Trap crops lure key pests away from the main field. This step also surfaces companion crops that produce microfeatures known to reduce risk from high-severity pests of the selected crops.")+
+        "Trap crops lure key pests away from the main field. This list also includes crops that produce pest-mitigating microfeatures for high-severity pests, shown together with trap-crop recommendations and differentiated by their reasons.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Backend pest analysis</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Selected main crops</span><span class="cs-fcrv">'+((CS2.step7Data && CS2.step7Data.selected_crop_ids) ? CS2.step7Data.selected_crop_ids.length : (CS2.mainCrops || []).length)+'</span></div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">High-severity pests analyzed</span><span class="cs-fcrv">'+analyzedPests+'</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Trap crop recommendations</span><span class="cs-fcrv">'+trapSuggestions.length+'</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Companion crop recommendations</span><span class="cs-fcrv">'+companionSuggestions.length+'</span></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl">Combined trap-step recommendations</span><span class="cs-fcrv">'+trapSuggestions.length+'</span></div>'+
         '</div>'+
         trapHtml+
-        companionHtml+
-        '<div class="cs-sf"><span class="cs-fn">'+trapSuggestions.length+' trap crop(s) and '+companionSuggestions.length+' companion crop(s) identified.</span>'+
+        '<div class="cs-sf"><span class="cs-fn">'+trapSuggestions.length+' crop(s) identified for trap and pest-mitigation support.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(6)">← Back</button>'+
         '<button class="cs-btn pri" onclick="p2_next()">Review & confirm →</button></div>';
 }
