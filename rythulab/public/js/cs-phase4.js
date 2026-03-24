@@ -50,7 +50,7 @@ function p4_build(){
 
     return'<div class="cs-sc">'+
         '<div class="cs-bdg"><span class="cs-bdg-n">Phase 4</span><span class="cs-bdg-t">System evaluation & layout transfer</span></div>'+
-        '<div class="cs-ttl">System evaluation scores</div><hr class="cs-hr">'+
+        '<div class="cs-ttl">System evaluation scores</div>'+'<div class="cs-desc">Summarizes how well the crop system performs in terms of feasibility, resource use, and ecological balance.</div>'+'<hr class="cs-hr">'+
         '<div class="cs-scards" style="grid-template-columns:repeat(5,1fr)">'+
         '<div class="cs-sc2"><div class="cs-sc2-n '+(mc.length>0?"sn-g":"sn-r")+'">'+mc.length+'</div><div class="cs-sc2-l">main crops</div></div>'+
         '<div class="cs-sc2"><div class="cs-sc2-n sn-g">'+assocCount+'</div><div class="cs-sc2-l">associate crops</div></div>'+

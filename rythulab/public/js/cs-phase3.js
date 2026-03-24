@@ -551,7 +551,7 @@ function p3_s1(){
     var famCount=Object.keys(g.families||{}).length;
     var totalGaps=(g.missingGroups.length+g.missingLayers.length+g.missingRoots.length+familyMissing.length);
     return p3_hd(1,"Biodiversity gap analysis",
-        "Checking the current crop system (main crops + associate crops from Phase 2) for gaps in functional group diversity, crop family diversity, canopy layers, and root depths.")+
+        "Evaluates crop diversity across functions, families, and growth layers and suggests suitable crops to enhance it.")+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
         '<div class="cs-fcrd"><div class="cs-fcht">Functional groups</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Group</th><th>Status</th></tr></thead><tbody>'+groupRows+'</tbody></table>'+
@@ -598,7 +598,7 @@ function p3_s2(){
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">All functional groups are already covered by your current crop system. ✓</div>';
     return p3_hd(2,"Functional group coverage",
-        "Ensuring at least one species is represented from each functional group. Functional-group labels come from backend metadata. Gaps identified in Step 1 are filled here.")+
+        "Ensuring at least one species is represented from each functional group.")+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:8px">Functional groups in current metadata: '+groupLabels.join(", ")+'</div>'+
         (g.missingGroups.length?
             '<div class="cs-vcrd cs-vc-warn"><div class="cs-vci cs-vci-warn">!</div><div>'+
@@ -643,7 +643,7 @@ function p3_s3(){
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">All key biodiversity MFs are covered by current selection.</div>';
     return p3_hd(3,"MF biodiversity crops",
-        "Adding crops that produce key microfeatures: pollinator support, beneficial insect habitat, soil nutrient cycling, phosphorus cycling, ground cover / leaf litter.")+
+        "Suggests crops that improve ecological balance, beneficial insects, and soil life.")+
         '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Biodiversity MF coverage in current selection</div>'+mfCoverage+'</div>'+
         html+
         '<div class="cs-sf"><span class="cs-fn">'+recs.length+' crop(s) suggested.</span>'+
@@ -686,7 +686,7 @@ function p3_s4(){
     var html=recs.length?recs.map(p3_cropCard).join(""):
         '<div class="cs-empty">No additional CF-improvement crops found for current farm profile.</div>';
     return p3_hd(4,"CF improvement crops",
-        "Adding crops with microfeatures that support or improve weak or very weak farm context features.")+
+        "Suggests crops that help improve weak soil, water, or biological conditions on the farm.")+
         '<div class="cs-fcrd" style="margin-bottom:10px"><div class="cs-fcht">Weak / Very Weak CFs and which selected crops help them</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Context Feature</th><th>Status</th><th>Helped by</th></tr></thead><tbody>'+cfRows+'</tbody></table></div>'+
         html+

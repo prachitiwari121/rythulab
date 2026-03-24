@@ -92,7 +92,7 @@ function cs_phase1_init(){
 function _cs_farmBasic(){
     var F=CS_FARM;
     var items=[
-        {l:"Farm Area",          v:F.area+" acres"},
+        {l:"Farm Area",          v:F.area+" ha"},
         {l:"Agro-climatic Zone", v:F.zone},
         {l:"Season",             v:F.season},
         {l:"Soil Type",          v:F.soil},
@@ -718,8 +718,8 @@ function cs_s6(){
     if(!CS.an.s6&&!CS.s6Loading) cs_fetchS6Analysis();
 
     if(CS.s6Loading){
-        return cs_hd(6,"Farm feasibility check",
-            "Checking if the critical parameters required by each of the main crops are met by the farm, flagging severe warnings if it is not met.")+
+        return cs_hd(6,"Feasibility check",
+            "(Can the crop grow here?) : Assesses whether key conditions like soil, water, and climate match the crop’s growth needs.")+
             '<div class="cs-empty">Running farm feasibility check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending all farm CFs to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(5)">← Back</button></div>';
@@ -742,8 +742,8 @@ function cs_s6(){
             '<div style="font-size:11px;color:var(--csg600);margin-top:5px">All critical parameters met — crop viable for this farm.</div>';
         return'<div class="cs-cicd"><div class="cs-cicn">'+d.crop.name+'</div><div class="cs-chktags">'+ck+'</div>'+det+'</div>';
     }).join("");
-    return cs_hd(6,"Farm feasibility check",
-        "Checking if the critical parameters required by each of the main crops are met by the farm, flagging severe warnings if it is not met.")+
+    return cs_hd(6,"Feasibility check",
+        "(Can the crop grow here?) : Assesses whether key conditions like soil, water, and climate match the crop’s growth needs.")+
         '<div class="cs-cig">'+(cards||'<div class="cs-empty">No farm feasibility response returned.</div>')+'</div>'+
         '<div class="cs-sf"><span class="cs-fn">'+(anyF?"Severe warnings detected — review before proceeding.":"All crops cleared the farm feasibility check.")+'</span>'+
         '<button class="cs-btn sec" onclick="cs_goto(5)">← Back</button>'+
@@ -785,8 +785,8 @@ function cs_s7(){
     if(!Array.isArray(CS.an.s7)&&!CS.s7Loading) cs_fetchS7Analysis();
 
     if(CS.s7Loading){
-        return cs_hd(7,"Resource pressure check",
-            "If crop resource demand is high and the corresponding farm context feature is ≤ Moderate, show a resource pressure warning.")+
+        return cs_hd(7,"Resource pressure check/Sustainability Check",
+            "(Will the crop stress farm resources?): Evaluates if growing this crop will place high demand on limited soil nutrients or water resources.")+
             '<div class="cs-empty">Running resource pressure check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending farm context features to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(6)">← Back</button></div>';
@@ -800,8 +800,8 @@ function cs_s7(){
             '<div class="cs-wb">'+w.m+'</div></div>';
         }).join("")+'</div>':
         '<div class="cs-empty">No resource pressure warnings detected.</div>';
-    return cs_hd(7,"Resource pressure check",
-        "If crop resource demand is high and the corresponding farm context feature is ≤ Moderate, show a resource pressure warning.")+
+    return cs_hd(7,"Resource Pressure Check/Sustainability Check",
+        "(Will the crop stress farm resources?): Evaluates if growing this crop will place high demand on limited soil nutrients or water resources")+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+ws.length+' warning(s) found.</span>'+
         '<button class="cs-btn sec" onclick="cs_goto(6)">← Back</button>'+
@@ -843,9 +843,9 @@ function cs_s8(){
     if(!Array.isArray(CS.an.s8)&&!CS.s8Loading) cs_fetchS8Analysis();
 
     if(CS.s8Loading){
-        return cs_hd(8,"Ecosystem impact check",
-            'Checks if the crop Micro Features (MF) deteriorates any Context Feature (CF) of the farm that is already weak, medium weak → Note the warning with reason.<br><br>'+
-            'Example: Crop X produces MF "a" and MF "a" -vely affects CF b (value = Medium Low / low). Hence revise.')+
+        return cs_hd(8,"Impact check",
+            '(Will crop ecosystem effects worsen CF?)“Assesses whether the crop may worsen existing weak soil, water, or biological conditions on the farm')+
+
             '<div class="cs-empty">Running ecosystem impact check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending farm context features to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(7)">← Back</button></div>';
@@ -859,9 +859,8 @@ function cs_s8(){
             '<div class="cs-wb">'+w.m+'</div></div>';
         }).join("")+'</div>':
         '<div class="cs-empty">No ecosystem impact warnings — none of the selected crops deteriorate weak context features of this farm.</div>';
-    return cs_hd(8,"Ecosystem impact check",
-        'Checks if the crop Micro Features (MF) deteriorates any Context Feature (CF) of the farm that is already weak, medium weak → Note the warning with reason.<br><br>'+
-        'Example: Crop X produces MF "a" and MF "a" -vely affects CF b (value = Medium Low / low). Hence revise.')+
+    return cs_hd(8,"Impact check",
+        '(Will crop ecosystem effects worsen CF?)“Assesses whether the crop may worsen existing weak soil, water, or biological conditions on the farm')+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+ws.length+' warning(s) found.</span>'+
         '<button class="cs-btn sec" onclick="cs_goto(7)">← Back</button>'+
@@ -918,9 +917,7 @@ function cs_s9(){
 
     if(CS.s9Loading){
         return cs_hd(9,"Intercrop competition check",
-            'Checks for Intercrop competition between structural traits, resource demand, Pest-Host relationships.<br>'+
-            'Example: Root, Canopy, Height, Pest overlap → note the warning with reason.<br>'+
-            'Crop X and Crop Y chosen have __________ competition — revise.')+
+            'Identifies potential conflicts between selected crops due to competition for light, nutrients, water, or shared pests')+
             '<div class="cs-empty">Running intercrop competition check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending selected crops to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(8)">← Back</button></div>';
@@ -935,9 +932,7 @@ function cs_s9(){
         }).join("")+'</div>':
         '<div class="cs-empty">No intercrop competition conflicts detected.</div>';
     return cs_hd(9,"Intercrop competition check",
-        'Checks for Intercrop competition between structural traits, resource demand, Pest-Host relationships.<br>'+
-        'Example: Root, Canopy, Height, Pest overlap → note the warning with reason.<br>'+
-        'Crop X and Crop Y chosen have __________ competition — revise.')+
+       'Identifies potential conflicts between selected crops due to competition for light, nutrients, water, or shared pests')+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+cf.length+' conflict(s) found.</span>'+
         (cf.length?'<button class="cs-btn rev" onclick="cs_goto(2)">← Revise selection</button>':"")+
@@ -995,8 +990,7 @@ function cs_s10(){
 
     if(CS.s10Loading){
         return cs_hd(10,"Microfeature conflict check",
-            'Checks for other conflicts that may arise between the Microfeatures of the main crops.<br><br>'+
-            '<strong>Rule:</strong> Required MF ∩ Suppress MF not empty → flag conflicts between Crop X (required MF) and Crop Y (suppress the same MF). Note the warning with reason.')+
+            'Checks for other conflicts that may arise between the Microfeatures of the main crops.<br><br>')+
             '<div class="cs-empty">Running microfeature conflict check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending selected crops to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(9)">← Back</button></div>';

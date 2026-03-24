@@ -867,7 +867,7 @@ function p2_s1(){
     }
 
     return p2_hd(1,"Missing MF analysis",
-        "Computing Missing MF = Required MF (main crops) − Available MF (main crops). If not empty, associate crops that produce each missing MF are listed below, grouped by microfeature.")+
+        "Identifies important ecological functions required that are not yet supported by the selected crops and recommends additional crops that can provide missing benefits like nutrient support, pest control, or soil improvement")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Main crop MF summary</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">MFs produced by main crops</span><span style="display:flex;flex-wrap:wrap;gap:3px;justify-content:flex-end">'+availHtml+'</span></div>'+
@@ -899,7 +899,7 @@ function p2_s2(){
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No additional cross-compatibility recommendations found — main crops already satisfy each other\'s MF requirements.</div>';
     return p2_hd(2,"MF cross-compatibility check",
-        "Checking if any produced MFs of main crops can cater to required MFs of other crops in the feasible list. If not, associate crops are suggested to fill the gap with no other conflicts.")+
+        "Recommends additional crops that can make use of ecosystem benefits provided by the main crops, such as shade or nutrient support.")+
         html+
         '<div class="cs-sf"><span class="cs-fn">'+suggestions.length+' crop(s) suggested.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(1)">← Back</button>'+
@@ -1004,7 +1004,7 @@ function p2_s3(){
         '<div class="cs-empty">No disease-specific associate crops found for current main crop selection.</div>';
 
     return p2_hd(3,"Main crop Disease risk",
-        "Listing disease risks (fungal, bacterial, viral) for selected main crops. Associate crops that produce microfeatures which mitigate these disease risks are recommended below.")+
+        "Suggests crops that mitigate disease risks for the selected main crops.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Main crop disease risks</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Crop</th><th>Key diseases</th></tr></thead><tbody>'+diseaseRows+'</tbody></table>'+
@@ -1088,7 +1088,7 @@ function p2_s4(){
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No CF-specific associate crop recommendations for current farm profile.</div>';
     return p2_hd(4,"Farm context features",
-        "Checking for vulnerable context features of the farm (poor/moderate values) and crops that produce MFs which improve these context features via the MF-CF interaction table.")+
+        "Adds crops that help improve weak soil, water, or biological conditions on the farm.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Weak / Very Weak CFs that need support</div>'+
         '<table class="cs-dtbl"><thead><tr><th>Context Feature</th><th>Current Status</th><th>MFs that improve it</th></tr></thead><tbody>'+cfRows+'</tbody></table>'+
@@ -1157,7 +1157,7 @@ function p2_s5(){
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join(""):
         '<div class="cs-empty">No wind-specific border crops needed — farm wind protection CF is adequate.</div>';
     return p2_hd(5,"Border crop (wind barrier)",
-        "If the farm is at risk for high wind exposure (CF Wind Protection is weak/moderate), crops that produce wind break MF are recommended as border crops to act as wind barriers.")+
+        "Recommends crops for field borders for reduced wind exposure and pest trapping to protect the main crops")+
         '<div class="cs-vcrd '+(windWeak?"cs-vc-warn":"cs-vc-ok")+'" style="margin-bottom:10px">'+
         '<div class="cs-vci '+(windWeak?"cs-vci-warn":"cs-vci-ok")+'">'+(windWeak?"!":"✓")+'</div>'+
         '<div><div class="cs-vttl">Wind Protection CF: '+(wpCF?wpCF.slab:"N/A")+'</div>'+
@@ -1251,7 +1251,7 @@ function p2_s6(){
         : '<div class="cs-empty">No pest barrier / pollinator border crops found.</div>';
 
     return p2_hd(6,"Border crop (Pest barrier Pollination promoter)",
-        "Based on the farm's general pest vulnerability (Pest Pressure CF) and region, crops that act as pest barriers and promote pollination are recommended as border crops.")+
+        "Recommends crops that are Border trap crops for generic pests of the region to protect the main crops")+
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
         '<div class="cs-fcrd"><div class="cs-fcht">Pest Pressure CF</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Status</span><span style="font-weight:700;color:'+(ppCF&&ppCF.s<=2?"var(--csr600)":"var(--csa600)")+'">'+( ppCF?ppCF.slab:"N/A")+'</span></div>'+
@@ -1298,7 +1298,7 @@ function p2_s7(){
         : '<div class="cs-empty">No trap crops identified for the current main crop pest profile.</div>';
 
     return p2_hd(7,"Trap crops",
-        "Trap crops lure key pests away from the main field. This list also includes crops that produce pest-mitigating microfeatures for high-severity pests, shown together with trap-crop recommendations and differentiated by their reasons.")+
+        "Suggests trap crops to manage major pests and additional crops that help suppress or mitigate pest occurrence.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Backend pest analysis</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Selected main crops</span><span class="cs-fcrv">'+((CS2.step7Data && CS2.step7Data.selected_crop_ids) ? CS2.step7Data.selected_crop_ids.length : (CS2.mainCrops || []).length)+'</span></div>'+
