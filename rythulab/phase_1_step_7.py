@@ -24,7 +24,6 @@ except ModuleNotFoundError:
 CROP_DETAILS_DIR = Path(__file__).resolve().parent / "sheets" / "crop_details"
 LIST_FILE = CROP_DETAILS_DIR / "0.List of All crops - Sheet1.csv"
 
-SENSITIVITY_RE = re.compile(r"^\s*sensit(?:ive|ivity)\s+to\s+", re.IGNORECASE)
 DEMAND_RE = re.compile(r"demand\s+class", re.IGNORECASE)
 CF_CODE_RE = re.compile(r"^(CF\d+)", re.IGNORECASE)
 
@@ -153,7 +152,7 @@ def check_resource_pressure(crop_id: str, farm_cfs: Dict[str, Any]) -> Dict[str,
             if not parameter:
                 continue
 
-            if not (SENSITIVITY_RE.search(parameter) or DEMAND_RE.search(parameter)):
+            if not DEMAND_RE.search(parameter):
                 continue
 
             cf_code = row_to_cf_map.get(parameter)
@@ -161,20 +160,15 @@ def check_resource_pressure(crop_id: str, farm_cfs: Dict[str, Any]) -> Dict[str,
                 continue
 
             value = row.get(crop_column)
-            bucket = extracted.setdefault(cf_code, {"sensitivity": None, "demand": None})
-
-            if SENSITIVITY_RE.search(parameter):
-                bucket["sensitivity"] = value
-            if DEMAND_RE.search(parameter):
-                bucket["demand"] = value
+            bucket = extracted.setdefault(cf_code, {"demand": None})
+            bucket["demand"] = value
 
     warnings: List[Dict[str, Any]] = []
 
     for cf_code, values in extracted.items():
-        sensitivity = values.get("sensitivity")
         demand = values.get("demand")
 
-        if not (_is_high(sensitivity) and _is_high(demand)):
+        if not _is_high(demand):
             continue
 
         cf_label = str((cf_info_map.get(cf_code) or {}).get("label") or cf_code)
@@ -187,12 +181,11 @@ def check_resource_pressure(crop_id: str, farm_cfs: Dict[str, Any]) -> Dict[str,
             {
                 "cf_code": cf_code,
                 "cf_label": cf_label,
-                "sensitivity": sensitivity,
                 "demand": demand,
                 "farm_cf_status": farm_status,
                 "message": (
-                    f"{crop_name}: {cf_label} has high sensitivity ({sensitivity}) and "
-                    f"high demand ({demand}), while farm CF status is {farm_status} (<= Moderate)."
+                    f"{crop_name}: {cf_label} demand is {demand}, while farm CF status is "
+                    f"{farm_status} (<= Moderate). Resource pressure risk."
                 ),
             }
         )

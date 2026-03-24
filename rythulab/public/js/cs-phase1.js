@@ -588,13 +588,8 @@ function _ck6(cr){
 function _ck7(cr){
     var F=CS_FARM,ws=[];
     cr.forEach(function(c){
-        var sens=c.sens||{};
-        if((sens.water==="High"||sens.water==="Very High")&&F.cf.W.s<=3)
-            ws.push({cn:c.name,t:"warn",m:c.name+' — Water sensitivity is "'+sens.water+'" and farm Water Availability CF is "'+F.cf.W.slab+'" (≤ Moderate). Resource pressure risk.'});
         if(c.res==="High"&&F.cf.N.s<=2)
             ws.push({cn:c.name,t:"warn",m:c.name+' — Resource demand is High and farm Available Nitrogen CF is "'+F.cf.N.slab+'" (≤ Weak). Nitrogen depletion risk.'});
-        if((sens.heat==="High"||sens.heat==="Very High")&&F.cf.HSD.s<=3)
-            ws.push({cn:c.name,t:"warn",m:c.name+' — Heat sensitivity is "'+sens.heat+'" and farm has '+F.cf.HSD.val+' heat stress days/season (Moderate). Yield risk.'});
     });
     return ws;
 }
@@ -791,7 +786,7 @@ function cs_s7(){
 
     if(CS.s7Loading){
         return cs_hd(7,"Resource pressure check",
-            "If crop sensitivity to that CF is high (using crop sensitivity table) and CF_resource ≤ Moderate, crop_resource_demand high then warning.")+
+            "If crop resource demand is high and the corresponding farm context feature is ≤ Moderate, show a resource pressure warning.")+
             '<div class="cs-empty">Running resource pressure check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending farm context features to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(6)">← Back</button></div>';
@@ -806,7 +801,7 @@ function cs_s7(){
         }).join("")+'</div>':
         '<div class="cs-empty">No resource pressure warnings detected.</div>';
     return cs_hd(7,"Resource pressure check",
-        "If crop sensitivity to that CF is high (using crop sensitivity table) and CF_resource ≤ Moderate, crop_resource_demand high then warning.")+
+        "If crop resource demand is high and the corresponding farm context feature is ≤ Moderate, show a resource pressure warning.")+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+ws.length+' warning(s) found.</span>'+
         '<button class="cs-btn sec" onclick="cs_goto(6)">← Back</button>'+
