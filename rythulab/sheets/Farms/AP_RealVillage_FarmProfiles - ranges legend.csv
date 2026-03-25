@@ -1,0 +1,28 @@
+Parameter,Very Weak,Weak,Moderate,Good,Ideal
+pH,"<5.0, >9.0","5.0-5.5, 8.5-9.0","5.6-6.4, 8.1-8.4","6.5-6.7,7.3-7.5",6.8-7.2
+N_Pct (%),<0.04,0.04-0.07,0.08-0.12,0.13-0.18,>0.18
+P_kgha (kg/ha),<8,Aug-14,15-24,25-40,>40
+K_kgha (kg/ha),<40,40-79,80-120,121-180,>180
+OC_Pct (%),<0.2,0.2-0.39,0.4-0.59,0.6-0.9,>0.9
+EC_dSm (dS/m),>6.0,4.0-6.0,2.5-3.9,1.5-2.4,<1.5
+Depth_cm (cm),<25,25-39,40-59,60-89,>90
+WHC_Pct (%),"<15, >50","15-19, 46-50","20-29, 40-45",30-39,30-39
+Compaction,Very High,High,Moderate,Low,None/Low
+BulkDensity_gcc (g/cc),>1.8,1.65-1.8,1.5-1.64,1.35-1.49,<1.35
+Drainage,Very Poor,Poor,Moderate,Good,Good/Excellent
+ErosionRisk,Very High,High,Moderate,Low,None/Low
+GWDepth_m (m),<0.5,0.5-1.0,1.1-1.9,2.0-3.0,>3.0
+Water_mm/ha (season),<400,400-699,700-999,1000-1499,>1500
+Water_Regime,Rain-fed Low,Rain-Fed-High,Supplemental,Controlled,Copious
+RainReliability,Very Low,Low,Medium,High,Very High
+TempC (season mean),"<18, >40","18-22, 37-40","23-27, 34-36",28-33,28-33
+HeatDays (>40°C),>35,25-35,15-24,May-14,<5
+FrostRisk,High,Moderate,Low,None,None
+Wind_kmph (max),>35,25-35,15-24,Aug-14,<8
+BioIndex,Very Low,Low,Moderate,Good,High/Very High
+PestPressure,Very High,High,Moderate,Low,Very Low
+Earthworms,Absent,Few,Present,Abundant,Very Abundant
+Slope_pct (%),>20,Dec-20,06-Nov,02-May,0-1
+FloodRisk,Very High,High,Moderate,Low,None
+DroughtRisk,Very High,High,Moderate,Low,None
+Ca_meq (meq/100g),<4,04-Jul,08-Dec,13-18,>18
