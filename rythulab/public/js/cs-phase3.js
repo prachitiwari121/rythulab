@@ -132,13 +132,15 @@ function cs_fetchPhase3Step3(){
         }
 
         var preserved = (CS3.recommendations || []).map(function(entry){
-            if(!entry || !entry.crop || !Array.isArray(entry.reasons)) return null;
+            if(!entry || !entry.crop) return null;
 
-            var keptReasons = entry.reasons.filter(function(reason){
+            var baseReasons = Array.isArray(entry.reasons) ? entry.reasons : [];
+            var keptReasons = baseReasons.filter(function(reason){
                 return isFunctionalGroupReason(reason) || isWeakCfReason(reason);
             });
+            var isSelected = Array.isArray(CS3.selected) && CS3.selected.indexOf(entry.crop.id) >= 0;
 
-            if(!keptReasons.length) return null;
+            if(!keptReasons.length && !isSelected) return null;
 
             return {
                 crop: {
@@ -152,7 +154,7 @@ function cs_fetchPhase3Step3(){
                     cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
                     desc: entry.crop.desc
                 },
-                reasons: keptReasons
+                reasons: keptReasons.length ? keptReasons : baseReasons.slice()
             };
         }).filter(Boolean);
 
@@ -213,13 +215,15 @@ function cs_fetchPhase3Step4(){
         }
 
         var preserved = (CS3.recommendations || []).map(function(entry){
-            if(!entry || !entry.crop || !Array.isArray(entry.reasons)) return null;
+            if(!entry || !entry.crop) return null;
 
-            var keptReasons = entry.reasons.filter(function(reason){
+            var baseReasons = Array.isArray(entry.reasons) ? entry.reasons : [];
+            var keptReasons = baseReasons.filter(function(reason){
                 return !isWeakCfReason(reason) && (isFunctionalGroupReason(reason) || isBiodiversityReason(reason));
             });
+            var isSelected = Array.isArray(CS3.selected) && CS3.selected.indexOf(entry.crop.id) >= 0;
 
-            if(!keptReasons.length) return null;
+            if(!keptReasons.length && !isSelected) return null;
 
             return {
                 crop: {
@@ -233,7 +237,7 @@ function cs_fetchPhase3Step4(){
                     cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
                     desc: entry.crop.desc
                 },
-                reasons: keptReasons
+                reasons: keptReasons.length ? keptReasons : baseReasons.slice()
             };
         }).filter(Boolean);
 
@@ -461,7 +465,27 @@ function p3_renderStep(n){
     if(typeof cs_updateSelBox==="function") cs_updateSelBox();
 }
 function p3_goto(n){if(n<=CS3.step){CS3.step=n;p3_renderStep(n);}}
-function p3_next(){CS3.step++;p3_renderStep(CS3.step);}
+function p3_invalidateStepData(step){
+    if(step===1 || step===2){
+        CS3.step1Step2Data = null;
+        CS3.step2BackendRecs = [];
+        CS3.gaps = {};
+        return;
+    }
+    if(step===3){
+        CS3.step3Data = null;
+        return;
+    }
+    if(step===4){
+        CS3.step4Data = null;
+    }
+}
+function p3_next(){
+    var nextStep=CS3.step+1;
+    p3_invalidateStepData(nextStep);
+    CS3.step=nextStep;
+    p3_renderStep(CS3.step);
+}
 
 function p3_hd(n,title,desc){
     return'<div class="cs-bdg"><span class="cs-bdg-n">Step '+n+'</span><span class="cs-bdg-t">Phase 3 — biodiversity crop selection</span></div>'+
