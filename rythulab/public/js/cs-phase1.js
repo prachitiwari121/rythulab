@@ -1,5 +1,5 @@
 var CS = {
-    step:1, farmOpen:true,
+    step:1, farmOpen:false,
     sel:[],
     wc:null, an:null,
     s5Data:null, s5Loading:false
@@ -80,7 +80,7 @@ function cs_selBoxSidebarHtml(){
 function cs_phase1_init(){
     var root=document.getElementById("cs-root"); if(!root)return;
     root.innerHTML="";
-    root.appendChild(_cs_farmBasic());
+    root.appendChild(_cs_farmBox());
     root.appendChild(_cs_phaseTabs());
     var lay=document.createElement("div"); lay.className="cs-lay";
     lay.innerHTML='<div class="cs-sbar" id="cs-sbar"></div><div class="cs-sc" id="cs-content"></div>';
@@ -133,18 +133,8 @@ function _cs_farmBox(){
 
     var cfRows=CS_CF_ORDER.map(function(key){
         var cf=F.cf[key]; if(!cf) return"";
-        var cols=["vw","w","m","g","i"];
-        var slabMap={vw:"Very Weak",w:"Weak",m:"Moderate",g:"Good",i:"Ideal"};
-        var cellHtml=cols.map(function(col){
-            var isMatch=(cf.slab===slabMap[col]);
-            var bg=isMatch?slabStyle(col==="vw"?1:col==="w"?2:col==="m"?3:col==="g"?4:5):"";
-            var fw=isMatch?"font-weight:700;":"";
-            return'<td style="font-size:11px;padding:6px 8px;border-bottom:1px solid var(--green-pale);'+bg+fw+'">'+cf[col]+'</td>';
-        }).join("");
         return'<tr>'+
             '<td style="font-weight:600;color:var(--text-dark);white-space:nowrap;padding:6px 8px;border-bottom:1px solid var(--green-pale)">'+cf.l+'</td>'+
-            '<td style="color:#3a4a2a;white-space:nowrap;padding:6px 8px;border-bottom:1px solid var(--green-pale)">'+cf.unit+'</td>'+
-            cellHtml+
             '<td style="padding:6px 8px;border-bottom:1px solid var(--green-pale)"><span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px;'+slabStyle(cf.s)+'">'+cf.slab+'</span></td>'+
             '<td style="font-weight:700;color:var(--text-dark);padding:6px 8px;border-bottom:1px solid var(--green-pale)">'+cf.val+'</td>'+
         '</tr>';
@@ -155,31 +145,28 @@ function _cs_farmBox(){
         '<table style="width:100%;border-collapse:collapse;font-size:12px">'+
         '<thead><tr>'+
         '<th style="'+thBase+'color:#2a3a1a;background:var(--green-bg)">Context Feature</th>'+
-        '<th style="'+thBase+'color:#2a3a1a;background:var(--green-bg)">Unit</th>'+
-        '<th style="'+thBase+'color:#A32D2D;background:#FFF5F5">Very Weak</th>'+
-        '<th style="'+thBase+'color:#854F0B;background:#FFFBF0">Weak</th>'+
-        '<th style="'+thBase+'color:#7a4400;background:#FFFDF0">Moderate</th>'+
-        '<th style="'+thBase+'color:#3B6D11;background:#F5FFF0">Good</th>'+
-        '<th style="'+thBase+'color:#27500A;background:#EAF3DE">Ideal</th>'+
         '<th style="'+thBase+'color:#2a3a1a;background:var(--green-bg)">Status</th>'+
         '<th style="'+thBase+'color:#2a3a1a;background:var(--green-bg)">Farm Value</th>'+
         '</tr></thead>'+
         '<tbody>'+cfRows+'</tbody></table></div>';
 
     var d=document.createElement("div"); d.className="cs-farm";
+    var detailsDisplay = CS.farmOpen ? "block" : "none";
     d.innerHTML=
         '<div class="cs-farm-hd" onclick="cs_toggleFarm()">'+
             '<span class="cs-farm-hd-l">Farm Context</span>'+
-            '<span id="cs-farr" style="color:#2a3a1a;font-weight:700">▴ Context Features</span>'+
+            '<span id="cs-farr" style="color:#2a3a1a;font-weight:700">'+(CS.farmOpen?"▴ Context Features":"▾ Context Features")+'</span>'+
         '</div>'+
         '<div class="cs-farm-grid" style="margin-top:12px">'+basicHtml+'</div>'+
-        '<div id="cs-fgrid">'+cfTable+'</div>';
+        '<div id="cs-fgrid" style="display:'+detailsDisplay+'">'+cfTable+'</div>';
     return d;
 }
 function cs_toggleFarm(){
     CS.farmOpen=!CS.farmOpen;
-    document.getElementById("cs-fgrid").style.display=CS.farmOpen?"block":"none";
-    document.getElementById("cs-farr").textContent=CS.farmOpen?"▴ Context Features":"▾ Context Features";
+    var grid=document.getElementById("cs-fgrid");
+    var arrow=document.getElementById("cs-farr");
+    if(grid) grid.style.display=CS.farmOpen?"block":"none";
+    if(arrow) arrow.textContent=CS.farmOpen?"▴ Context Features":"▾ Context Features";
 }
 
 /* ── PHASE TABS ───────────────────────────────────────────────── */

@@ -10,7 +10,7 @@ function initCropSelection(){
 function cs_resetWorkflowState(){
     if(typeof CS !== "undefined" && CS){
         CS.step = 1;
-        CS.farmOpen = true;
+        CS.farmOpen = false;
         CS.sel = [];
         CS.wc = null;
         CS.an = null;
