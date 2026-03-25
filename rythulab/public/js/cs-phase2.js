@@ -109,9 +109,6 @@ function cs_phase2_init(){
     lay.innerHTML='<div class="cs-sbar" id="cs-sbar"></div><div class="cs-sc" id="cs-content"></div>';
     root.appendChild(lay);
     p2_renderSidebar(); p2_renderStep(CS2.step);
-    cs_fetchPhase2Step1();
-    cs_fetchPhase2Step2();
-    cs_fetchPhase2Step3();
 }
 
 /* ── Fetch Phase 2 Step 1 from backend ───────────────────────── */
@@ -772,6 +769,10 @@ function p2_mergeRecommendation(pool, entry){
 
 /* ── Step 1: Missing MF — grouped by microfeature ───────────── */
 function p2_s1(){
+    if(!CS2.step1Data && !CS2.p2s1Loading){
+        cs_fetchPhase2Step1();
+    }
+
     var mc=CS2.mainCrops;
     var step1Data=CS2.step1Data||{};
     var availMF=Array.isArray(step1Data.available_mfs)?step1Data.available_mfs.slice():[];
@@ -881,6 +882,10 @@ function p2_s1(){
 
 /* ── Step 2: MF Cross-compatibility ──────────────────────────── */
 function p2_s2(){
+    if(!CS2.step2Data && !CS2.p2s2Loading){
+        cs_fetchPhase2Step2();
+    }
+
     var step2Associated = CS2.step2Data && Array.isArray(CS2.step2Data.associated_crops)
         ? CS2.step2Data.associated_crops
         : null;
@@ -908,6 +913,10 @@ function p2_s2(){
 
 /* ── Step 3: Main crop Disease risk — diseases only ─────────── */
 function p2_s3(){
+    if(!CS2.step3Data && !CS2.p2s3Loading){
+        cs_fetchPhase2Step3();
+    }
+
     var backendRows = CS2.step3Data && Array.isArray(CS2.step3Data.crop_disease_mitigations)
         ? CS2.step3Data.crop_disease_mitigations
         : null;
