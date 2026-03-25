@@ -208,7 +208,26 @@ function cs_renderSidebar(){
 }
 function cs_renderStep(n){var el=document.getElementById("cs-content");if(!el)return;el.innerHTML=cs_buildStep(n);cs_renderSidebar();cs_updateSelBox();}
 function cs_goto(n){if(n<=CS.step){CS.step=n;cs_renderStep(n);}}
-function cs_next(){CS.step++;cs_renderStep(CS.step);}
+function cs_invalidateStepData(step){
+    if(step===1){
+        CS.phase1Loaded=false;
+        return;
+    }
+    if(step===5){
+        CS.s5Data=null;
+        return;
+    }
+    if(step===6||step===7||step===8||step===9||step===10){
+        CS.an=CS.an||{};
+        CS.an["s"+step]=null;
+    }
+}
+function cs_next(){
+    var nextStep=CS.step+1;
+    cs_invalidateStepData(nextStep);
+    CS.step=nextStep;
+    cs_renderStep(CS.step);
+}
 
 /* ── STEP HEADER ──────────────────────────────────────────────── */
 function cs_hd(n,title,desc){
