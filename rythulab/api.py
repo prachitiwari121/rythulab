@@ -1,6 +1,7 @@
 import frappe
 from frappe import _
 import csv
+import os
 import re
 from typing import Any, Dict, List
 
@@ -624,6 +625,289 @@ def _build_cropid_map_from_sheet():
             cropid_map[_norm_crop_name(key)] = cropid_map[norm_target]
 
     return cropid_map
+
+
+def _farm_profiles_csv_path() -> str:
+    farms_dir = frappe.get_app_path("rythulab", "sheets", "Farms")
+    preferred = os.path.join(
+        farms_dir,
+        "AP_RealVillage_FarmProfiles - AP_RealVillage_FarmProfiles.csv",
+    )
+    if os.path.exists(preferred):
+        return preferred
+
+    fallback = os.path.join(
+        farms_dir,
+        "AP_RealVillage_FarmProfiles - AP_RealVillage_FarmProfiles - with classes.csv",
+    )
+    if os.path.exists(fallback):
+        return fallback
+
+    for file_name in os.listdir(farms_dir):
+        lower_name = file_name.lower()
+        if lower_name.endswith(".csv") and "farmprofiles" in lower_name:
+            return os.path.join(farms_dir, file_name)
+
+    frappe.throw("Farm profiles CSV not found")
+
+
+def _read_farm_profiles() -> List[Dict[str, str]]:
+    rows: List[Dict[str, str]] = []
+    with open(_farm_profiles_csv_path(), "r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            if not row:
+                continue
+            farm_id = str(row.get("Farm_ID") or "").strip()
+            if not farm_id:
+                continue
+            rows.append(row)
+    return rows
+
+
+def _slab_to_score(slab: Any, default: int = 3) -> int:
+    slab_text = str(slab or "").strip().lower()
+    score_map = {
+        "very weak": 1,
+        "weak": 2,
+        "moderate": 3,
+        "good": 4,
+        "ideal": 5,
+    }
+    return score_map.get(slab_text, default)
+
+
+def _zone_display(zone_value: Any) -> str:
+    text = str(zone_value or "").strip()
+    if not text:
+        return ""
+
+    canonical_map = {
+        "NorthCoastal": "North Coastal",
+        "Godavari": "Godavari",
+        "Krishna": "Krishna",
+        "Krishna Delta": "Krishna",
+        "Southern": "Southern",
+        "ScarceRainfall": "Scarce Rainfall",
+        "Scarce Rainfall": "Scarce Rainfall",
+        "HighAltitudeTribal": "High Altitude & Tribal",
+        "High Altitude Tribal": "High Altitude & Tribal",
+    }
+    if text in canonical_map:
+        return canonical_map[text]
+
+    text = text.replace("_", " ").replace("-", " ")
+    text = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
+def _season_code(season_value: Any) -> str:
+    text = str(season_value or "").strip().lower()
+    if text.startswith("kharif"):
+        return "kharif"
+    if text.startswith("rabi"):
+        return "rabi"
+    if text.startswith("zaid"):
+        return "zaid"
+    if text.startswith("perennial"):
+        return "perennial"
+    return text
+
+
+def _water_availability_label(water_regime: Any) -> str:
+    text = str(water_regime or "").strip().lower()
+    if "copious" in text:
+        return "High"
+    if "controlled" in text:
+        return "Moderate"
+    if "supplemental" in text:
+        return "Moderate"
+    if "rain-fed-high" in text:
+        return "Moderate"
+    if "rain-fed" in text:
+        return "Low"
+    return "Moderate"
+
+
+def _irrigation_label(water_regime: Any) -> str:
+    text = str(water_regime or "").strip().lower()
+    if "copious" in text:
+        return "Assured"
+    if "controlled" in text:
+        return "Reliable"
+    if "supplemental" in text:
+        return "Occasional"
+    if "rain-fed" in text:
+        return "Seasonal"
+    return "Occasional"
+
+
+def _wind_exposure_label(wind_kmph: Any) -> str:
+    wind_val = _extract_numeric_value(wind_kmph, default=None)
+    if wind_val is None:
+        return "Low–Moderate"
+    if wind_val <= 12:
+        return "Low"
+    if wind_val <= 22:
+        return "Low–Moderate"
+    if wind_val <= 32:
+        return "Moderate"
+    return "High"
+
+
+def _water_components(total_water: Any, water_regime: Any) -> Dict[str, float]:
+    total_val = _extract_numeric_value(total_water, default=650.0) or 650.0
+    regime = str(water_regime or "").strip().lower()
+
+    if "copious" in regime:
+        rain_ratio, irrigation_ratio, stored_ratio = 0.35, 0.55, 0.10
+    elif "controlled" in regime:
+        rain_ratio, irrigation_ratio, stored_ratio = 0.45, 0.40, 0.15
+    elif "supplemental" in regime:
+        rain_ratio, irrigation_ratio, stored_ratio = 0.55, 0.30, 0.15
+    elif "rain-fed-high" in regime:
+        rain_ratio, irrigation_ratio, stored_ratio = 0.70, 0.10, 0.20
+    else:
+        rain_ratio, irrigation_ratio, stored_ratio = 0.75, 0.05, 0.20
+
+    return {
+        "rain": round(total_val * rain_ratio),
+        "re": 0.65,
+        "irr": round(total_val * irrigation_ratio),
+        "sw": round(total_val * stored_ratio),
+    }
+
+
+def _farm_cf_entry(value: Any, slab: Any, default_slab: str = "Moderate") -> Dict[str, Any]:
+    slab_value = str(slab or "").strip() or default_slab
+    return {
+        "val": value,
+        "slab": slab_value,
+        "s": _slab_to_score(slab_value),
+    }
+
+
+def _build_cs_farm_from_row(row: Dict[str, Any]) -> Dict[str, Any]:
+    farm_id = str(row.get("Farm_ID") or "").strip()
+    village = str(row.get("Village") or "").strip()
+    district = str(row.get("District") or "").strip()
+    zone_raw = row.get("AP_Zone")
+    zone_display = _zone_display(zone_raw)
+
+    season_raw = str(row.get("Season") or "").strip()
+    season_code = _season_code(season_raw)
+
+    water_regime = str(row.get("Water_Regime") or "").strip()
+    water_parts = _water_components(row.get("Water_mm/ha"), water_regime)
+
+    temp_text = str(row.get("TempC") or "").strip()
+    temp_matches = re.findall(r"-?\d+(?:\.\d+)?", temp_text)
+    min_temp = temp_matches[0] if temp_matches else str(int(_extract_numeric_value(temp_text, default=24) or 24))
+    max_temp = temp_matches[1] if len(temp_matches) > 1 else str(int(_extract_numeric_value(temp_text, default=34) or 34))
+
+    cf_payload = {
+        "N": _farm_cf_entry(row.get("N kg/ha (0-20cm)"), row.get("Farm N%_Class"), "Moderate"),
+        "P": _farm_cf_entry(row.get("P_kgha"), row.get("P_kgha_Class"), "Moderate"),
+        "K": _farm_cf_entry(row.get("K_kgha"), row.get("K_kgha_Class"), "Moderate"),
+        "SOC": _farm_cf_entry(row.get("OC_Pct"), row.get("OC_Pct_Class"), "Moderate"),
+        "pH": _farm_cf_entry(row.get("pH"), row.get("pH_Class"), "Moderate"),
+        "EC": _farm_cf_entry(row.get("EC_dSm"), row.get("EC_dSm_Class"), "Moderate"),
+        "TXT": _farm_cf_entry(row.get("Soil_Type_Texture"), "Moderate", "Moderate"),
+        "ESD": _farm_cf_entry(row.get("Depth_cm"), row.get("Depth_cm_Class"), "Moderate"),
+        "WHC": _farm_cf_entry(row.get("WHC_Pct"), row.get("WHC_Pct_Class"), "Moderate"),
+        "BD": _farm_cf_entry(row.get("BulkDensity_gcc"), row.get("BulkDensity_gcc_Class"), "Moderate"),
+        "DR": _farm_cf_entry(row.get("Drainage"), row.get("Drainage_Class"), "Moderate"),
+        "ER": _farm_cf_entry(row.get("ErosionRisk"), row.get("ErosionRisk_Class"), "Moderate"),
+        "GW": _farm_cf_entry(row.get("GWDepth_m"), row.get("GWDepth_m_Class"), "Moderate"),
+        "IA": _farm_cf_entry(_irrigation_label(water_regime), row.get("Water_Regime_Class"), "Moderate"),
+        "RR": _farm_cf_entry(row.get("RainReliability"), row.get("RainReliability_Class"), "Moderate"),
+        "TMP": _farm_cf_entry(temp_text or row.get("TempC"), row.get("TempC_Class"), "Moderate"),
+        "HSD": _farm_cf_entry(row.get("HeatDays"), row.get("HeatDays_Class"), "Moderate"),
+        "FR": _farm_cf_entry(row.get("FrostRisk"), row.get("FrostRisk_Class"), "Moderate"),
+        "W": _farm_cf_entry(water_regime, row.get("Water_Regime_Class"), "Moderate"),
+        "WP": _farm_cf_entry(row.get("Wind_kmph"), row.get("Wind_kmph_Class"), "Moderate"),
+        "PP": _farm_cf_entry(row.get("PestPressure"), row.get("PestPressure_Class"), "Moderate"),
+        "PA": _farm_cf_entry(row.get("BioIndex"), row.get("BioIndex_Class"), "Moderate"),
+        "CA": _farm_cf_entry(row.get("Ca_meq"), row.get("Ca_meq_Class"), "Moderate"),
+    }
+
+    return {
+        "id": farm_id,
+        "label": f"{farm_id} — {village}, {district}" if district else f"{farm_id} — {village}",
+        "area": 5.0,
+        "zone": zone_display,
+        "zone_code": zone_display,
+        "season": season_raw,
+        "season_code": season_code,
+        "soil": row.get("Soil_Type_Texture"),
+        "soil_code": row.get("Soil_Type_Texture"),
+        "waterAvail": _water_availability_label(water_regime),
+        "water_supply": water_regime,
+        "wind": _wind_exposure_label(row.get("Wind_kmph")),
+        "minTemp": str(min_temp),
+        "maxTemp": str(max_temp),
+        "rain": water_parts["rain"],
+        "re": water_parts["re"],
+        "irr": water_parts["irr"],
+        "sw": water_parts["sw"],
+        "cf": cf_payload,
+    }
+
+
+@frappe.whitelist()
+def get_crop_selection_farms() -> Dict[str, Any]:
+    rows = _read_farm_profiles()
+    farms = []
+    for row in rows:
+        farm_id = str(row.get("Farm_ID") or "").strip()
+        village = str(row.get("Village") or "").strip()
+        district = str(row.get("District") or "").strip()
+        if not farm_id:
+            continue
+        farms.append(
+            {
+                "id": farm_id,
+                "label": f"{farm_id} — {village}, {district}" if district else f"{farm_id} — {village}",
+            }
+        )
+
+    def _farm_sort_key(item: Dict[str, Any]):
+        farm_id = str(item.get("id") or "")
+        match = re.search(r"(\d+)", farm_id)
+        if not match:
+            return (farm_id, 0)
+        return (farm_id[:match.start()], int(match.group(1)))
+
+    farms.sort(key=_farm_sort_key)
+    return {
+        "ok": True,
+        "farms": farms,
+    }
+
+
+@frappe.whitelist()
+def get_crop_selection_farm_profile(farm_id: str | None = None) -> Dict[str, Any]:
+    payload = frappe.request.get_json(silent=True) or {}
+    farm_id = (farm_id or payload.get("farm_id") or "").strip()
+
+    rows = _read_farm_profiles()
+    if not rows:
+        return {"ok": False, "error": "Farm profile data is empty"}
+
+    selected_row = None
+    if farm_id:
+        for row in rows:
+            if str(row.get("Farm_ID") or "").strip().upper() == farm_id.upper():
+                selected_row = row
+                break
+    if not selected_row:
+        selected_row = rows[0]
+
+    return {
+        "ok": True,
+        "farm": _build_cs_farm_from_row(selected_row),
+    }
 
 
 @frappe.whitelist()

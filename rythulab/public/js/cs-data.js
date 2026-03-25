@@ -99,7 +99,55 @@ var CS_FARM = {
              val:"Low",     s:2, slab:"Weak"}
     }
 };
+
+var CS_FARM_OPTIONS = [];
+var CS_FARM_ID = null;
+
+function cs_deepClone(obj){
+     return JSON.parse(JSON.stringify(obj));
+}
+
+function cs_slabScore(slab, fallback){
+     var map = {"Very Weak":1,"Weak":2,"Moderate":3,"Good":4,"Ideal":5};
+     return map[slab] || fallback || 3;
+}
+
+var CS_FARM_TEMPLATE = cs_deepClone(CS_FARM);
+
+function cs_applyFarmProfile(farm){
+     if(!farm || typeof farm !== "object") return;
+
+     var nextFarm = cs_deepClone(CS_FARM_TEMPLATE);
+     var topKeys = [
+          "id","label","area","zone","zone_code","season","season_code",
+          "soil","soil_code","waterAvail","water_supply","wind",
+          "minTemp","maxTemp","rain","re","irr","sw"
+     ];
+
+     topKeys.forEach(function(k){
+          if(typeof farm[k] !== "undefined" && farm[k] !== null && farm[k] !== ""){
+               nextFarm[k] = farm[k];
+          }
+     });
+
+     var incomingCf = farm.cf || {};
+     Object.keys(incomingCf).forEach(function(cfKey){
+          var existing = nextFarm.cf[cfKey] || {l:cfKey,unit:"",vw:"-",w:"-",m:"-",g:"-",i:"-"};
+          var incoming = incomingCf[cfKey] || {};
+          nextFarm.cf[cfKey] = Object.assign({}, existing, {
+               val: typeof incoming.val !== "undefined" ? incoming.val : existing.val,
+               slab: incoming.slab || existing.slab,
+               s: typeof incoming.s === "number" ? incoming.s : cs_slabScore(incoming.slab || existing.slab, existing.s)
+          });
+     });
+
+     nextFarm.wa = Math.round((parseFloat(nextFarm.rain)||0)*(parseFloat(nextFarm.re)||0) + (parseFloat(nextFarm.irr)||0) + (parseFloat(nextFarm.sw)||0));
+     CS_FARM = nextFarm;
+     CS_FARM_ID = nextFarm.id || CS_FARM_ID;
+}
+
 CS_FARM.wa = Math.round(CS_FARM.rain*CS_FARM.re + CS_FARM.irr + CS_FARM.sw);
+CS_FARM_TEMPLATE.wa = CS_FARM.wa;
 
 var CS_CF_ORDER = ["N","P","K","SOC","pH","EC","TXT","ESD","WHC","BD","DR","ER","GW","IA","RR","TMP","HSD","FR"];
 
