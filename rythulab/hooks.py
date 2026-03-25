@@ -39,7 +39,7 @@ fixtures = [
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/rythulab/css/rythulab.css"
-# app_include_js = "/assets/rythulab/js/rythulab.js"
+app_include_js = ["/assets/rythulab/js/rythulab_ai_bot.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/rythulab/css/rythulab.css"
