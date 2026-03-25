@@ -285,7 +285,7 @@ def find_disease_mitigating_crops(
                     if disease_id in disease_master_map
                 ]
                 reasons.append(
-                    f"Produces {mf_code} ({mf_label_map.get(mf_code, mf_code)}), which decreases occurrence of: {', '.join(helped_diseases)}"
+                    f"Produces {mf_label_map.get(mf_code, mf_code)}, which decreases occurrence of: {', '.join(helped_diseases)}"
                 )
 
             mitigating_crops.append(

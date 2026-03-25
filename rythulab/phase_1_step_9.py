@@ -10,6 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
 CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 CROP_LIST_PATH = CROP_DETAILS_DIR / "0.List of All crops - Sheet1.csv"
+PEST_MASTER_PATH = SHEETS_DIR / "Pests" / "AP_Disease_CF_MF_Triggers_filled - AP_Pest_CF_MF_Triggers.csv"
 
 # ---------------------------------------------------------------------------
 # Competition threshold sets
@@ -180,12 +181,27 @@ def _load_crop_label_map() -> Dict[str, str]:
     return label_map
 
 
+def _load_pest_label_map() -> Dict[str, str]:
+    label_map: Dict[str, str] = {}
+    if not PEST_MASTER_PATH.exists():
+        return label_map
+    with PEST_MASTER_PATH.open("r", encoding="utf-8-sig", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            pest_id = str(row.get("PestID") or "").strip().upper()
+            pest_name = str(row.get("Pest") or "").strip()
+            if pest_id:
+                label_map[pest_id] = pest_name
+    return label_map
+
+
 # ---------------------------------------------------------------------------
 # Lazy-loaded module-level caches
 # ---------------------------------------------------------------------------
 
 _CROP_ATTRS: Optional[Dict[str, Dict[str, str]]] = None
 _CROP_LABELS: Optional[Dict[str, str]] = None
+_PEST_LABELS: Optional[Dict[str, str]] = None
 
 
 def _get_crop_attrs() -> Dict[str, Dict[str, str]]:
@@ -204,6 +220,20 @@ def _get_crop_labels() -> Dict[str, str]:
 
 def _crop_label(crop_id: str) -> str:
     return _get_crop_labels().get(crop_id.upper(), crop_id)
+
+
+def _get_pest_labels() -> Dict[str, str]:
+    global _PEST_LABELS
+    if _PEST_LABELS is None:
+        _PEST_LABELS = _load_pest_label_map()
+    return _PEST_LABELS
+
+
+def _pest_label(pest_key: str) -> str:
+    pest_id = str(pest_key or "").strip().upper()
+    if re.fullmatch(r"PEST\d+", pest_id):
+        return _get_pest_labels().get(pest_id, pest_id)
+    return str(pest_key or "").strip().title()
 
 
 # ---------------------------------------------------------------------------
@@ -377,14 +407,17 @@ def _check_pair(
     shared = _shared_pests_medium_high(pests_a, pests_b)
 
     if shared:
-        pest_list = ", ".join(p.title() for p in sorted(shared))
+        shared_sorted = sorted(shared)
+        shared_labels = [_pest_label(p) for p in shared_sorted]
+        pest_list = ", ".join(shared_labels)
         warn(
             "pest_host_overlap",
             (
                 f"{label_a} and {label_b} share common major pests at medium/high severity: "
                 f"{pest_list} — pest host overlap risk."
             ),
-            shared_pests=shared,
+            shared_pests=shared_sorted,
+            shared_pest_labels=shared_labels,
         )
 
     return warnings

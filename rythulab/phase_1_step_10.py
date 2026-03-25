@@ -132,8 +132,7 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 				for supp_cid in suppressing_crops:
 					mf_label = get_mf_label(mf_code)
 					message = (
-						f"{crop_labels.get(req_cid, req_cid)} requires MF {mf_code} "
-						f"({mf_label or 'unknown'}), but "
+						f"{crop_labels.get(req_cid, req_cid)} requires {mf_label or 'unknown'}, but "
 						f"{crop_labels.get(supp_cid, supp_cid)} suppresses this same MF. "
 						f"Required MF ∩ Suppress MF is not empty — conflict between "
 						f"{crop_labels.get(req_cid, req_cid)} (requires) and "

@@ -29,7 +29,7 @@ def get_crops_producing_wind_barrier(micro_features_dir=MICRO_FEATURES_DIR):
 	crops = [
 		{
 			"crop": crop_name,
-			"reason": f"Produces {WIND_BARRIER_MF_CODE} ({wind_barrier_label})",
+			"reason": f"Produces {wind_barrier_label}",
 		}
 		for crop_name, produced_mfs in produced_by_crop.items()
 		if WIND_BARRIER_MF_CODE in produced_mfs

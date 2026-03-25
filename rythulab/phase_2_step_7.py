@@ -185,9 +185,7 @@ def recommend(crop_ids: list[str]) -> dict:
         entry = trap_map[cid]
         if not entry["trap_crops"]:
             continue
-        tc_names = ", ".join(
-            f"{tc['crop']} ({tc['crop_id']})" for tc in entry["trap_crops"]
-        )
+        tc_names = ", ".join(tc["crop"] for tc in entry["trap_crops"])
         trap_results.append({
             "for_crop_id": cid,
             "for_crop": entry["crop"],
@@ -257,12 +255,12 @@ def recommend(crop_ids: list[str]) -> dict:
             mf_labels = sorted(comp["produces_mfs"])
             pest_labels = sorted(comp["mitigates_pests"])
             pest_names = [
-                f"{p} ({pest_master[p]['name']})"
+                pest_master[p]["name"]
                 for p in pest_labels
                 if p in pest_master
             ]
             mf_descs = [
-                f"{m} – {mf_names.get(m, m)}" for m in mf_labels
+                mf_names.get(m, m) for m in mf_labels
             ]
             companion_list.append({
                 "crop_id": comp["crop_id"],
