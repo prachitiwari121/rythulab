@@ -660,14 +660,39 @@ function p2_computeAll(){
         });
     });
 
+    var prevAssocList = Array.isArray(CS2.associateList) ? CS2.associateList.slice() : [];
+    var prevBorderList = Array.isArray(CS2.borderList) ? CS2.borderList.slice() : [];
+    var prevTrapList = Array.isArray(CS2.trapList) ? CS2.trapList.slice() : [];
+    var prevSelectedAssoc  = Array.isArray(CS2.selectedAssoc) ? CS2.selectedAssoc.slice() : [];
+    var prevSelectedBorder = Array.isArray(CS2.selectedBorder) ? CS2.selectedBorder.slice() : [];
+    var prevSelectedTrap   = Array.isArray(CS2.selectedTrap) ? CS2.selectedTrap.slice() : [];
+
+    function ensureSelectedEntries(targetList, previousList, selectedIds){
+        selectedIds.forEach(function(id){
+            var exists = targetList.some(function(entry){ return entry.crop && entry.crop.id===id; });
+            if(exists) return;
+            var previous = previousList.find(function(entry){ return entry.crop && entry.crop.id===id; });
+            if(previous) targetList.push(previous);
+        });
+    }
+
+    ensureSelectedEntries(assoc, prevAssocList, prevSelectedAssoc);
+    ensureSelectedEntries(border, prevBorderList, prevSelectedBorder);
+    ensureSelectedEntries(trap, prevTrapList, prevSelectedTrap);
+
     CS2.associateList = assoc;
     CS2.borderList    = border;
     CS2.trapList      = trap;
 
-    // Start empty — user selects crops manually; sidebar updates as they tick
-    CS2.selectedAssoc  = [];
-    CS2.selectedBorder = [];
-    CS2.selectedTrap   = [];
+    CS2.selectedAssoc = Array.from(new Set(prevSelectedAssoc)).filter(function(id){
+        return CS2.associateList.some(function(entry){ return entry.crop && entry.crop.id===id; });
+    });
+    CS2.selectedBorder = Array.from(new Set(prevSelectedBorder)).filter(function(id){
+        return CS2.borderList.some(function(entry){ return entry.crop && entry.crop.id===id; });
+    });
+    CS2.selectedTrap = Array.from(new Set(prevSelectedTrap)).filter(function(id){
+        return CS2.trapList.some(function(entry){ return entry.crop && entry.crop.id===id; });
+    });
 }
 
 /* ── Phase tabs ──────────────────────────────────────────────── */
@@ -706,7 +731,17 @@ function p2_renderSidebar(){
 }
 function p2_renderStep(n){var el=document.getElementById("cs-content");if(!el)return;el.innerHTML=p2_buildStep(n);p2_renderSidebar();if(typeof cs_updateSelBox==="function")cs_updateSelBox();}
 function p2_goto(n){if(n<=CS2.step){CS2.step=n;p2_renderStep(n);}}
-function p2_next(){CS2.step++;p2_renderStep(CS2.step);}
+function p2_invalidateStepData(step){
+    if(step>=1 && step<=7){
+        CS2["step"+step+"Data"] = null;
+    }
+}
+function p2_next(){
+    var nextStep=CS2.step+1;
+    p2_invalidateStepData(nextStep);
+    CS2.step=nextStep;
+    p2_renderStep(CS2.step);
+}
 
 /* ── Step header ─────────────────────────────────────────────── */
 function p2_hd(n,title,desc){
@@ -1354,6 +1389,6 @@ function p2_s8(){
         '</div></div>'+
         '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">'+
         '<button class="cs-btn sec" onclick="p2_goto(1)">← Revisit selections</button>'+
-        '<button class="cs-btn pri" onclick="cs_switchPhase(3)">Proceed to Phase 3 →</button>'+
+        '<button class="cs-btn pri" onclick="cs_switchPhase(3,true)">Proceed to Phase 3 →</button>'+
         '</div>';
 }
