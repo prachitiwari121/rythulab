@@ -503,6 +503,13 @@ function p3_buildStep(n){
 }
 
 /* ── Crop card for P3 ────────────────────────────────────────── */
+function p3_sortByScoredesc(arr){
+    return arr.slice().sort(function(a,b){
+        var sa=a.crop&&a.crop.step1_score!=null?Number(a.crop.step1_score):-Infinity;
+        var sb=b.crop&&b.crop.step1_score!=null?Number(b.crop.step1_score):-Infinity;
+        return sb-sa;
+    });
+}
 function p3_cropCard(entry){
     var bc=entry.crop, sel=CS3.selected.indexOf(bc.id)>=0;
     var tags=(bc.mfp||[]).slice(0,4).map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join("");
@@ -629,7 +636,7 @@ function p3_s2(){
             return r.reasons.some(function(x){return x.toLowerCase().indexOf("functional group")>=0;});
         });
     }
-    var html=recs.length?recs.map(p3_cropCard).join(""):
+    var html=recs.length?p3_sortByScoredesc(recs).map(p3_cropCard).join(""):
         '<div class="cs-empty">All functional groups are already covered by your current crop system. ✓</div>';
     return p3_hd(2,"Functional group coverage",
         "Ensuring at least one species is represented from each functional group.")+
@@ -674,7 +681,7 @@ function p3_s3(){
             (m.covered?"Covered ✓"+coveredBy:"Not covered ✗")+
             '</span></div>';
     }).join("");
-    var html=recs.length?recs.map(p3_cropCard).join(""):
+    var html=recs.length?p3_sortByScoredesc(recs).map(p3_cropCard).join(""):
         '<div class="cs-empty">All key biodiversity MFs are covered by current selection.</div>';
     return p3_hd(3,"MF biodiversity crops",
         "Suggests crops that improve ecological balance, beneficial insects, and soil life.")+
@@ -717,7 +724,7 @@ function p3_s4(){
     if(!cfRows){
         cfRows = '<tr><td colspan="3" style="font-size:11px;color:var(--text-mid)">No weak/very-weak context features detected.</td></tr>';
     }
-    var html=recs.length?recs.map(p3_cropCard).join(""):
+    var html=recs.length?p3_sortByScoredesc(recs).map(p3_cropCard).join(""):
         '<div class="cs-empty">No additional CF-improvement crops found for current farm profile.</div>';
     return p3_hd(4,"CF improvement crops",
         "Suggests crops that help improve weak soil, water, or biological conditions on the farm.")+

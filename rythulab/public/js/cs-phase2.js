@@ -763,6 +763,13 @@ function p2_buildStep(n){
 }
 
 /* ── Reusable crop recommendation card ───────────────────────── */
+function p2_sortByScoredesc(arr){
+    return arr.slice().sort(function(a,b){
+        var sa=a.crop&&a.crop.step1_score!=null?Number(a.crop.step1_score):-Infinity;
+        var sb=b.crop&&b.crop.step1_score!=null?Number(b.crop.step1_score):-Infinity;
+        return sb-sa;
+    });
+}
 function p2_cropCard(entry, selArr, prefix){
     var ac=entry.crop, sel=selArr.indexOf(ac.id)>=0;
     var tags=(ac.mfp||[]).slice(0,4).map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join("");
@@ -858,7 +865,7 @@ function p2_s1(){
             });
             var cropListHtml;
             if(providingEntries.length){
-                cropListHtml = providingEntries.map(function(entry){
+                cropListHtml = p2_sortByScoredesc(providingEntries).map(function(entry){
                     return p2_cropCard(entry, CS2.selectedAssoc, 'assoc');
                 }).join('');
             } else if(Array.isArray(detail.producer_crops) && detail.producer_crops.length){
@@ -949,7 +956,7 @@ function p2_s2(){
         });
     }
     var html=suggestions.length?
-        suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
+        p2_sortByScoredesc(suggestions).map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No additional cross-compatibility recommendations found — main crops already satisfy each other\'s MF requirements.</div>';
     return p2_hd(2,"MF cross-compatibility check",
         "Recommends additional crops that can make use of ecosystem benefits provided by the main crops, such as shade or nutrient support.")+
@@ -1058,7 +1065,7 @@ function p2_s3(){
     if(!diseaseRows) diseaseRows='<tr><td colspan="2" style="color:#aaa;font-style:italic;padding:10px;text-align:center">No disease records found for selected crops.</td></tr>';
 
     var html=diseaseSuggestions.length?
-        diseaseSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
+        p2_sortByScoredesc(diseaseSuggestions).map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No disease-specific associate crops found for current main crop selection.</div>';
 
     return p2_hd(3,"Main crop Disease risk",
@@ -1144,7 +1151,7 @@ function p2_s4(){
     var html = CS2.p2s4Loading && !backend
         ? '<div class="cs-empty">Loading backend recommendations...</div>'
         : suggestions.length?
-        suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
+        p2_sortByScoredesc(suggestions).map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No CF-specific associate crop recommendations for current farm profile.</div>';
     return p2_hd(4,"Improving context features",
         "Adds crops that help improve weak soil, water, or biological conditions on the farm.")+
@@ -1214,7 +1221,7 @@ function p2_s5(){
     var cards = CS2.p2s5Loading && !CS2.step5Data
         ? '<div class="cs-empty">Loading wind barrier recommendations from backend...</div>'
         : suggestions.length?
-        suggestions.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join(""):
+        p2_sortByScoredesc(suggestions).map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join(""):
         '<div class="cs-empty">No wind-specific border crops needed — farm wind protection CF is adequate.</div>';
     return p2_hd(5,"Border crop (wind barrier)",
         "Recommends crops for field borders for reduced wind exposure and pest trapping to protect the main crops")+
@@ -1308,7 +1315,7 @@ function p2_s6(){
     var cards = CS2.p2s6Loading && !CS2.step6Data
         ? '<div class="cs-empty">Loading zone-based pest mitigation recommendations from backend...</div>'
         : suggestions.length
-        ? suggestions.map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join("")
+        ? p2_sortByScoredesc(suggestions).map(function(e){return p2_cropCard(e,CS2.selectedBorder,"border");}).join("")
         : '<div class="cs-empty">No pest barrier / pollinator border crops found.</div>';
 
     return p2_hd(6,"Border crop (Pest barrier Pollination promoter)",
@@ -1355,7 +1362,7 @@ function p2_s7(){
     var trapHtml = CS2.p2s7Loading && !CS2.step7Data
         ? '<div class="cs-empty">Loading trap crop and pest-mitigation recommendations from backend...</div>'
         : trapSuggestions.length
-        ? trapSuggestions.map(function(e){return p2_cropCard(e,CS2.selectedTrap,"trap");}).join("")
+        ? p2_sortByScoredesc(trapSuggestions).map(function(e){return p2_cropCard(e,CS2.selectedTrap,"trap");}).join("")
         : '<div class="cs-empty">No trap crops identified for the current main crop pest profile.</div>';
 
     return p2_hd(7,"Trap crops",
