@@ -171,9 +171,16 @@ function cs_toggleFarm(){
 
 /* ── PHASE TABS ───────────────────────────────────────────────── */
 function _cs_phaseTabs(){
-    var ph=[{n:1,l:"Main crop selection",a:true},{n:2,l:"Associate crops",a:false},{n:3,l:"Biodiversity crops",a:false},{n:4,l:"System evaluation",a:false}];
+    var ph=[{n:1,l:"Main crop selection"},{n:2,l:"Associate crops"},{n:3,l:"Biodiversity crops"},{n:4,l:"System evaluation"}];
+    var p1done=(typeof CS !== "undefined" && CS && CS.step >= 11);
     var d=document.createElement("div"); d.className="cs-ptabs";
-    d.innerHTML=ph.map(function(p){return'<button class="cs-ptab '+(p.a?"active":"")+' " onclick="cs_switchPhase('+p.n+')"><span class="cs-pnum">'+p.n+'</span>Phase '+p.n+': '+p.l+'</button>';}).join("");
+    d.innerHTML=ph.map(function(p){
+        var isActive=p.n===CS_ACTIVE_PHASE;
+        var locked=p.n!==1&&!p1done;
+        var cls="cs-ptab"+(isActive?" active":"")+(locked?" disabled":"");
+        var style=locked?"opacity:0.45;cursor:not-allowed;pointer-events:none;":""; 
+        return'<button class="'+cls+'" style="'+style+'" onclick="cs_switchPhase('+p.n+')"><span class="cs-pnum">'+p.n+'</span>Phase '+p.n+': '+p.l+'</button>';
+    }).join("");
     return d;
 }
 
