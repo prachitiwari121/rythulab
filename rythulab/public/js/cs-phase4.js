@@ -48,9 +48,9 @@ function p4_build(){
     var allCropRows=mc.map(function(c){return'<tr><td style="font-weight:700;color:var(--text-dark)">'+c.name+'</td><td style="color:#3a4a2a">Main crop</td><td>'+c.a.toFixed(1)+' ha</td></tr>';}).join("")+
         (CS2&&CS2.selectedAssoc?CS2.selectedAssoc.map(function(id){var e=(CS2.associateList||[]).find(function(x){return x.crop.id===id;});return e?'<tr><td style="font-weight:700;color:var(--text-dark)">'+e.crop.name+'</td><td style="color:var(--csg600)">Associate</td><td>—</td></tr>':"";}).join(""):"")+(CS2&&CS2.selectedBorder?CS2.selectedBorder.map(function(id){var e=(CS2.borderList||[]).find(function(x){return x.crop.id===id;});return e?'<tr><td style="font-weight:700;color:var(--text-dark)">'+e.crop.name+'</td><td style="color:var(--csa600)">Border</td><td>—</td></tr>':"";}).join(""):"")+(CS2&&CS2.selectedTrap?CS2.selectedTrap.map(function(id){var e=(CS2.trapList||[]).find(function(x){return x.crop.id===id;});return e?'<tr><td style="font-weight:700;color:var(--text-dark)">'+e.crop.name+'</td><td style="color:var(--csr600)">Trap</td><td>—</td></tr>':"";}).join(""):"")+(CS3&&CS3.selected?CS3.selected.map(function(id){var e=(CS3.recommendations||[]).find(function(x){return x.crop.id===id;});return e?'<tr><td style="font-weight:700;color:var(--text-dark)">'+e.crop.name+'</td><td style="color:#7b3fa0">Biodiversity</td><td>—</td></tr>':"";}).join(""):"");
 
-    return'<div class="cs-sc">'+
+return'<div class="cs-sc">'+
         '<div class="cs-bdg"><span class="cs-bdg-n">Phase 4</span><span class="cs-bdg-t">System evaluation & layout transfer</span></div>'+
-        '<div class="cs-ttl">System evaluation scores</div>'+'<div class="cs-desc">Summarizes how well the crop system performs in terms of feasibility, resource use, and ecological balance.</div>'+'<hr class="cs-hr">'+
+        '<div class="cs-ttl">System evaluation scores</div>'+'<div class="cs-desc">Summarizes how well the crop system performs in terms of feasibility, resource use, and ecological balance. <span style="color:red;">[Please Note: The following data is yet to be finalized and is provided for illustrative purposes only.]</span></div>'+'<hr class="cs-hr">'+
         '<div class="cs-scards" style="grid-template-columns:repeat(5,1fr)">'+
         '<div class="cs-sc2"><div class="cs-sc2-n '+(mc.length>0?"sn-g":"sn-r")+'">'+mc.length+'</div><div class="cs-sc2-l">main crops</div></div>'+
         '<div class="cs-sc2"><div class="cs-sc2-n sn-g">'+assocCount+'</div><div class="cs-sc2-l">associate crops</div></div>'+
@@ -83,5 +83,5 @@ function p4_transferToLayout(){
     window._confirmedCrops={main:mc,assoc:CS2&&CS2.selectedAssoc?CS2.selectedAssoc:[],border:CS2&&CS2.selectedBorder?CS2.selectedBorder:[],trap:CS2&&CS2.selectedTrap?CS2.selectedTrap:[],bio:CS3&&CS3.selected?CS3.selected:[]};
     // Open layout builder
     if(typeof openBuilder==="function") openBuilder(null);
-    else window.location.href="/farmer-dashboard";
+    else window.location.href="/field-planner";
 }

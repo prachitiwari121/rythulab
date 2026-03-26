@@ -102,6 +102,8 @@ function cs_renderFarmSelector(){
         '<option value="" '+(!selectedId?"selected":"")+' disabled>Select a farm</option>'+
         optionsHtml+
         '</select>';
+
+        
 }
 
 function cs_renderAwaitingFarmSelection(){
