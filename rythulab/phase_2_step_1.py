@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -31,6 +32,7 @@ except ModuleNotFoundError:
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
 CROP_LIST_PATH = SHEETS_DIR / "crop_details" / "0.List of All crops - Sheet1.csv"
+CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 
 
 def _sorted_unique(values: List[str]) -> List[str]:
@@ -51,6 +53,60 @@ def _load_crop_label_map() -> Dict[str, str]:
 	return label_map
 
 
+def _load_crop_height_map() -> Dict[str, float]:
+	height_map: Dict[str, float] = {}
+	if not CROP_DETAILS_DIR.exists():
+		return height_map
+
+	for csv_path in sorted(CROP_DETAILS_DIR.glob("*.csv")):
+		with csv_path.open("r", encoding="utf-8-sig", newline="") as fh:
+			rows = list(csv.reader(fh))
+
+		if len(rows) < 2:
+			continue
+
+		cropid_row = None
+		height_row = None
+
+		for row in rows:
+			if not row:
+				continue
+			first_cell = str(row[0]).strip().upper()
+			if first_cell == "CROPID":
+				cropid_row = row
+			elif first_cell == "CROP HEIGHT METERS (VALUE)":
+				height_row = row
+
+		if not cropid_row or not height_row:
+			continue
+
+		max_len = min(len(cropid_row), len(height_row))
+		for idx in range(1, max_len):
+			cid = str(cropid_row[idx]).strip().upper()
+			raw_height = str(height_row[idx]).strip()
+			if not cid or not raw_height:
+				continue
+
+			numbers = [float(m) for m in re.findall(r"\d+(?:\.\d+)?", raw_height)]
+			if not numbers:
+				continue
+
+			numeric_height = sum(numbers[:2]) / 2 if len(numbers) >= 2 else numbers[0]
+			height_map[cid] = max(height_map.get(cid, numeric_height), numeric_height)
+
+	return height_map
+
+
+_CROP_HEIGHTS: Optional[Dict[str, float]] = None
+
+
+def _get_crop_heights() -> Dict[str, float]:
+	global _CROP_HEIGHTS
+	if _CROP_HEIGHTS is None:
+		_CROP_HEIGHTS = _load_crop_height_map()
+	return _CROP_HEIGHTS
+
+
 def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 	"""
 	Given a list of crop IDs (main crops), compute:
@@ -69,6 +125,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 	crop_label_map = _load_crop_label_map()
 	produced_by_cropid = get_produced_micro_features_by_cropid()
 	required_by_cropid = get_required_micro_features_by_cropid()
+	crop_heights = _get_crop_heights()
 
 	# Aggregate required and available MFs across all selected crops
 	required_mfs: set = set()
@@ -126,6 +183,48 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 			"producer_crops": producers,
 		}
 
+	# Height-based MF4 recommendation:
+	# If crop X requires MF1 or MF2, recommend crop Y where height(Y) > height(X) and Y produces MF4
+	for crop_x in selected_ids:
+		x_required = set(required_by_cropid.get(crop_x) or [])
+		mf1_or_mf2_present = {"MF1", "MF2"} & x_required
+		if not mf1_or_mf2_present:
+			continue
+
+		height_x = crop_heights.get(crop_x)
+		crop_x_name = crop_label_map.get(crop_x, crop_x)
+
+		for candidate_id, candidate_produced in produced_by_cropid.items():
+			if candidate_id in selected_set:
+				continue
+			if "MF4" not in candidate_produced:
+				continue
+
+			height_y = crop_heights.get(candidate_id)
+			if height_y is None or height_x is None or height_y <= height_x:
+				continue
+
+			candidate_name = crop_label_map.get(candidate_id, candidate_id)
+			mf_codes = sorted(mf1_or_mf2_present)
+			reason = (
+				f"{crop_x_name} requires {', '.join(mf_codes)} — "
+				f"{candidate_name} is taller ({height_y}m) and produces MF4"
+			)
+
+			rec = recommended.setdefault(
+				candidate_id,
+				{
+					"crop_id": candidate_id,
+					"crop_name": candidate_name,
+					"covers_missing_mfs": [],
+					"reasons": [],
+				},
+			)
+			if "MF4" not in rec["covers_missing_mfs"]:
+				rec["covers_missing_mfs"].append("MF4")
+			if reason not in rec["reasons"]:
+				rec["reasons"].append(reason)
+
 	# Deduplicate and sort recommended crops by coverage count
 	recommended_list = []
 	for rec in recommended.values():
@@ -151,9 +250,30 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 if __name__ == "__main__":
 	import json
 
+	# --- Original MF-gap test ---
+	print("=== Test 1: MF gap (Cereals) ===")
 	sample_crop_ids = ["CRP0001", "CRP0002", "CRP0003"]
 	result = find_missing_mfs_and_producers(sample_crop_ids)
 	print(json.dumps(result, indent=2))
 	print(f"\nMissing MFs: {result['missing_mfs']}")
 	print(f"Recommended crops: {len(result['recommended_crops'])}")
+
+	# --- Height-based MF4 recommendation test ---
+	# Ginger (CRP0032) requires MF1 and is short (~0.8 m).
+	# Taller crops that produce MF4 (e.g. Teak CRP0097, Silver Oak CRP0103)
+	# should appear in recommended_crops via the height-MF4 rule.
+	print("\n=== Test 2: Height-based MF4 recommendation (Ginger + Turmeric) ===")
+	height_mf4_sample = ["CRP0032", "CRP0031"]
+	result2 = find_missing_mfs_and_producers(height_mf4_sample)
+	print(json.dumps(result2, indent=2))
+	print(f"\nMissing MFs: {result2['missing_mfs']}")
+	print(f"Recommended crops (total): {len(result2['recommended_crops'])}")
+
+	height_mf4_recs = [
+		r for r in result2["recommended_crops"]
+		if any("MF4" in reason or "taller" in reason for reason in r.get("reasons", []))
+	]
+	print(f"Height-MF4 triggered recommendations: {len(height_mf4_recs)}")
+	for r in height_mf4_recs:
+		print(f"  {r['crop_name']} ({r['crop_id']}): {r['reasons']}")
 
