@@ -136,7 +136,7 @@ def load_mf_producers() -> dict[str, list[dict]]:
             reader = csv.DictReader(f)
             for row in reader:
                 cid  = row.get("CropID", "").strip()
-                name = row.get("Crop", "").strip()
+                name = (row.get("Crop") or row.get("Crop Name", "")).strip()
                 produces_cell = row.get("Produces (MF List)", "")
                 for mf in _parse_mf_codes(produces_cell):
                     mf_producers[mf].append({"crop_id": cid, "crop": name})
@@ -177,6 +177,7 @@ def recommend(crop_ids: list[str]) -> dict:
     }
     """
     crop_ids = [str(crop_id or "").strip().upper() for crop_id in crop_ids or [] if str(crop_id or "").strip()]
+    given_set = set(crop_ids)  # exclude input crops from all recommendations
 
     trap_map      = load_trap_map()
     pest_master   = load_pest_master()
@@ -184,6 +185,14 @@ def recommend(crop_ids: list[str]) -> dict:
     mf_names      = load_mf_name_map()
     mf_producers  = load_mf_producers()
     step1_scores  = load_step1_results()
+
+    # Fallback crop name map for crops not in trap_map
+    crop_name_map: dict[str, str] = {
+        p["crop_id"]: p["crop"]
+        for producers in mf_producers.values()
+        for p in producers
+        if p["crop_id"] and p["crop"]
+    }
 
     # ── 1. Trap crop recommendations ─────────────────────────────────────────
     trap_results = []
@@ -194,7 +203,8 @@ def recommend(crop_ids: list[str]) -> dict:
         trap_crops_filtered = [
             {**tc, "step1_score": step1_scores.get(tc.get("crop_id"))}
             for tc in entry["trap_crops"]
-            if not step1_scores or tc.get("crop_id") in step1_scores
+            if tc.get("crop_id") not in given_set
+            and (not step1_scores or tc.get("crop_id") in step1_scores)
         ]
         if not trap_crops_filtered:
             continue
@@ -218,7 +228,7 @@ def recommend(crop_ids: list[str]) -> dict:
         if not high_pests:
             continue
 
-        crop_name = trap_map.get(cid, {}).get("crop") or cid
+        crop_name = trap_map.get(cid, {}).get("crop") or crop_name_map.get(cid) or cid
 
         # Collect MFs that reduce risk for each high-severity pest
         # mf_code -> [pest_ids that it mitigates]
@@ -247,8 +257,8 @@ def recommend(crop_ids: list[str]) -> dict:
         for mf, pids in mf_pest_map.items():
             for producer in mf_producers.get(mf, []):
                 comp_id = producer["crop_id"]
-                if comp_id == cid or not comp_id:
-                    continue  # skip self
+                if not comp_id:
+                    continue  # skip self and all given crops
                 if step1_scores and comp_id not in step1_scores:
                     continue
                 if comp_id not in companions:
