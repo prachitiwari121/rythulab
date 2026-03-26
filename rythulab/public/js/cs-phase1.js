@@ -112,7 +112,7 @@ function _cs_farmBasic(){
 function _cs_farmBox(){
     var F=CS_FARM;
     var basic=[
-        {l:"Farm Area",          v:F.area+" acres"},
+        {l:"Farm Area",          v:F.area+" ha"},
         {l:"Agro-climatic Zone", v:F.zone},
         {l:"Season",             v:F.season},
         {l:"Soil Type / Texture",v:F.soil},
