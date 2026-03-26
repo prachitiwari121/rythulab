@@ -14,6 +14,13 @@ import re
 import pathlib
 from collections import defaultdict
 
+try:
+    from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+    import sys
+    sys.path.append(str(pathlib.Path(__file__).parent))
+    from phase_1_step_1 import load_step1_results
+
 # ── Paths ────────────────────────────────────────────────────────────────────
 BASE = pathlib.Path(__file__).parent
 SHEETS = BASE / "sheets"
@@ -176,6 +183,7 @@ def recommend(crop_ids: list[str]) -> dict:
     crop_pests    = load_crop_high_pests()
     mf_names      = load_mf_name_map()
     mf_producers  = load_mf_producers()
+    step1_scores  = load_step1_results()
 
     # ── 1. Trap crop recommendations ─────────────────────────────────────────
     trap_results = []
@@ -183,13 +191,18 @@ def recommend(crop_ids: list[str]) -> dict:
         if cid not in trap_map:
             continue
         entry = trap_map[cid]
-        if not entry["trap_crops"]:
+        trap_crops_filtered = [
+            {**tc, "step1_score": step1_scores.get(tc.get("crop_id"))}
+            for tc in entry["trap_crops"]
+            if not step1_scores or tc.get("crop_id") in step1_scores
+        ]
+        if not trap_crops_filtered:
             continue
-        tc_names = ", ".join(tc["crop"] for tc in entry["trap_crops"])
+        tc_names = ", ".join(tc["crop"] for tc in trap_crops_filtered)
         trap_results.append({
             "for_crop_id": cid,
             "for_crop": entry["crop"],
-            "trap_crops": entry["trap_crops"],
+            "trap_crops": trap_crops_filtered,
             "reason": (
                 f"{entry['crop']} is susceptible to pests that are diverted by "
                 f"{tc_names} when grown as border/intercrop rows, reducing direct "
@@ -236,6 +249,8 @@ def recommend(crop_ids: list[str]) -> dict:
                 comp_id = producer["crop_id"]
                 if comp_id == cid or not comp_id:
                     continue  # skip self
+                if step1_scores and comp_id not in step1_scores:
+                    continue
                 if comp_id not in companions:
                     companions[comp_id] = {
                         "crop_id": comp_id,
@@ -265,6 +280,7 @@ def recommend(crop_ids: list[str]) -> dict:
             companion_list.append({
                 "crop_id": comp["crop_id"],
                 "crop": comp["crop"],
+                "step1_score": step1_scores.get(comp["crop_id"]),
                 "produces_mfs": mf_labels,
                 "mitigates_pests": pest_labels,
                 "reason": (
@@ -306,6 +322,7 @@ def build_frontend_payload(crop_ids: list[str]) -> dict:
                 {
                     "crop_id": trap_crop_id,
                     "crop_name": trap_crop.get("crop", trap_crop_id),
+                    "step1_score": trap_crop.get("step1_score"),
                     "reasons": [],
                     "supports_crop_ids": [],
                     "supports_crops": [],
@@ -334,6 +351,7 @@ def build_frontend_payload(crop_ids: list[str]) -> dict:
                 {
                     "crop_id": companion_id,
                     "crop_name": companion.get("crop", companion_id),
+                    "step1_score": companion.get("step1_score"),
                     "produces_mfs": [],
                     "mitigates_pests": [],
                     "supports_crop_ids": [],
@@ -377,6 +395,7 @@ def build_frontend_payload(crop_ids: list[str]) -> dict:
                 "desc": "",
                 "border": True,
                 "trap": True,
+                "step1_score": item.get("step1_score"),
             },
             "reasons": item.get("reasons", []),
         }
@@ -394,6 +413,7 @@ def build_frontend_payload(crop_ids: list[str]) -> dict:
                 "desc": "",
                 "border": False,
                 "trap": False,
+                "step1_score": item.get("step1_score"),
             },
             "reasons": item.get("reasons", []),
         }

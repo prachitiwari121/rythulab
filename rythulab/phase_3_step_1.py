@@ -4,6 +4,11 @@ import csv
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
+try:
+	from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+	from phase_1_step_1 import load_step1_results
+
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
 CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
@@ -242,6 +247,7 @@ def recommend_crops_for_biodiversity_gaps(crop_ids: List[str]) -> Dict[str, Any]
 	"""
 	coverage_result = analyze_biodiversity_coverage(crop_ids)
 	catalog = _build_crop_catalog()
+	step1_scores = load_step1_results()
 
 	selected_ids = set(coverage_result["known_crop_ids"])
 	coverage = coverage_result["coverage"]
@@ -259,6 +265,8 @@ def recommend_crops_for_biodiversity_gaps(crop_ids: List[str]) -> Dict[str, Any]
 		if crop_id in selected_ids:
 			continue
 		if not _should_include_in_universe(crop):
+			continue
+		if step1_scores and crop_id not in step1_scores:
 			continue
 
 		fills = {
@@ -291,6 +299,7 @@ def recommend_crops_for_biodiversity_gaps(crop_ids: List[str]) -> Dict[str, Any]
 			{
 				"crop_id": crop_id,
 				"crop_name": crop.get("crop_name") or crop_id,
+				"step1_score": step1_scores.get(crop_id),
 				"sub_category": crop.get("sub_category") or "",
 				"functional_group": crop.get("functional_group") or "",
 				"family": crop.get("family") or "",

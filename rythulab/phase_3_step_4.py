@@ -57,6 +57,14 @@ def _load_annotate_mf_helper():
 	return module.annotate_mf_codes
 
 
+def _load_step1_results_helper():
+	try:
+		module = importlib.import_module("rythulab.phase_1_step_1")
+	except ModuleNotFoundError:
+		module = importlib.import_module("phase_1_step_1")
+	return module.load_step1_results
+
+
 get_produced_micro_features_by_cropid = _load_produced_mf_helper()
 _phase2_step4 = _load_phase2_step4_module()
 CF_FARM_FEATURES_PATH = _phase2_step4.CF_FARM_FEATURES_PATH
@@ -68,6 +76,7 @@ _build_crop_catalog = _load_crop_catalog_helper()
 annotate_cf_code = _load_annotate_cf_helper()
 get_cropid_to_name_map = _load_crop_name_helper()
 annotate_mf_codes = _load_annotate_mf_helper()
+load_step1_results = _load_step1_results_helper()
 
 
 def _normalize_crop_ids(crop_ids: List[str] | None) -> List[str]:
@@ -120,6 +129,7 @@ def analyze_weak_cf_support_and_recommendations(
 	produced_by_cropid = get_produced_micro_features_by_cropid()
 	cropid_to_name = get_cropid_to_name_map()
 	crop_catalog = _build_crop_catalog()
+	step1_scores = load_step1_results()
 
 	cf_analysis: List[Dict[str, Any]] = []
 	crop_recommendation_map: Dict[str, Dict[str, Any]] = {}
@@ -162,6 +172,8 @@ def analyze_weak_cf_support_and_recommendations(
 		for crop_id, produced_mfs in (produced_by_cropid or {}).items():
 			if crop_id in selected_set:
 				continue
+			if step1_scores and crop_id not in step1_scores:
+				continue
 
 			matched_improving = sorted(set(produced_mfs or []) & improving_set)
 			if not matched_improving:
@@ -172,6 +184,7 @@ def analyze_weak_cf_support_and_recommendations(
 				{
 					"crop_id": crop_id,
 					"crop_name": cropid_to_name.get(crop_id, crop_id),
+					"step1_score": step1_scores.get(crop_id),
 					"family": (crop_catalog.get(crop_id) or {}).get("family") or "",
 					"functional_group": (crop_catalog.get(crop_id) or {}).get("functional_group") or "",
 					"root_depth_class": (crop_catalog.get(crop_id) or {}).get("root_depth_class") or "",
@@ -245,6 +258,7 @@ def build_frontend_payload(
 		crop_payload = _to_frontend_crop(crop_id, crop_catalog, cropid_to_name)
 		crop_payload["mfp"] = all_mfp_codes
 		crop_payload["cfImprove"] = cf_codes
+		crop_payload["step1_score"] = rec.get("step1_score")
 
 		recommendations.append(
 			{

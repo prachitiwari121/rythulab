@@ -96,6 +96,7 @@ function p3_upsertRecommendations(entries){
         existing.crop.desc = existing.crop.desc || entry.crop.desc;
         existing.crop.mfp = Array.from(new Set((existing.crop.mfp || []).concat(entry.crop.mfp || [])));
         existing.crop.cfImprove = Array.from(new Set((existing.crop.cfImprove || []).concat(entry.crop.cfImprove || [])));
+        existing.crop.step1_score = existing.crop.step1_score || entry.crop.step1_score;
         (entry.reasons || []).forEach(function(reason){
             if(existing.reasons.indexOf(reason) < 0){
                 existing.reasons.push(reason);
@@ -152,7 +153,8 @@ function cs_fetchPhase3Step3(){
                     rootD: entry.crop.rootD,
                     mfp: Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
                     cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
-                    desc: entry.crop.desc
+                    desc: entry.crop.desc,
+                    step1_score: entry.crop.step1_score
                 },
                 reasons: keptReasons.length ? keptReasons : baseReasons.slice()
             };
@@ -235,7 +237,8 @@ function cs_fetchPhase3Step4(){
                     rootD: entry.crop.rootD,
                     mfp: Array.isArray(entry.crop.mfp) ? entry.crop.mfp.slice() : [],
                     cfImprove: Array.isArray(entry.crop.cfImprove) ? entry.crop.cfImprove.slice() : [],
-                    desc: entry.crop.desc
+                    desc: entry.crop.desc,
+                    step1_score: entry.crop.step1_score
                 },
                 reasons: keptReasons.length ? keptReasons : baseReasons.slice()
             };
@@ -296,7 +299,8 @@ function cs_fetchPhase3Step1Step2(){
                     rootD: rec.root_depth_class || "",
                     mfp: [],
                     cfImprove: [],
-                    desc: ""
+                    desc: "",
+                    step1_score: rec.step1_score
                 },
                 reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
             };
@@ -509,7 +513,10 @@ function p3_cropCard(entry){
             ' style="margin-top:3px;width:16px;height:16px;flex-shrink:0"'+
             ' onchange="p3_toggleSel(\''+bc.id+'\',this.checked)">'+
         '<div style="flex:1">'+
-        '<div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px">'+bc.name+'</div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+bc.name+'</div>'+
+        (bc.step1_score!=null?'<span style="font-size:10px;font-weight:700;background:#d4edda;color:#155724;padding:2px 7px;border-radius:8px">'+Number(bc.step1_score).toFixed(1)+'</span>':'')+
+        '</div>'+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.family+' · '+bc.group+' · Height: '+bc.h+' · Root: '+(bc.rootD||bc.rd||"N/A")+'</div>'+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+bc.desc+'</div>'+
         '<div style="margin-bottom:6px">'+tags+'</div>'+

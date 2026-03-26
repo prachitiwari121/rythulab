@@ -22,6 +22,11 @@ except ModuleNotFoundError:
 	sys.path.append(str(Path(__file__).resolve().parent / "sheets" / "mf_labels"))
 	from mf_label_extract import build_mf_label_map
 
+try:
+	from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+	from phase_1_step_1 import load_step1_results
+
 
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
@@ -150,6 +155,7 @@ def find_zone_pest_mitigating_crops(
 
 	pest_by_id, pest_name_to_id = _load_pest_maps(pest_triggers_path)
 	mf_label_map = build_mf_label_map()
+	step1_scores = load_step1_results()
 
 	zone_pests = []
 	mf_to_pests: Dict[str, set[str]] = {}
@@ -192,6 +198,8 @@ def find_zone_pest_mitigating_crops(
 
 	recommended_crops = []
 	for crop_id, produced_mfs in (produced_by_crop or {}).items():
+		if step1_scores and crop_id not in step1_scores:
+			continue
 		produced_set = set(produced_mfs or [])
 		overlap = sorted(produced_set & set(all_mitigating_mfs))
 		priority_overlap = sorted(produced_set & STEP6_PRIORITY_MF_CODES)
@@ -204,6 +212,7 @@ def find_zone_pest_mitigating_crops(
 			{
 				"crop_id": crop_id,
 				"crop_name": cropid_to_name.get(crop_id, crop_id),
+				"step1_score": step1_scores.get(crop_id),
 				"produced_mitigating_mfs": [
 					{"mf_code": mf_code, "mf_label": mf_label_map.get(mf_code, mf_code)} for mf_code in recommended_mf_codes
 				],

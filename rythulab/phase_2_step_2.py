@@ -14,6 +14,13 @@ except ModuleNotFoundError:
 	from mf_label_extract import get_mf_label
 
 try:
+	from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+	import sys
+	sys.path.append(str(Path(__file__).resolve().parent))
+	from phase_1_step_1 import load_step1_results
+
+try:
 	from crop_micro_feature_extract import (
 		get_produced_micro_features_by_cropid,
 		get_required_micro_features_by_cropid,
@@ -127,6 +134,7 @@ def find_cross_compatible_associate_crops(crop_ids: List[str]) -> Dict[str, Any]
 	selected_ids = [str(cid).strip().upper() for cid in crop_ids if str(cid).strip()]
 	selected_set = set(selected_ids)
 
+	step1_scores = load_step1_results()  # {crop_id: score} — allowed universe
 	crop_label_map = _load_crop_label_map()
 	produced_by_cropid = get_produced_micro_features_by_cropid()
 	required_by_cropid = get_required_micro_features_by_cropid()
@@ -142,7 +150,9 @@ def find_cross_compatible_associate_crops(crop_ids: List[str]) -> Dict[str, Any]
 		selected_required_mfs.update(required_by_cropid.get(crop_id, []))
 		selected_suppressed_mfs.update(suppressed_by_cropid.get(crop_id, []))
 
-	candidate_ids = set(produced_by_cropid.keys()) | set(required_by_cropid.keys())
+	candidate_ids = (
+		set(produced_by_cropid.keys()) | set(required_by_cropid.keys())
+	) & (set(step1_scores.keys()) if step1_scores else set(produced_by_cropid.keys()) | set(required_by_cropid.keys()))
 	associated_crops: List[Dict[str, Any]] = []
 
 	for candidate_id in candidate_ids:
@@ -178,6 +188,7 @@ def find_cross_compatible_associate_crops(crop_ids: List[str]) -> Dict[str, Any]
 			{
 				"crop_id": candidate_id,
 				"crop_name": crop_name,
+				"step1_score": step1_scores.get(candidate_id),
 				"required_mfs_satisfied": [
 					{"mf_code": mf, "mf_label": get_mf_label(mf)} for mf in required_satisfied
 				],
@@ -264,6 +275,7 @@ def find_cross_compatible_associate_crops(crop_ids: List[str]) -> Dict[str, Any]
 					{
 						"crop_id": candidate_id,
 						"crop_name": candidate_name,
+						"step1_score": step1_scores.get(candidate_id),
 						"required_mfs_satisfied": [
 							{"mf_code": mf, "mf_label": get_mf_label(mf)} for mf in satisfied_mfs
 						],

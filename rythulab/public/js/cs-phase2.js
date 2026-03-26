@@ -155,7 +155,8 @@ function cs_fetchPhase2Step1(){
                             family: "",
                             desc: "",
                             border: false,
-                            trap: false
+                            trap: false,
+                            step1_score: rec.step1_score
                         },
                         reasons: rec.reasons || []
                     });
@@ -218,7 +219,8 @@ function cs_fetchPhase2Step2(){
                         family: "",
                         desc: "",
                         border: false,
-                        trap: false
+                        trap: false,
+                        step1_score: rec.step1_score
                     },
                     reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                 });
@@ -290,7 +292,8 @@ function cs_fetchPhase2Step3(){
                             family: "",
                             desc: "",
                             border: false,
-                            trap: false
+                            trap: false,
+                            step1_score: rec.step1_score
                         },
                         reasons: reasonLines
                     });
@@ -461,7 +464,8 @@ function cs_fetchPhase2Step7(){
                     family: entry.crop.family || "",
                     desc: entry.crop.desc || "",
                     border: !!entry.crop.border,
-                    trap: entry.crop.trap !== false
+                    trap: entry.crop.trap !== false,
+                    step1_score: entry.crop.step1_score
                 },
                 reasons: Array.isArray(entry.reasons) ? entry.reasons.slice() : []
             };
@@ -517,7 +521,8 @@ function cs_fetchPhase2Step7(){
                         family: "",
                         desc: "",
                         border: true,
-                        trap: true
+                        trap: true,
+                        step1_score: rec.step1_score
                     },
                     reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                 });
@@ -536,7 +541,8 @@ function cs_fetchPhase2Step7(){
                         family: entry.crop && entry.crop.family ? entry.crop.family : "",
                         desc: entry.crop && entry.crop.desc ? entry.crop.desc : "",
                         border: true,
-                        trap: true
+                        trap: true,
+                        step1_score: entry.crop && entry.crop.step1_score
                     },
                     reasons: Array.isArray(entry.reasons) ? entry.reasons.slice() : []
                 };
@@ -554,7 +560,8 @@ function cs_fetchPhase2Step7(){
                         family: "",
                         desc: "",
                         border: true,
-                        trap: true
+                        trap: true,
+                        step1_score: rec.step1_score
                     },
                     reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                 });
@@ -766,7 +773,10 @@ function p2_cropCard(entry, selArr, prefix){
             ' style="margin-top:3px;width:16px;height:16px;flex-shrink:0"'+
             ' onchange="p2_toggleSel(\''+prefix+'\',\''+ac.id+'\',this.checked)">'+
         '<div style="flex:1">'+
-        '<div style="font-size:13px;font-weight:700;color:var(--text-dark);margin-bottom:2px">'+ac.name+'</div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+ac.name+'</div>'+
+        (ac.step1_score!=null?'<span style="font-size:10px;font-weight:700;background:#d4edda;color:#155724;padding:2px 7px;border-radius:8px">'+Number(ac.step1_score).toFixed(1)+'</span>':'')+
+        '</div>'+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+ac.type+' · '+ac.family+' · '+ac.desc+'</div>'+
         '<div style="margin-bottom:6px">'+tags+'</div>'+
         '<div style="background:white;border-radius:6px;padding:7px 10px">'+
@@ -998,7 +1008,8 @@ function p2_s3(){
                             family: "",
                             desc: "",
                             border: false,
-                            trap: false
+                            trap: false,
+                            step1_score: rec.step1_score
                         },
                         reasons: Array.isArray(rec.reasons) ? rec.reasons.slice() : []
                     };
@@ -1116,7 +1127,8 @@ function p2_s4(){
                     family: "",
                     desc: "",
                     border: false,
-                    trap: false
+                    trap: false,
+                    step1_score: rec.step1_score
                 },
                 reasons: reasons
             };
@@ -1164,7 +1176,8 @@ function p2_s5(){
                     family: "",
                     desc: "",
                     border: true,
-                    trap: false
+                    trap: false,
+                    step1_score: rec.step1_score
                 },
                 reasons: [rec.reason || "Produces MF11 (Wind Barrier)"]
             };
@@ -1251,7 +1264,8 @@ function p2_s6(){
                     family: "",
                     desc: "",
                     border: true,
-                    trap: false
+                    trap: false,
+                    step1_score: rec.step1_score
                 },
                 reasons: reasons.length ? reasons : ["Supports pest mitigation for this zone"]
             };

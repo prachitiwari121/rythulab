@@ -43,6 +43,29 @@ _CROPID_CATEGORY_MAP: dict = _load_cropid_category_map()
 _CANOPY_TREES_LABEL = "canopy trees"
 
 
+def load_step1_results() -> dict:
+    """
+    Load the phase 1 step 1 results CSV and return a dict of
+    {crop_id (upper): weighted_score (float)}.
+    Returns an empty dict if the file doesn't exist yet.
+    """
+    csv_path = _RESULTS_DIR / "phase_1_step_1_results.csv"
+    if not csv_path.exists():
+        return {}
+    result = {}
+    with csv_path.open("r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            cid = str(row.get("crop_id") or "").strip().upper()
+            try:
+                score = float(row.get("weighted_score") or 0)
+            except ValueError:
+                score = 0.0
+            if cid:
+                result[cid] = score
+    return result
+
+
 def _save_step1_results(crops: list) -> None:
     """Persist step-1 feasibility results to results/phase_1_step_1_results.csv."""
     _RESULTS_DIR.mkdir(exist_ok=True)

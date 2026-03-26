@@ -41,10 +41,19 @@ def _load_annotate_mf_helper():
 	return module.annotate_mf_codes
 
 
+def _load_step1_results_helper():
+	try:
+		module = importlib.import_module("rythulab.phase_1_step_1")
+	except ModuleNotFoundError:
+		module = importlib.import_module("phase_1_step_1")
+	return module.load_step1_results
+
+
 get_produced_micro_features_by_cropid = _load_produced_mf_helper()
 get_cropid_to_name_map = _load_crop_name_helper()
 _build_crop_catalog = _load_crop_catalog_helper()
 annotate_mf_codes = _load_annotate_mf_helper()
+load_step1_results = _load_step1_results_helper()
 
 
 TARGET_MF_CODES = ["MF18", "MF19", "MF20", "MF24", "MF29"]
@@ -76,6 +85,7 @@ def get_crops_producing_priority_biodiversity_mfs(
 	produced_by_cropid = get_produced_micro_features_by_cropid()
 	crop_labels = get_cropid_to_name_map()
 	crop_catalog = _build_crop_catalog()
+	step1_scores = load_step1_results()
 
 	# ── Check coverage for selected crops ─────────────────────────
 	mf_coverage_map: Dict[str, List[str]] = {code: [] for code in target_codes}
@@ -105,6 +115,8 @@ def get_crops_producing_priority_biodiversity_mfs(
 	for crop_id, produced_mfs in (produced_by_cropid or {}).items():
 		if crop_id in selected_set:
 			continue
+		if step1_scores and crop_id not in step1_scores:
+			continue
 		matched_codes = sorted(set(produced_mfs or []) & missing_mfs)
 		if not matched_codes:
 			continue
@@ -115,6 +127,7 @@ def get_crops_producing_priority_biodiversity_mfs(
 			{
 				"crop_id": crop_id,
 				"crop_name": crop_labels.get(crop_id, crop_id),
+				"step1_score": step1_scores.get(crop_id),
 				"family": crop_meta.get("family") or "",
 				"functional_group": crop_meta.get("functional_group") or "",
 				"canopy_layer_class": crop_meta.get("canopy_layer_class") or "",
@@ -158,7 +171,8 @@ def build_frontend_payload(
 					"rootD": item.get("root_depth_class") or "",
 					"mfp": [mf.get("mf_code") for mf in matched if mf.get("mf_code")],
 					"cfImprove": [],
-					"desc": ""
+					"desc": "",
+					"step1_score": item.get("step1_score"),
 				},
 				"reasons": reasons,
 			}

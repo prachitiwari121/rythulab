@@ -1556,6 +1556,7 @@ def get_phase2_farm_context_support(farm_cfs: Any = None) -> Dict[str, Any]:
             {
                 "crop_id": crop_id,
                 "crop_name": cropid_to_name.get(crop_id, crop_id),
+                "step1_score": rec.get("step1_score"),
                 "supports": rec.get("supports", []),
             }
         )
@@ -1590,13 +1591,14 @@ def get_phase2_wind_barrier_crops(selected_crops: Any = None) -> Dict[str, Any]:
 
     recommended = []
     for rec in get_crops_producing_wind_barrier() or []:
-        crop_id = str(rec.get("crop") or "").strip().upper()
+        crop_id = str(rec.get("crop_id") or rec.get("crop") or "").strip().upper()
         if not crop_id:
             continue
         recommended.append(
             {
                 "crop_id": crop_id,
-                "crop_name": cropid_to_name.get(crop_id, crop_id),
+                "crop_name": rec.get("crop") or cropid_to_name.get(crop_id, crop_id),
+                "step1_score": rec.get("step1_score"),
                 "reason": rec.get("reason") or "Produces MF11 (Wind Barrier)",
             }
         )

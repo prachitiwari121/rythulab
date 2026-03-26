@@ -31,6 +31,11 @@ except ModuleNotFoundError:
     from mf_label_extract import annotate_mf_codes, build_mf_label_map
     from cf_label_extract import annotate_cf_code, build_cf_label_map, build_label_to_cf_number_map
 
+try:
+    from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+    from phase_1_step_1 import load_step1_results
+
 
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
@@ -203,6 +208,7 @@ def analyze_weak_cf_mitigating_crops(
     cf_mf_impact_map = build_cf_mf_impact_map(impact_matrix_path)
     produced_by_crop = get_produced_micro_features_by_cropid(micro_features_dir)
     mf_label_map = build_mf_label_map()
+    step1_scores = load_step1_results()
     normalized_farm_cf_values, unsupported_inputs = _normalize_farm_cf_values(
         farm_cf_values,
         cf_mf_impact_map,
@@ -233,6 +239,8 @@ def analyze_weak_cf_mitigating_crops(
         # Find crops that produce any of the improving MFs
         crops_for_cf = []
         for crop_name, produced_mfs in produced_by_crop.items():
+            if step1_scores and crop_name not in step1_scores:
+                continue
             matching_mfs = sorted(set(produced_mfs) & set(improving_mfs))
             if not matching_mfs:
                 continue
@@ -247,12 +255,13 @@ def analyze_weak_cf_mitigating_crops(
 
             crops_for_cf.append({
                 "crop": crop_name,
+                "step1_score": step1_scores.get(crop_name),
                 "produces_mfs": annotate_mf_codes(matching_mfs),
                 "reasons": reasons,
             })
 
             # Aggregate across all weak CFs
-            agg = aggregated_crops.setdefault(crop_name, {"crop": crop_name, "supports": []})
+            agg = aggregated_crops.setdefault(crop_name, {"crop": crop_name, "step1_score": step1_scores.get(crop_name), "supports": []})
             agg["supports"].append({
                 "cf": annotate_cf_code(full_cf_code, farm_features_path),
                 "cf_status": cf_status,

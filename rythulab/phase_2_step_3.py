@@ -23,6 +23,11 @@ except ModuleNotFoundError:
     sys.path.append(str(sheets_dir / "mf_labels"))
     from mf_label_extract import annotate_mf_codes, build_mf_label_map
 
+try:
+    from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+    from phase_1_step_1 import load_step1_results
+
 
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
@@ -233,6 +238,7 @@ def find_disease_mitigating_crops(
     crop_high_risk_disease_map = build_crop_high_risk_disease_map(crop_details_dir)
     produced_by_cropid = get_produced_micro_features_by_cropid(micro_features_dir)
     mf_label_map = build_mf_label_map()
+    step1_scores = load_step1_results()
 
     result: Dict[str, Any] = {
         "selected_crop_ids": selected_crop_ids,
@@ -269,6 +275,8 @@ def find_disease_mitigating_crops(
         for producer_crop_id, produced_mfs in produced_by_cropid.items():
             if producer_crop_id in selected_set:
                 continue
+            if step1_scores and producer_crop_id not in step1_scores:
+                continue
 
             relevant_mfs = sorted(set(produced_mfs) & all_mitigating_mfs)
             if not relevant_mfs:
@@ -292,6 +300,7 @@ def find_disease_mitigating_crops(
                 {
                     "crop_id": producer_crop_id,
                     "crop_name": crop_label_map.get(producer_crop_id, producer_crop_id),
+                    "step1_score": step1_scores.get(producer_crop_id),
                     "produces_mfs": annotate_mf_codes(relevant_mfs),
                     "reasons": reasons,
                 }

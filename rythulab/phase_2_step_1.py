@@ -14,6 +14,13 @@ except ModuleNotFoundError:
 	from mf_label_extract import get_mf_label
 
 try:
+	from rythulab.phase_1_step_1 import load_step1_results
+except ModuleNotFoundError:
+	import sys
+	sys.path.append(str(Path(__file__).resolve().parent))
+	from phase_1_step_1 import load_step1_results
+
+try:
 	from crop_micro_feature_extract import (
 		get_produced_micro_features_by_cropid,
 		get_required_micro_features_by_cropid,
@@ -130,6 +137,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 	selected_ids = [str(cid).strip().upper() for cid in crop_ids if str(cid).strip()]
 	selected_set = set(selected_ids)
 
+	step1_scores = load_step1_results()  # {crop_id: score} — allowed universe
 	crop_label_map = _load_crop_label_map()
 	produced_by_cropid = get_produced_micro_features_by_cropid()
 	required_by_cropid = get_required_micro_features_by_cropid()
@@ -163,6 +171,8 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 		for candidate_id, produced_mfs in produced_by_cropid.items():
 			if candidate_id in selected_set:
 				continue
+			if step1_scores and candidate_id not in step1_scores:
+				continue
 			if mf_code not in produced_mfs:
 				continue
 
@@ -174,6 +184,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 				{
 					"crop_id": candidate_id,
 					"crop_name": candidate_name,
+					"step1_score": step1_scores.get(candidate_id),
 					"covers_missing_mfs": [],
 					"reasons": [],
 				},
@@ -205,6 +216,8 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 		for candidate_id, candidate_produced in produced_by_cropid.items():
 			if candidate_id in selected_set:
 				continue
+			if step1_scores and candidate_id not in step1_scores:
+				continue
 			if "MF4" not in candidate_produced:
 				continue
 
@@ -227,6 +240,7 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 				{
 					"crop_id": candidate_id,
 					"crop_name": candidate_name,
+					"step1_score": step1_scores.get(candidate_id),
 					"covers_missing_mfs": [],
 					"reasons": [],
 				},
