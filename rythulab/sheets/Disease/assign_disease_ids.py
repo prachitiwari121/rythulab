@@ -158,6 +158,30 @@ if unmatched_new:
         print(f'  - {n}')
 
 not_in_new = [r for r in master_rows if r['id'] not in matched_ids]
-print(f'\nMaster diseases NOT present in new sheet ({len(not_in_new)}):')
+print(f'\nMaster diseases NOT present in new sheet ({len(not_in_new)}) — appending:')
 for r in not_in_new:
     print(f"  {r['id']}  {r['name']}")
+
+# Append missing master rows to new sheet
+master_full = []
+with open(MASTER, newline='', encoding='utf-8-sig') as f:
+    for row in csv.DictReader(f):
+        master_full.append(row)
+
+missing_ids = {r['id'] for r in not_in_new}
+rows_to_append = [
+    {
+        'DiseaseID': row['DiseaseID'],
+        'Disease': row['Disease'],
+        'CF_TriggerIncites': row['CF_TriggerIncites'],
+        'MF_IncreasesOccurance': row['MF_IncreasesOccurance'],
+        'MF_DecreasesOccurance': row['MF_DecreasesOccurance'],
+    }
+    for row in master_full if row['DiseaseID'] in missing_ids
+]
+
+with open(NEW, 'a', newline='', encoding='utf-8') as f:
+    w = csv.DictWriter(f, fieldnames=new_fields)
+    w.writerows(rows_to_append)
+
+print(f'\nAppended {len(rows_to_append)} rows from master to new sheet.')

@@ -77,6 +77,28 @@ function cs_selBoxSidebarHtml(){
 }
 
 
+/* ── INLINE ERROR POPUP ─────────────────────────────────────── */
+function cs_showError(title, body){
+    var existing=document.getElementById('cs-err-overlay');
+    if(existing) existing.remove();
+    var ov=document.createElement('div');
+    ov.id='cs-err-overlay';
+    ov.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(2px);';
+    ov.innerHTML=
+        '<div style="background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);border:1.5px solid var(--csr200);max-width:380px;width:90%;padding:0;overflow:hidden;font-family:\'Source Sans 3\',sans-serif;">'+
+            '<div style="background:var(--csr50);padding:14px 18px 12px;border-bottom:1px solid var(--csr200);display:flex;align-items:center;gap:10px;">'+
+                '<span style="font-size:20px;line-height:1;">⚠️</span>'+
+                '<span style="font-size:14px;font-weight:700;color:var(--csr600);">'+title+'</span>'+
+            '</div>'+
+            '<div style="padding:16px 18px;font-size:13px;color:#2a2a2a;line-height:1.6;">'+body+'</div>'+
+            '<div style="padding:0 18px 16px;display:flex;justify-content:flex-end;">'+
+                '<button onclick="document.getElementById(\'cs-err-overlay\').remove()" style="padding:7px 22px;border-radius:8px;border:none;background:var(--csr400);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">OK</button>'+
+            '</div>'+
+        '</div>';
+    ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+    document.body.appendChild(ov);
+}
+
 function cs_phase1_init(){
     var root=document.getElementById("cs-root"); if(!root)return;
     root.innerHTML="";
@@ -279,6 +301,17 @@ function cs_s1(){
         });
     }
 
+    if(!CS.phase1Loaded && CS.phase1Loading){
+        return cs_hd(1,"Feasibility screening","")+
+            '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;gap:12px">'+
+            '<div style="font-size:28px">⏳</div>'+
+            '<div style="font-size:14px;font-weight:600;color:var(--green-dark)">Analysing farm context…</div>'+
+            '<div style="font-size:12px;color:#5a7a4a">Fetching feasible crops for your farm conditions</div>'+
+            '</div>'+
+            '<div class="cs-sf"><span class="cs-fn"></span>'+
+            '<button class="cs-btn pri" disabled>⏳ Loading…</button></div>';
+    }
+
     function _cs_levelFromScore(score,fallbackBool){
         if(typeof score==="number" && !isNaN(score)){
             var lv=Math.round(score);
@@ -381,8 +414,9 @@ function cs_abar(){
 function cs_toWater(){
     if(CS.s2Fetching) return;
     var tot=CS.sel.reduce(function(a,s){return a+parseFloat(s.a||0);},0);
-    if(!CS.sel.length){alert("Select at least one crop.");return;}
-    if(tot<=0){alert("Enter area for each selected crop.");return;}
+    if(!CS.sel.length){cs_showError('No crops selected','Please select at least one crop before proceeding.');return;}
+    if(tot<=0){cs_showError('No area entered','Please enter an area (ha) for each selected crop.');return;}
+    if(tot>CS_FARM.area){cs_showError('Area exceeded','Total allocated area <b>'+tot.toFixed(2)+' ha</b> exceeds your available farm area of <b>'+CS_FARM.area+' ha</b>.<br><br>Please reduce the allocated areas before proceeding.');return;}
     CS.s2Fetching=true;
     var _btn=document.querySelector('.cs-sf .cs-btn.pri');
     if(_btn){_btn.disabled=true;_btn.textContent='⏳ Please wait…';}

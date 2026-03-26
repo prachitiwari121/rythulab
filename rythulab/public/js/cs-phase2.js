@@ -1344,15 +1344,6 @@ function p2_s6(){
 
     return p2_hd(6,"Border crop (Pest barrier Pollination promoter)",
         "Recommends crops that are Border trap crops for generic pests of the region to protect the main crops")+
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'+
-        '<div class="cs-fcrd"><div class="cs-fcht">Pest Pressure CF</div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Status</span><span style="font-weight:700;color:'+(ppCF&&ppCF.s<=2?"var(--csr600)":"var(--csa600)")+'">'+( ppCF?ppCF.slab:"N/A")+'</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Value</span><span class="cs-fcrv">'+(ppCF?ppCF.val:"N/A")+'</span></div>'+
-        '</div>'+
-        '<div class="cs-fcrd"><div class="cs-fcht">Pollinator Activity CF</div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Status</span><span style="font-weight:700;color:var(--csa600)">'+(paCF?paCF.slab:"N/A")+'</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl">Value</span><span class="cs-fcrv">'+(paCF?paCF.val:"N/A")+'</span></div>'+
-        '</div></div>'+
         cards+
         '<div class="cs-sf"><span class="cs-fn">Select border crops to include in your system.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(5)">← Back</button>'+
