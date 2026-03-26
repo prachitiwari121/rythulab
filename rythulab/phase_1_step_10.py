@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -18,6 +19,7 @@ except ModuleNotFoundError:
 
 try:
 	from crop_micro_feature_extract import (
+		get_produced_micro_features_by_cropid,
 		get_required_micro_features_by_cropid,
 		get_suppressed_micro_features_by_cropid,
 	)
@@ -26,6 +28,7 @@ except ModuleNotFoundError:
 	sheets_dir = Path(__file__).resolve().parent / "sheets" / "Crop Micro Features"
 	sys.path.append(str(sheets_dir))
 	from crop_micro_feature_extract import (
+		get_produced_micro_features_by_cropid,
 		get_required_micro_features_by_cropid,
 		get_suppressed_micro_features_by_cropid,
 	)
@@ -34,6 +37,7 @@ except ModuleNotFoundError:
 BASE_DIR = Path(__file__).resolve().parent
 SHEETS_DIR = BASE_DIR / "sheets"
 CROP_LIST_PATH = SHEETS_DIR / "crop_details" / "0.List of All crops - Sheet1.csv"
+CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 
 
 def _load_crop_label_map() -> Dict[str, str]:
@@ -50,10 +54,61 @@ def _load_crop_label_map() -> Dict[str, str]:
 	return label_map
 
 
+def _load_crop_height_map() -> Dict[str, float]:
+	height_map: Dict[str, float] = {}
+	if not CROP_DETAILS_DIR.exists():
+		return height_map
+
+	for csv_path in sorted(CROP_DETAILS_DIR.glob("*.csv")):
+		# Matrix sheets are transposed: first column has parameter names,
+		# subsequent columns are crop values.
+		with csv_path.open("r", encoding="utf-8-sig", newline="") as fh:
+			rows = list(csv.reader(fh))
+
+		if len(rows) < 2:
+			continue
+
+		cropid_row: Optional[List[str]] = None
+		height_row: Optional[List[str]] = None
+
+		for row in rows:
+			if not row:
+				continue
+			first_cell = str(row[0]).strip().upper()
+			if first_cell == "CROPID":
+				cropid_row = row
+			elif first_cell == "CROP HEIGHT METERS (VALUE)":
+				height_row = row
+
+		if not cropid_row or not height_row:
+			continue
+
+		max_len = min(len(cropid_row), len(height_row))
+		for idx in range(1, max_len):
+			cid = str(cropid_row[idx]).strip().upper()
+			raw_height = str(height_row[idx]).strip()
+			if not cid or not raw_height:
+				continue
+
+			numbers = [float(match) for match in re.findall(r"\d+(?:\.\d+)?", raw_height)]
+			if not numbers:
+				continue
+
+			# Use midpoint for ranges; single value as-is.
+			numeric_height = sum(numbers[:2]) / 2 if len(numbers) >= 2 else numbers[0]
+
+			# Keep maximum seen height if crop appears in multiple sheets.
+			height_map[cid] = max(height_map.get(cid, numeric_height), numeric_height)
+
+	return height_map
+
+
 # Lazy-loaded module-level caches
 _REQUIRED_MF: Optional[Dict[str, List[str]]] = None
 _SUPPRESSED_MF: Optional[Dict[str, List[str]]] = None
+_PRODUCED_MF: Optional[Dict[str, List[str]]] = None
 _CROP_LABELS: Optional[Dict[str, str]] = None
+_CROP_HEIGHTS: Optional[Dict[str, float]] = None
 
 
 def _get_required_mf() -> Dict[str, List[str]]:
@@ -61,6 +116,13 @@ def _get_required_mf() -> Dict[str, List[str]]:
 	if _REQUIRED_MF is None:
 		_REQUIRED_MF = get_required_micro_features_by_cropid()
 	return _REQUIRED_MF
+
+
+def _get_produced_mf() -> Dict[str, List[str]]:
+	global _PRODUCED_MF
+	if _PRODUCED_MF is None:
+		_PRODUCED_MF = get_produced_micro_features_by_cropid()
+	return _PRODUCED_MF
 
 
 def _get_suppressed_mf() -> Dict[str, List[str]]:
@@ -77,8 +139,19 @@ def _get_crop_labels() -> Dict[str, str]:
 	return _CROP_LABELS
 
 
+def _get_crop_heights() -> Dict[str, float]:
+	global _CROP_HEIGHTS
+	if _CROP_HEIGHTS is None:
+		_CROP_HEIGHTS = _load_crop_height_map()
+	return _CROP_HEIGHTS
+
+
 def _crop_label(crop_id: str) -> str:
 	return _get_crop_labels().get(crop_id.upper(), crop_id)
+
+
+def _crop_height(crop_id: str) -> Optional[float]:
+	return _get_crop_heights().get(crop_id.upper())
 
 
 def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
@@ -92,6 +165,7 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 	    crop_requiring_id, crop_requiring_label,
 	    crop_suppressing_id, crop_suppressing_label,
 	    mf_code, mf_label,
+	    conflict_type,
 	    message
 	  }
 	"""
@@ -108,8 +182,10 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 		return []
 
 	required_mfs = _get_required_mf()
+	produced_mfs = _get_produced_mf()
 	suppressed_mfs = _get_suppressed_mf()
 	crop_labels = _get_crop_labels()
+	crop_heights = _get_crop_heights()
 	conflicts: List[Dict[str, Any]] = []
 
 	# Map MF code -> list of (crop_id, "requires"/"suppresses")
@@ -130,6 +206,8 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 			# Conflict detected
 			for req_cid in requiring_crops:
 				for supp_cid in suppressing_crops:
+					if req_cid == supp_cid:
+						continue
 					mf_label = get_mf_label(mf_code)
 					message = (
 						f"{crop_labels.get(req_cid, req_cid)} requires {mf_label or 'unknown'}, but "
@@ -147,8 +225,51 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 						"crop_suppressing_label": crop_labels.get(supp_cid, supp_cid),
 						"mf_code": mf_code,
 						"mf_label": mf_label,
+						"conflict_type": "mf_require_vs_suppress",
 						"message": message,
 					})
+
+	# Height-directional shade/light conflict:
+	# if crop X(height) > crop Y(height), and X has MF2 while Y has MF3,
+	# then X can cast dense shade on Y that requires light exposure.
+	for crop_x in unique_ids:
+		height_x = crop_heights.get(crop_x)
+		if height_x is None:
+			continue
+
+		for crop_y in unique_ids:
+			if crop_x == crop_y:
+				continue
+
+			height_y = crop_heights.get(crop_y)
+			if height_y is None or height_x <= height_y:
+				continue
+
+			x_produced = set(produced_mfs.get(crop_x) or [])
+			y_required = set(required_mfs.get(crop_y) or [])
+
+			x_has_mf2_dense_shade = "MF2" in x_produced
+			y_has_mf3_light_exposure = any(code.startswith("MF3") for code in y_required)
+
+			if x_has_mf2_dense_shade and y_has_mf3_light_exposure:
+				message = (
+					f"{crop_labels.get(crop_x, crop_x)} (height={height_x}) is taller than "
+					f"{crop_labels.get(crop_y, crop_y)} (height={height_y}). "
+					f"{crop_labels.get(crop_x, crop_x)} has MF2 (dense shade) while "
+					f"{crop_labels.get(crop_y, crop_y)} has MF3 (light exposure). "
+					"This creates a shade-light conflict."
+				)
+
+				conflicts.append({
+					"crop_requiring_id": crop_y,
+					"crop_requiring_label": crop_labels.get(crop_y, crop_y),
+					"crop_suppressing_id": crop_x,
+					"crop_suppressing_label": crop_labels.get(crop_x, crop_x),
+					"mf_code": "MF2-MF3",
+					"mf_label": "Dense shade vs light exposure",
+					"conflict_type": "height_shade_light",
+					"message": message,
+				})
 
 	return conflicts
 
@@ -158,8 +279,10 @@ if __name__ == "__main__":
 
 	# Test: Paddy (CRP0001) requires MF8, MF9; suppresses MF3G, MF10, MF13, MF15
 	# Maize (CRP0002) produces MF1, MF2, MF3U, MF11, MF12, MF14, etc.
-	# Should show conflicts if any Requires/Suppresses overlap
-	sample_crop_ids = ["CRP0001", "CRP0002", "CRP0003"]
+	# Additional directional height test: non-canopy taller crop vs shorter crop
+	# Silver Oak (CRP0103, Sub-Canopy) vs Vitex (CRP0107, Pioneer)
+	# Should show conflicts if any Requires/Suppresses overlap and/or MF2-MF3 height rule is met
+	sample_crop_ids = ["CRP0103", "CRP0107", "CRP0001", "CRP0002"]
 
 	results = check_microfeature_conflicts(sample_crop_ids)
 	print(json.dumps(results, indent=2))
