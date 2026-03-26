@@ -65,6 +65,7 @@
 .cs-t{font-size:10px;padding:1px 5px;border-radius:7px}
 .cs-t-p{background:var(--csg100);color:var(--csg800)}
 .cs-t-f{background:var(--csr50);color:var(--csr600)}
+.cs-t-w{background:var(--csa50);color:var(--csa600)}
 
 /* Selection table */
 .cs-tbl{width:100%;border-collapse:collapse;font-size:13px}

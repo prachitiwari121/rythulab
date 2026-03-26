@@ -159,7 +159,8 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 		for mf_code in (produced_by_cropid.get(crop_id) or []):
 			available_mfs.add(mf_code)
 
-	missing_mfs = _sorted_unique(required_mfs - available_mfs)
+	_MF_STEP1_EXCLUDE = {"MF11"}  # Wind Barrier — handled exclusively in Step 5
+	missing_mfs = _sorted_unique((required_mfs - available_mfs) - _MF_STEP1_EXCLUDE)
 
 	# For each missing MF, find which crops (outside selection) produce it
 	producers_by_mf: Dict[str, List[Dict]] = {}

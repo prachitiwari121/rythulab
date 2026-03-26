@@ -845,7 +845,10 @@ function p2_s1(){
     var availHtml=availMF.map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join(" ");
     var reqHtml=reqMF.map(function(m){
         var isMissing=missing.indexOf(m)>=0;
-        return'<span class="cs-t '+(isMissing?"cs-t-f":"cs-t-p")+'">'+cs_mfl(m)+(isMissing?" ✗":"")+'</span>';
+        var isWind=m==="MF11";
+        var cls=isWind?"cs-t-w":(isMissing?"cs-t-f":"cs-t-p");
+        var suffix=isWind?" (Choose Border Crops)":(isMissing?" ✗":"");
+        return'<span class="cs-t '+cls+'">'+cs_mfl(m)+suffix+'</span>';
     }).join(" ");
     var missingHtml=missing.length?
         missing.map(function(m){return'<span class="cs-t cs-t-f">'+cs_mfl(m)+'</span>';}).join(" "):
@@ -1225,11 +1228,6 @@ function p2_s5(){
         '<div class="cs-empty">No wind-specific border crops needed — farm wind protection CF is adequate.</div>';
     return p2_hd(5,"Border crop (wind barrier)",
         "Recommends crops for field borders for reduced wind exposure and pest trapping to protect the main crops")+
-        '<div class="cs-vcrd '+(windWeak?"cs-vc-warn":"cs-vc-ok")+'" style="margin-bottom:10px">'+
-        '<div class="cs-vci '+(windWeak?"cs-vci-warn":"cs-vci-ok")+'">'+(windWeak?"!":"✓")+'</div>'+
-        '<div><div class="cs-vttl">Wind Protection CF: '+(wpCF?wpCF.slab:"N/A")+'</div>'+
-        '<div class="cs-vmsg">'+(windWeak?"Farm wind protection is "+wpCF.slab+" — border wind barrier crops are recommended.":"Farm wind protection is adequate — no urgent border wind barrier needed.")+'</div>'+
-        '</div></div>'+
         cards+
         '<div class="cs-sf"><span class="cs-fn">'+suggestions.length+' border crop(s) suggested for wind barrier.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(4)">← Back</button>'+
