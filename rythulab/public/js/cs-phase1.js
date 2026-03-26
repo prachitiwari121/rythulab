@@ -1096,5 +1096,5 @@ function cs_s11(){
         vrd+
         '<div class="cs-sf"><span class="cs-fn">Phase 2 will recommend associate crops based on missing microfeatures.</span>'+
         '<button class="cs-btn rev" onclick="cs_goto(2)">← Revise selection</button>'+
-        '<button class="cs-btn pri" '+(sv>0?"disabled":"")+' onclick="cs_switchPhase(2,true)">Proceed to Phase 2 →</button></div>';
+        '<button class="cs-btn pri" onclick="cs_switchPhase(2,true)">Proceed to Phase 2 →</button></div>';
 }
