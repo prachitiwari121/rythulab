@@ -347,7 +347,7 @@ function cs_s2(){
             '<td><input type="checkbox" '+(sel?"checked":"")+' onchange="cs_toggleCrop(\''+c.id+'\',this.checked)"></td>'+
             '<td style="font-weight:700;color:var(--text-dark)">'+c.name+'</td>'+
             '<td style="color:#3a4a2a">'+c.type+'</td>'+
-            '<td><span class="cs-pill '+pc+'">'+c.sc+'%</span></td>'+
+            '<td><span class="cs-pill '+pc+'">'+c.sc+'</span></td>'+
             '<td style="color:var(--text-dark)">'+c.wr+'mm</td>'+
             '<td><input type="number" class="cs-ainp" id="csa-'+c.id+'" value="'+(s?s.a:"")+'" placeholder="0" min="0" max="'+CS_FARM.area+'" step="0.1" '+(sel?"":"disabled")+' onchange="cs_updateArea(\''+c.id+'\',this.value)"> ha</td>'+
         '</tr>';
