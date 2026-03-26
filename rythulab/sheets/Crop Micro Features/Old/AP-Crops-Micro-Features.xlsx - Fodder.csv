@@ -1,0 +1,4 @@
+CropID,Crop,Produces (MF List),Requires (MF List),Suppresses (MF List)
+CRP0035,Napier Grass,"MF2, MF3U, MF6, MF11, MF17, MF22, MF25","MF3U, MF11","MF3G, MF13, MF15"
+CRP0036,Hedge Lucerne (Desmanthus),"MF1, MF16, MF17, MF18, MF23, MF24, MF25, MF27, MF28, MF29","MF3L, MF13","MF2, MF14"
+CRP0037,Stylosanthes,"MF3G, MF17, MF18, MF23, MF24, MF25, MF27, MF28, MF29","MF3G, MF13","MF2, MF14"

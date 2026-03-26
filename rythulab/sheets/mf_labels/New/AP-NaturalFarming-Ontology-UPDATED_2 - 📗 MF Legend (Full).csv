@@ -1,0 +1,46 @@
+"Parameter
+Domain",MF Code,Feature Name,PROD Meaning,REQ Meaning,SUPP Meaning,"Spectral / Soil
+Profile","Downstream
+Triggers",Suppresses
+▶  Light,,,,,,,,
+Light,MF1,Partial Shade,Creates moderate shade below canopy,Needs partial shade from neighbors,Prevents shade formation,PAR 40–70% transmitted; NIR partly reflected,"MF5,MF6,MF8,MF9",
+Light,MF2,Dense Shade,Creates heavy shade blocking most light,Needs dense shade,Prevents dense shade,PAR <30% transmitted; NIR mostly reflected; Far-red enriched,"MF6,MF8,MF14",MF10
+Light,MF3G,Ground Sun Exposure (0-1m),Allows ground-level sunlight penetration,Needs full ground-level sun,Blocks ground sunlight,Full-spectrum direct beam; max NIR heat load at ground,"MF7,MF10,MF15",MF14
+Light,MF3L,Lower Canopy Sun exposure (1-2m),Allows lower canopy sunlight,Needs lower canopy sun,Blocks lower canopy sun,Direct PAR 1–2m band; NIR load moderate,"MF7,MF10,MF15",MF14
+Light,MF3U,Upper Canopy Sun exposure (2-4m),Allows upper canopy sunlight,Needs upper canopy sun,Blocks upper canopy sun,Full-spectrum above 2m; NIR heat dissipates before ground,MF7,
+Light,MF4-PAR,PAR Transmission Zone,Retains 400–700nm photosynthetically active radiation below canopy,Needs adequate PAR for photosynthesis (>100 µmol/m²/s),Prevents PAR penetration,PAR 400–700nm retained; DLI maintained; drives vegetative & fruit growth,"MF5,MF9",
+Light,MF4-NIR,NIR Reflection Zone,"Reflects 700–1400nm near-infrared upward, removing heat load",Needs NIR-filtered environment to reduce heat stress,Allows NIR heat penetration,NIR 700–1400nm reflected by waxy cuticle; reduces 52% of solar energy load,MF5,MF7
+Light,MF4-FR,Far-Red Enrichment Zone,Transmits 700–750nm far-red downward as shade signal,Needs far-red signal for shade-adaptive morphology,Suppresses far-red shade signal,R:FR ratio decreases; triggers internode elongation & shade acclimation,,
+Light,MF4-UV,UV Absorption Zone,"Absorbs UV-B 280–315nm in leaf pigments (flavonoids, anthocyanins)",Needs UV-B protection for understory establishment,Allows UV-B stress signal,UV-B 280–315nm absorbed; converted to heat in mesophyll; stress signal removed,,
+Light,MF4-STR,Beam Scatter / Uniformity,Scatters direct beam into diffuse multi-angle radiation,Needs uniform light without sunfleck hotspots,"Creates uniform light, eliminates hotspots",Eliminates photosystem saturation spikes; angular distribution reaches vertical leaf surfaces,"MF5,MF9",
+▶  Heat / Temp,,,,,,,,
+Heat / Temp,MF5,Surface Temperature Reduction,Lowers soil surface heat,Needs cooler soil surface,Increases surface heat,Reduces conductive heat flux to roots; lowers Tsoil by 3–8°C,MF9,MF7
+Heat / Temp,MF6,Canopy Cooling,Reduces air temperature under canopy,Needs cooler microclimate,No cooling effect,Evapotranspiration lowers Tair 2–5°C; affects VPD,"MF9,MF14",MF7
+Heat / Temp,MF7,Heat Accumulation Zone,Dense planting increases local heat,Tolerates heat buildup,Prevents heat accumulation,High sensible heat flux; elevated Tsoil and Tair; lowers RH,"MF10,MF15",MF9
+▶  Water / Moisture,,,,,,,,
+Water / Moisture,MF8,Reduced Soil Evaporation,Mulch or canopy reduces water loss,Benefits from reduced evaporation,Increases evaporation,Reduces soil evaporation by 40–60%; conserves available water,MF9,
+Water / Moisture,MF9,Moisture Retention,Improves local water holding,Needs high moisture zone,Promotes drying,Increases soil WHC; raises VWC; supports capillary rise,MF14,
+Water / Moisture,MF10,Rapid Surface Drying,High sun or wind exposure dries soil,Needs well-drained dry conditions,Maintains moisture,Increases evaporative demand; lowers surface VWC,MF15,MF9
+Water / Moisture,MF14,Increased Local Humidity,High transpiration raises humidity,Needs humid microclimate,Creates dry atmosphere,RH >75%; reduces crop VPD; affects stomatal conductance,MF22,MF15
+Water / Moisture,MF15,Dry Micro-Atmosphere,Sparse canopy lowers humidity,Needs dry conditions,Increases humidity,RH <50%; increases VPD; accelerates transpirational demand,,"MF14,MF22"
+▶  Wind / Airflow,,,,,,,,
+Wind / Airflow,MF11,Wind Barrier,Reduces wind speed,Needs wind protection,Allows wind penetration,Reduces wind speed up to 50% leeward; lowers mechanical stress,"MF12,MF14",MF13
+Wind / Airflow,MF12,Air Circulation Reduction,Dense canopy restricts airflow,Tolerates poor airflow,Improves air circulation,"Stagnant air increases humidity, CO₂ buildup; pest pressure risk",MF14,MF15
+Wind / Airflow,MF13,Airflow Enhancement,Open structure improves ventilation,Needs good airflow,Blocks airflow,Increases boundary layer conductance; reduces fungal disease risk,MF15,MF14
+▶  Soil Physical,,,,,,,,
+Soil Physical,MF16,Root Channel Formation,Deep roots improve soil porosity,Benefits from improved soil structure,Shallow roots only,Biopores increase hydraulic conductivity; bulk density reduced,"MF9,MF24",
+Soil Physical,MF17,Surface Mulch Layer,Leaf litter or biomass ground cover,Benefits from mulch protection,No mulch production,Insulates soil; buffers Tsoil; feeds surface microbiome,"MF5,MF8,MF9",
+Soil Physical,MF18,Ground Cover Weed Suppression,Canopy suppresses weeds,Benefits from weed control,Allows weed growth,Reduces light at soil surface; smothers weed germination,"MF8,MF9",MF10
+Soil Physical,MF25,Erosion Buffer,Roots stabilize soil locally,Benefits from soil stability,Minimal erosion control,Root tensile strength resists rill/sheet erosion; litter armours surface,,
+▶  Soil Biology,,,,,,,,
+Soil Biology,MF23,N-Fixation Zone,Legume nodules fix nitrogen locally,Benefits from nitrogen availability,No nitrogen fixation,BNF: 50–200 kg N/ha/yr; increases soil mineral N pool,MF24,
+Soil Biology,MF24,Nutrient Cycling Zone,Rapid biomass decomposition,Benefits from nutrient turnover,Slow decomposition,"Releases N,P,K,Ca,Mg from litter; feeds microbial biomass",,
+Soil Biology,MF26,Allelopathy Release,Biochemical signalling affects neighbours,Tolerates allelopathic compounds,Sensitive to allelopathy,Releases phenolics/terpenes via root exudates or litter leachate,,"MF16,MF23"
+Soil Biology,MF27,Rhizosphere Microbial Enhancement,Root zone supports beneficial microbes,Benefits from microbial activity,Low microbial activity,Increases mycorrhizal colonisation; boosts MBC; enhances aggregate stability,"MF24,MF29",
+Soil Biology,MF28,Soil pH Modulation,Root exudates alter local pH,Benefits from pH buffering,No pH effect,Acidification via H⁺ exudates or alkalinisation via HCO₃⁻; affects nutrient availability,MF24,
+Soil Biology,MF29,P-Cycling Enhancement,Enhances phosphorus availability,Benefits from P mobilisation,No P enhancement,Organic acids solubilise Ca-P and Fe-P; mycorrhizal hyphae extend P uptake radius,MF24,
+▶  Biotic / Pest,,,,,,,,
+Biotic / Pest,MF19,Pollinator Attraction Zone,Flowering attracts beneficial insects,Benefits from pollinators,No pollinator attraction,Floral volatiles and UV-patterned petals attract Apis/Bombus/butterflies,MF20,
+Biotic / Pest,MF20,Beneficial Insect Habitat,Provides habitat for predators,Benefits from pest control,No habitat provision,"Provides shelter, pollen and nectar for parasitoids and predators",,MF22
+Biotic / Pest,MF21,Pest Diversion Zone,Trap crop effect diverts pests,Benefits from pest diversion,No diversion effect,Preferred host crop intercept pests before main crop,,MF22
+Biotic / Pest,MF22,Pest Shelter Microclimate,Dense canopy harbors pests,Tolerates pest pressure,Reduces pest habitat,High RH + low airflow creates favourable microhabitat for fungal pathogens and insects,,MF20

@@ -1,15 +1,5 @@
 MF Code,Feature Name,PROD Meaning,REQ Meaning,SUPPRESS Meaning
 MF1,Partial Shade,Creates moderate shade below canopy,Needs partial shade from neighbors,Prevents shade formation
-MF2,Dense Shade,Creates heavy shade blocking most light,Needs dense shade,Prevents dense shade
-MF3G,Ground Sun Exposure (0-1m),Allows ground-level sunlight penetration,Needs full ground-level sun,Blocks ground sunlight
-MF3L,Lower Canopy Sun (1-2m),Allows lower canopy sunlight,Needs lower canopy sun,Blocks lower canopy sun
-MF3U,Upper Canopy Sun (2-4m),Allows upper canopy sunlight,Needs upper canopy sun,Blocks upper canopy sun
-MF4,Light Diffusion,Creates filtered scattered light,Benefits from diffused light,Prevents light diffusion
-MF5,Surface Temperature Reduction,Lowers soil surface heat,Needs cooler soil surface,Increases surface heat
-MF6,Canopy Cooling,Reduces air temperature under canopy,Needs cooler microclimate,No cooling effect
-MF7,Heat Accumulation Zone,Dense planting increases local heat,Tolerates heat buildup,Prevents heat accumulation
-MF8,Reduced Soil Evaporation,Mulch or canopy reduces water loss,Benefits from reduced evaporation,Increases evaporation
-MF9,Moisture Retention,Improves local water holding,Needs high moisture zone,Promotes drying
 MF10,Rapid Surface Drying,High sun or wind exposure dries soil,Needs well-drained dry conditions,Maintains moisture
 MF11,Wind Barrier,Reduces wind speed,Needs wind protection,Allows wind penetration
 MF12,Air Circulation Reduction,Dense canopy restricts airflow,Tolerates poor airflow,Improves air circulation
@@ -20,13 +10,27 @@ MF16,Root Channel Formation,Deep roots improve soil porosity,Benefits from impro
 MF17,Surface Mulch Layer,Leaf litter or biomass ground cover,Benefits from mulch protection,No mulch production
 MF18,Ground Cover Weed Suppression,Canopy suppresses weeds,Benefits from weed control,Allows weed growth
 MF19,Pollinator Attraction Zone,Flowering attracts beneficial insects,Benefits from pollinators,No pollinator attraction
+MF2,Dense Shade,Creates heavy shade blocking most light,Needs dense shade,Prevents dense shade
 MF20,Beneficial Insect Habitat,Provides habitat for predators,Benefits from pest control,No habitat provision
 MF21,Pest Diversion Zone,Trap crop effect diverts pests,Benefits from pest diversion,No diversion effect
 MF22,Pest Shelter Microclimate,Dense canopy harbors pests,Tolerates pest pressure,Reduces pest habitat
 MF23,N-Fixation Zone,Legume nodules fix nitrogen locally,Benefits from nitrogen availability,No nitrogen fixation
 MF24,Nutrient Cycling Zone,Rapid biomass decomposition,Benefits from nutrient turnover,Slow decomposition
 MF25,Erosion Buffer,Roots stabilize soil locally,Benefits from soil stability,Minimal erosion control
-MF26,Allelopathy Release,Biochemical signaling affects neighbors,Tolerates allelopathic compounds,Sensitive to allelopathy
+MF26,Allelopathy Release,Biochemical signalling affects neighbours,Tolerates allelopathic compounds,Sensitive to allelopathy
 MF27,Rhizosphere Microbial Enhancement,Root zone supports beneficial microbes,Benefits from microbial activity,Low microbial activity
 MF28,Soil pH Modulation,Root exudates alter local pH,Benefits from pH buffering,No pH effect
-MF29,P-Cycling Enhancement,Enhances phosphorus availability,Benefits from P mobilization,No P enhancement
+MF29,P-Cycling Enhancement,Enhances phosphorus availability,Benefits from P mobilisation,No P enhancement
+MF3G,Ground Sun Exposure (0-1m),Allows ground-level sunlight penetration,Needs full ground-level sun,Blocks ground sunlight
+MF3L,Lower Canopy Sun exposure (1-2m),Allows lower canopy sunlight,Needs lower canopy sun,Blocks lower canopy sun
+MF3U,Upper Canopy Sun exposure (2-4m),Allows upper canopy sunlight,Needs upper canopy sun,Blocks upper canopy sun
+MF4-FR,Far-Red Enrichment Zone,Transmits 700–750nm far-red downward as shade signal,Needs far-red signal for shade-adaptive morphology,Suppresses far-red shade signal
+MF4-NIR,NIR Reflection Zone,"Reflects 700–1400nm near-infrared upward, removing heat load",Needs NIR-filtered environment to reduce heat stress,Allows NIR heat penetration
+MF4-PAR,PAR Transmission Zone,Retains 400–700nm photosynthetically active radiation below canopy,Needs adequate PAR for photosynthesis (>100 µmol/m²/s),Prevents PAR penetration
+MF4-STR,Beam Scatter / Uniformity,Scatters direct beam into diffuse multi-angle radiation,Needs uniform light without sunfleck hotspots,"Creates uniform light, eliminates hotspots"
+MF4-UV,UV Absorption Zone,"Absorbs UV-B 280–315nm in leaf pigments (flavonoids, anthocyanins)",Needs UV-B protection for understory establishment,Allows UV-B stress signal
+MF5,Surface Temperature Reduction,Lowers soil surface heat,Needs cooler soil surface,Increases surface heat
+MF6,Canopy Cooling,Reduces air temperature under canopy,Needs cooler microclimate,No cooling effect
+MF7,Heat Accumulation Zone,Dense planting increases local heat,Tolerates heat buildup,Prevents heat accumulation
+MF8,Reduced Soil Evaporation,Mulch or canopy reduces water loss,Benefits from reduced evaporation,Increases evaporation
+MF9,Moisture Retention,Improves local water holding,Needs high moisture zone,Promotes drying

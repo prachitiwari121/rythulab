@@ -219,7 +219,8 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 				continue
 			if step1_scores and candidate_id not in step1_scores:
 				continue
-			if "MF4" not in candidate_produced:
+			mf4_variants = [mf for mf in candidate_produced if mf.startswith("MF4")]
+			if not mf4_variants:
 				continue
 
 			height_y = crop_heights.get(candidate_id)
@@ -230,10 +231,11 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 			mf_codes = sorted(mf1_or_mf2_present)
 			x_class = HEIGHT_CLASS_LABEL.get(height_x, str(height_x))
 			y_class = HEIGHT_CLASS_LABEL.get(height_y, str(height_y))
+			mf4_label = ", ".join(sorted(mf4_variants))
 			reason = (
 				f"{crop_x_name} requires {', '.join(mf_codes)} — "
 				f"{candidate_name} (height class: {y_class}) is taller than "
-				f"{crop_x_name} (height class: {x_class}) and produces MF4"
+				f"{crop_x_name} (height class: {x_class}) and produces {mf4_label}"
 			)
 
 			rec = recommended.setdefault(
@@ -246,8 +248,9 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 					"reasons": [],
 				},
 			)
-			if "MF4" not in rec["covers_missing_mfs"]:
-				rec["covers_missing_mfs"].append("MF4")
+			for mf4 in mf4_variants:
+				if mf4 not in rec["covers_missing_mfs"]:
+					rec["covers_missing_mfs"].append(mf4)
 			if reason not in rec["reasons"]:
 				rec["reasons"].append(reason)
 
