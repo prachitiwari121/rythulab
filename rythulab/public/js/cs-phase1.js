@@ -403,7 +403,7 @@ function cs_s3(){
         '<div class="cs-fcr"><span class="cs-fcrl"><strong>Total farm water available</strong></span><span class="cs-fcrv"><strong>'+w.avl+'mm</strong></span></div></div>'+
         '<div class="cs-fcrd"><div class="cs-fcht">Crop demand breakdown</div>'+bd+
         '<div class="cs-fcr"><span class="cs-fcrl">Weighted average water requirement</span><span class="cs-fcrv">'+w.ws+'mm</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl"><strong>× WMF 0.8 = system water requirement</strong></span><span class="cs-fcrv"><strong>'+w.req+'mm required</strong></span></div></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl"><strong>× IEF = system water requirement</strong></span><span class="cs-fcrv"><strong>'+w.req+'mm required</strong></span></div></div>'+
         '<div class="cs-vcrd '+(w.ok?"cs-vc-ok":"cs-vc-warn")+'">'+
         '<div class="cs-vci '+(w.ok?"cs-vci-ok":"cs-vci-warn")+'">'+(w.ok?"✓":"!")+'</div>'+
         '<div><div class="cs-vttl">'+(w.ok?"System is water feasible ✓":"Water demand exceeds availability")+'</div>'+
@@ -923,7 +923,7 @@ function cs_s9(){
 
     if(CS.s9Loading){
         return cs_hd(9,"Intercrop competition check",
-            'Identifies potential conflicts between selected crops due to competition for light, nutrients, water, or shared pests')+
+            'Identifies conflicts where one crop’s ecological effects may negatively impact the needs of another')+
             '<div class="cs-empty">Running intercrop competition check from backend...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Sending selected crops to backend.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(8)">← Back</button></div>';
@@ -938,7 +938,7 @@ function cs_s9(){
         }).join("")+'</div>':
         '<div class="cs-empty">No intercrop competition conflicts detected.</div>';
     return cs_hd(9,"Intercrop competition check",
-       'Identifies potential conflicts between selected crops due to competition for light, nutrients, water, or shared pests')+
+       'Identifies conflicts where one crop’s ecological effects may negatively impact the needs of another')+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+cf.length+' conflict(s) found.</span>'+
         (cf.length?'<button class="cs-btn rev" onclick="cs_goto(2)">← Revise selection</button>':"")+
