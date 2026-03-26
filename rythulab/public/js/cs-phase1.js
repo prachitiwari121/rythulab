@@ -378,7 +378,7 @@ function cs_toWater(){
     var cropIds=CS.sel.map(function(s){return s.id;});
     fetch("/api/method/rythulab.api.get_ief",{
         method:"POST",
-        headers:{"Content-Type":"application/json","X-Frappe-CSRF-Token":frappe.csrf_token||"" },
+        headers:{"Content-Type":"application/json"},
         body:JSON.stringify({crop_ids:cropIds})
     }).then(function(r){return r.json();}).then(function(d){
         CS.ief=(d.message&&d.message.ief!=null)?d.message.ief:0.8;
@@ -407,7 +407,7 @@ function cs_s3(){
     return cs_hd(3,"Water feasibility check",
         "Verifying whether the farm's total water supply can meet the aggregate demand of all selected crops.")+
         '<div class="cs-fcrd"><div class="cs-fcht">Formula</div>'+
-        '<div class="cs-fcfm">Σ (CropWaterRequirement × AreaShare) × WMF ('+w.wmf.toFixed(2)+') ≤ Farm Water Availability</div>'+
+        '<div class="cs-fcfm">Σ (CropWaterRequirement × AreaShare) × IEF ('+w.wmf.toFixed(2)+') ≤ Farm Water Availability</div>'+
         '<div class="cs-fcfm" style="margin-top:4px;font-size:12px;opacity:0.85">Farm Water Availability = (SeasonalRainfall × RainfallEfficiency) + IrrigationWater + SoilStoredWater</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Seasonal rainfall × efficiency ('+F.rain+'mm × '+F.re+')</span><span class="cs-fcrv">'+Math.round(F.rain*F.re)+'mm</span></div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Irrigation water</span><span class="cs-fcrv">'+F.irr+'mm</span></div>'+
