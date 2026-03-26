@@ -76,7 +76,7 @@ var CS2_STEPS = [
     {n:1, name:"Missing MF analysis"},
     {n:2, name:"MF cross-compatibility"},
     {n:3, name:"Main crop Disease risk"},
-    {n:4, name:"Farm context features"},
+    {n:4, name:"Improving context features"},
     {n:5, name:"Border crop (wind barrier)"},
     {n:6, name:"Border crop (Pest barrier Pollination promoter)"},
     {n:7, name:"Trap crops"},
@@ -962,7 +962,7 @@ function p2_s3(){
             '<div class="cs-empty">Loading backend recommendations...</div>'+
             '<div class="cs-sf"><span class="cs-fn">Fetching high-risk diseases for selected crops.</span>'+
             '<button class="cs-btn sec" onclick="p2_goto(2)">← Back</button>'+ 
-            '<button class="cs-btn pri" disabled>Farm context features →</button></div>';
+            '<button class="cs-btn pri" disabled>Improving context features →</button></div>';
     }
 
     var diseaseRows='';
@@ -1057,7 +1057,7 @@ function p2_s3(){
         html+
         '<div class="cs-sf"><span class="cs-fn">'+diseaseSuggestions.length+' crop(s) suggested.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(2)">← Back</button>'+
-        '<button class="cs-btn pri" onclick="p2_next()">Farm context features →</button></div>';
+        '<button class="cs-btn pri" onclick="p2_next()">Improving context features →</button></div>';
 }
 
 /* ── Step 4: Farm context features ───────────────────────────── */
@@ -1131,7 +1131,7 @@ function p2_s4(){
         : suggestions.length?
         suggestions.map(function(e){return p2_cropCard(e,CS2.selectedAssoc,"assoc");}).join(""):
         '<div class="cs-empty">No CF-specific associate crop recommendations for current farm profile.</div>';
-    return p2_hd(4,"Farm context features",
+    return p2_hd(4,"Improving context features",
         "Adds crops that help improve weak soil, water, or biological conditions on the farm.")+
         '<div class="cs-fcrd" style="margin-bottom:10px">'+
         '<div class="cs-fcht">Weak / Very Weak CFs that need support</div>'+
