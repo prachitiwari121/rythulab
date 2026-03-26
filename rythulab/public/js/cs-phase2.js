@@ -828,6 +828,14 @@ function p2_s1(){
         cs_fetchPhase2Step1();
     }
 
+    if(!CS2.step1Data && CS2.p2s1Loading){
+        return p2_hd(1,"Missing MF analysis",
+            "Identifies important ecological functions required that are not yet supported by the selected crops and recommends additional crops that can provide missing benefits like nutrient support, pest control, or soil improvement")+
+            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">⏳ Loading MF analysis from backend…</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching missing microfeature data for your crops.</span>'+
+            '<button class="cs-btn pri" disabled>MF cross-compatibility →</button></div>';
+    }
+
     var mc=CS2.mainCrops;
     var step1Data=CS2.step1Data||{};
     var availMF=Array.isArray(step1Data.available_mfs)?step1Data.available_mfs.slice():[];
@@ -942,6 +950,15 @@ function p2_s1(){
 function p2_s2(){
     if(!CS2.step2Data && !CS2.p2s2Loading){
         cs_fetchPhase2Step2();
+    }
+
+    if(!CS2.step2Data && CS2.p2s2Loading){
+        return p2_hd(2,"MF cross-compatibility check",
+            "Recommends additional crops that can make use of ecosystem benefits provided by the main crops, such as shade or nutrient support.")+
+            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">⏳ Loading cross-compatibility data from backend…</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching MF cross-compatibility for your crops.</span>'+
+            '<button class="cs-btn sec" onclick="p2_goto(1)">← Back</button>'+
+            '<button class="cs-btn pri" disabled>Main crop Disease risk →</button></div>';
     }
 
     var step2Associated = CS2.step2Data && Array.isArray(CS2.step2Data.associated_crops)
@@ -1090,6 +1107,15 @@ function p2_s4(){
         cs_fetchPhase2Step4();
     }
 
+    if(!CS2.step4Data && CS2.p2s4Loading){
+        return p2_hd(4,"Improving context features",
+            "Adds crops that help improve weak soil, water, or biological conditions on the farm.")+
+            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">⏳ Loading farm context analysis from backend…</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching context feature analysis and crop recommendations.</span>'+
+            '<button class="cs-btn sec" onclick="p2_goto(3)">← Back</button>'+
+            '<button class="cs-btn pri" disabled>Border crop (wind barrier) →</button></div>';
+    }
+
     var backend = CS2.step4Data;
     var cfRows = "";
     if(backend && Array.isArray(backend.farm_context_features) && backend.farm_context_features.length){
@@ -1231,7 +1257,7 @@ function p2_s5(){
         cards+
         '<div class="cs-sf"><span class="cs-fn">'+suggestions.length+' border crop(s) suggested for wind barrier.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(4)">← Back</button>'+
-        '<button class="cs-btn pri" onclick="p2_next()">Border crop (Pest barrier Pollination promoter) →</button></div>';
+        (CS2.p2s5Loading&&!CS2.step5Data?'<button class="cs-btn pri" disabled>⏳ Loading… →</button>':'<button class="cs-btn pri" onclick="p2_next()">Border crop (Pest barrier Pollination promoter) →</button>')+'</div>';
 }
 
 /* ── Step 6: Border crop (Pest barrier Pollination promoter) ─── */
@@ -1330,7 +1356,7 @@ function p2_s6(){
         cards+
         '<div class="cs-sf"><span class="cs-fn">Select border crops to include in your system.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(5)">← Back</button>'+
-        '<button class="cs-btn pri" onclick="p2_next()">Trap crops →</button></div>';
+        (CS2.p2s6Loading&&!CS2.step6Data?'<button class="cs-btn pri" disabled>⏳ Loading… →</button>':'<button class="cs-btn pri" onclick="p2_next()">Trap crops →</button>')+'</div>';
 }
 
 /* ── Step 7: Trap Crops ──────────────────────────────────────── */
@@ -1374,7 +1400,7 @@ function p2_s7(){
         trapHtml+
         '<div class="cs-sf"><span class="cs-fn">'+trapSuggestions.length+' crop(s) identified for trap and pest-mitigation support.</span>'+
         '<button class="cs-btn sec" onclick="p2_goto(6)">← Back</button>'+
-        '<button class="cs-btn pri" onclick="p2_next()">Review & confirm →</button></div>';
+        (CS2.p2s7Loading&&!CS2.step7Data?'<button class="cs-btn pri" disabled>⏳ Loading… →</button>':'<button class="cs-btn pri" onclick="p2_next()">Review & confirm →</button>')+'</div>';
 }
 
 /* ── Step 8: Final Selection ─────────────────────────────────── */

@@ -379,9 +379,13 @@ function cs_abar(){
     cs_updateSelBox();
 }
 function cs_toWater(){
+    if(CS.s2Fetching) return;
     var tot=CS.sel.reduce(function(a,s){return a+parseFloat(s.a||0);},0);
     if(!CS.sel.length){alert("Select at least one crop.");return;}
     if(tot<=0){alert("Enter area for each selected crop.");return;}
+    CS.s2Fetching=true;
+    var _btn=document.querySelector('.cs-sf .cs-btn.pri');
+    if(_btn){_btn.disabled=true;_btn.textContent='⏳ Please wait…';}
     var cropIds=CS.sel.map(function(s){return s.id;});
     fetch("/api/method/rythulab.api.get_ief",{
         method:"POST",
@@ -393,6 +397,8 @@ function cs_toWater(){
     }).catch(function(){
         CS.ief=0.8;
         cs_calcWater();cs_next();
+    }).finally(function(){
+        CS.s2Fetching=false;
     });
 }
 
@@ -519,10 +525,10 @@ function cs_s5(){
     if(!CS.s5Data && CS.s5Loading){
         return cs_hd(5,"Crop characteristics",
             "All agronomic characteristics for selected crops. Sensitivity levels — High / Very High: highly vulnerable (red), Medium: moderate risk (amber), Low: tolerant (green).")+
-            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">Loading crop characteristics from database…</div>'+
-            '<div class="cs-sf"><span class="cs-fn"></span>'+
+            '<div class="cs-empty" style="padding:32px;text-align:center;color:#8a9a7a">⏳ Loading crop characteristics from database…</div>'+
+            '<div class="cs-sf"><span class="cs-fn">Fetching agronomic data for your crops.</span>'+
             '<button class="cs-btn sec" onclick="cs_goto(4)">← Back</button>'+
-            '<button class="cs-btn pri" onclick="cs_next()">Run feasibility check →</button></div>';
+            '<button class="cs-btn pri" disabled>Run feasibility check →</button></div>';
     }
 
     function sv(v){
