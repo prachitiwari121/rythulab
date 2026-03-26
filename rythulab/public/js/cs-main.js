@@ -96,12 +96,21 @@ function cs_renderFarmSelector(){
         return '<option value="'+id+'" '+(id===selectedId?"selected":"")+'>'+label+'</option>';
     }).join("");
 
+    // host.innerHTML =
+    //     '<label for="cs-farm-select" style="font-size:12px;font-weight:700;color:var(--green-dark);margin-right:8px;">Farm:</label>'+
+    //     '<select id="cs-farm-select" onchange="cs_onFarmChange(this.value)" style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;min-width:300px;max-width:520px">'+
+    //     '<option value="" '+(!selectedId?"selected":"")+' disabled>Select a farm</option>'+
+    //     optionsHtml+
+    //     '</select>';
+
     host.innerHTML =
-        '<label for="cs-farm-select" style="font-size:12px;font-weight:700;color:var(--green-dark);margin-right:8px;">Farm:</label>'+
-        '<select id="cs-farm-select" onchange="cs_onFarmChange(this.value)" style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;min-width:300px;max-width:520px">'+
-        '<option value="" '+(!selectedId?"selected":"")+' disabled>Select a farm</option>'+
-        optionsHtml+
-        '</select>';
+    '<div style="display:flex;justify-content:center;align-items:center;">'+
+    '<label for="cs-farm-select" style="font-size:12px;font-weight:700;color:var(--green-dark);margin-right:8px;">Farm:</label>'+
+    '<select id="cs-farm-select" onchange="cs_onFarmChange(this.value)" style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;min-width:300px;max-width:520px">'+
+    '<option value="" '+(!selectedId?"selected":"")+' disabled>Select a farm</option>'+
+    optionsHtml+
+    '</select>'+
+    '</div>';
 
         
 }

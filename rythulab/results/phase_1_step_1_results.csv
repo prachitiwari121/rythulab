@@ -20,6 +20,7 @@ CRP0074,Pomegranate,Fruit Crops,4.25
 CRP0075,Amla (Indian Gooseberry),Fruit Crops,4.25
 CRP0087,Vetiver,Medicinal,4.25
 CRP0006,Wheat,Cereals,4.0
+CRP0007,Foxtail Millet (Korralu),Minor Millets,4.0
 CRP0008,Little Millet (Samalu),Minor Millets,4.0
 CRP0009,Barnyard Millet (Udalu),Minor Millets,4.0
 CRP0010,Proso Millet (Varigalu),Minor Millets,4.0
@@ -49,10 +50,10 @@ CRP0062,Okra,Vegetables,4.0
 CRP0068,Papaya,Fruit Crops,4.0
 CRP0084,Ashwagandha,Medicinal,4.0
 CRP0085,Tulsi (Holy Basil),Medicinal,4.0
-CRP0007,Foxtail Millet (Korralu),Minor Millets,4.0
 CRP0017,Cowpea,Pulses,3.75
 CRP0018,Broad Beans (Faba Beans) (Vicia faba),Pulses,3.75
 CRP0020,Lentils (Lens culinaris),Pulses,3.75
+CRP0021,Cluster Bean,Pulses,3.75
 CRP0022,Field Bean,Pulses,3.75
 CRP0028,Sesame,Oilseeds,3.75
 CRP0033,Garlic,Commercial,3.75
@@ -61,7 +62,6 @@ CRP0039,Amaranth,GLV,3.75
 CRP0041,Lettuce,GLV,3.75
 CRP0063,Onion,Vegetables,3.75
 CRP0064,Elephant Yam,Vegetables,3.75
-CRP0021,Cluster Bean,Pulses,3.75
 CRP0001,Paddy/Rice,Cereals,3.5
 CRP0002,Maize,Cereals,3.5
 CRP0040,Fenugreek,GLV,3.5
