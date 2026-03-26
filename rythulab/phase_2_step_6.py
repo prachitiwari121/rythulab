@@ -49,6 +49,8 @@ STEP1_TO_PESTS_ZONE_MAP = {
 	"scarce rainfall zone": "Scarce Rainfall Zone (Rayalaseema)",
 	"rayalaseema": "Scarce Rainfall Zone (Rayalaseema)",
 	"scarce rainfall zone (rayalaseema)": "Scarce Rainfall Zone (Rayalaseema)",
+	"high altitude and tribal areas": "High Altitude / Tribal Areas",
+	"high altitude & tribal": "High Altitude / Tribal Areas"
 }
 
 
