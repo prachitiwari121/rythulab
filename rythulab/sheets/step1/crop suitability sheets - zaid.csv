@@ -1,34 +1,121 @@
 CropID,Crop,North Coastal,Godavari,Krishna,Southern,Scarce Rainfall,High Altitude & Tribal
-CRP0001,Paddy/Rice,S,H,H,M,U,S
+CRP0001,Rice,S,H,H,M,U,S
 CRP0002,Maize,U,M,M,M,S,U
+CRP0003,Jowar (Sorghum),M,M,M,H,H,P
+CRP0004,Bajra (Pearl Millet),M,M,M,H,H,P
+CRP0005,Ragi (Finger Millet),M,M,M,H,H,P
+CRP0006,Wheat,T,T,T,T,T,S
+CRP0007,Foxtail Millet (Korralu),M,M,M,H,H,P
+CRP0008,Little Millet (Samalu),M,M,M,H,H,P
+CRP0009,Barnyard Millet (Udalu),M,M,M,H,H,P
+CRP0010,Proso Millet (Varigalu),M,M,M,H,H,P
+CRP0011,Kodo Millet (Paspalum scrobiculatum),M,M,M,H,H,P
+CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),M,M,M,H,H,P
+CRP0013,Red Gram (Pigeon Pea),M,H,H,M,M,M
+CRP0014,Blackgram,M,M,M,M,S,U
+CRP0015,Greengram,M,H,H,M,M,U
+CRP0016,Horse Gram,M,H,H,M,M,M
+CRP0017,Cowpea,M,H,H,M,M,M
+CRP0018,Broad Beans (Faba Beans) (Vicia faba),M,H,H,M,M,M
+CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),T,T,T,T,T,S
+CRP0020,Lentils (Lens culinaris),T,T,T,T,T,S
+CRP0021,Cluster Bean,M,H,H,M,M,M
+CRP0022,Field Bean,M,H,H,M,M,M
 CRP0023,Groundnut,S,M,M,M,S,U
-CRP0015,Green Gram (Moong),M,H,H,M,M,U
-CRP0014,Black Gram (Urad),M,M,M,M,S,U
 CRP0024,Sunflower,S,M,M,H,M,U
+CRP0025,Castor,M,H,H,M,M,M
+CRP0026,Mustard,T,T,T,T,T,S
+CRP0027,Oil Palm,H,P,P,S,S,S
 CRP0028,Sesame,S,M,M,M,M,U
-CRP0053,Watermelon,M,H,H,H,M,U
-CRP0057,Muskmelon,M,H,H,H,H,U
-,Cucumber,M,H,H,H,M,S
-CRP0048,Bitter Gourd,M,H,H,M,M,S
-CRP0051,Ridge Gourd,M,H,H,M,M,S
-CRP0050,Bottle Gourd,M,H,H,M,S,S
-CRP0052,Pumpkin,M,M,M,M,S,S
-CRP0058,Tomato,S,M,M,M,S,U
-CRP0059,Brinjal (Eggplant),M,M,M,M,S,S
-CRP0062,Okra,M,H,H,M,M,S
-CRP0060,Chilli,S,M,M,M,S,S
-CRP0063,Onion,S,M,M,M,S,U
+CRP0029,Cotton,S,S,S,S,S,S
+CRP0030,Sugarcane,H,P,P,S,S,S
+CRP0031,Turmeric,M,H,H,M,M,M
+CRP0032,Ginger,M,H,H,M,M,M
+CRP0033,Garlic,T,T,T,T,T,S
+CRP0034,Chilli (Commercial),T,T,T,T,T,T
+CRP0035,Napier Grass,M,H,H,M,M,M
+CRP0036,Hedge Lucerne (Desmanthus),M,H,H,M,M,M
+CRP0037,Stylosanthes,M,H,H,M,M,M
+CRP0038,Spinach,M,H,H,M,M,M
+CRP0039,Amaranth,M,M,M,M,S,M
+CRP0040,Fenugreek,M,H,H,M,M,M
+CRP0041,Lettuce,M,H,H,M,M,M
+CRP0042,Cabbage,U,U,U,U,U,H
+CRP0043,Cauliflower,U,U,U,U,U,H
 CRP0044,Coriander,U,S,S,S,U,U
+CRP0045,Curry leaf,M,H,H,M,M,M
+CRP0046,Gogu,M,H,H,M,M,M
+CRP0047,Drumstick (Moringa),M,H,H,M,M,M
+CRP0048,Bitter Gourd,M,H,H,M,M,S
+CRP0049,Snake Gourd,M,H,H,M,M,M
+CRP0050,Bottle Gourd,M,H,H,M,S,S
+CRP0051,Ridge Gourd,M,H,H,M,M,S
+CRP0052,Pumpkin,M,M,M,M,S,S
+CRP0053,Watermelon,M,H,H,H,M,U
+CRP0054,Beetroot,U,U,U,U,U,H
+CRP0055,Radish,U,U,U,U,U,H
+CRP0056,Carrot,U,U,U,U,U,H
+CRP0057,Muskmelon,M,H,H,H,H,U
+CRP0058,Tomato,S,M,M,M,S,U
+CRP0059,Brinjal,M,M,M,M,S,S
+CRP0060,Chillies,S,M,M,M,S,S
+CRP0061,Potato,U,U,U,U,U,H
+CRP0062,Okra,M,H,H,M,M,S
+CRP0063,Onion,S,M,M,M,S,U
+CRP0064,Elephant Yam,M,H,H,M,M,M
+CRP0065,Mango,P,H,P,P,H,H
+CRP0066,Citrus,P,P,M,M,M,M
+CRP0067,Guava,P,P,M,M,M,M
+CRP0068,Papaya,P,P,M,M,M,M
+CRP0069,Coconut,P,P,M,M,M,M
+CRP0070,Cashew,P,P,M,M,M,M
+CRP0071,Banana,P,P,M,M,M,M
+CRP0072,Jackfruit,P,P,M,M,M,M
+CRP0073,Custard Apple,P,P,M,M,H,M
+CRP0074,Pomegranate,P,P,M,M,H,M
+CRP0075,Amla (Indian Gooseberry),P,P,M,M,M,M
+CRP0076,Areca Nut,M,M,T,T,T,P
+CRP0077,Cocoa,M,M,T,T,T,P
+CRP0078,Coffee,M,M,T,T,T,P
+CRP0079,Tea,M,M,T,T,T,P
+CRP0080,Pepper,M,M,T,T,T,P
+CRP0081,cloves,M,M,T,T,T,P
+CRP0082,Betel Leaf,M,M,T,T,T,P
+CRP0083,Cardamom,M,M,T,T,T,P
+CRP0084,Ashwagandha,M,H,H,M,M,M
+CRP0085,Tulsi (Holy Basil),T,T,T,T,T,T
+CRP0086,Neem,P,H,H,H,H,P
+CRP0087,Vetiver,P,H,H,H,H,P
+CRP0088,Marigold(African/French),M,M,P,P,M,M
+CRP0089,Chrysanthemum,M,M,P,P,M,M
+CRP0090,Rose,M,M,P,P,M,M
+CRP0091,Crossandra (Kanakambaram),M,H,H,M,M,M
+CRP0092,Tuberose (Sugandhiraja),M,M,P,P,M,M
+CRP0093,Gaillardia (Blanket Flower),T,T,T,T,T,T
+CRP0094,Cock's Comb (Celosia),M,M,P,P,M,M
+CRP0095,China Aster,M,M,P,P,M,M
+CRP0096,Lotus,U,P,P,U,U,U
+CRP0097,Teak,P,H,H,H,H,P
+CRP0098,Neem,T,T,T,T,T,T
+CRP0099,Pongamia (Kanuga),P,H,H,H,H,P
+CRP0100,Tamarind,P,H,H,H,H,P
+CRP0101,Indian Rosewood (Sheesham),P,H,H,H,H,P
+CRP0102,Gliricidia,P,H,H,H,H,P
+CRP0103,Silver Oak (Grevillea),P,H,H,H,H,P
+CRP0104,Bamboo,P,H,H,H,H,P
+CRP0105,Sesbania,P,H,H,H,H,P
+CRP0106,Calliandra,P,H,H,H,H,P
+CRP0107,Vitex (Lagundi),P,H,H,H,H,P
+,Cucumber,M,H,H,H,M,S
 ,Sun Hemp,S,S,S,S,M,U
-CRP0060,Chilli,S,M,M,M,S,S
 ,Zinnia,M,M,M,H,M,M
-CRP0093,Gaillardia (Blanket Flower),M,H,H,H,H,M
+,Gaillardia,M,H,H,H,H,M
 ,Portulaca,H,H,H,H,M,S
-CRP0024,Sunflower,M,M,M,H,M,S
+,Sunflower (Ornamental),M,M,M,H,M,S
 ,Celosia,M,M,M,H,M,M
 ,Mint,H,H,H,H,M,M
-CRP0085,Tulsi (Holy Basil),M,M,M,M,S,M
-CRP0039,Amaranth,M,M,M,M,S,M
+,Tulsi,M,M,M,M,S,M
+,,,,,,,
 ,Lemongrass,M,H,H,H,M,M
 ,Aloe Vera,H,H,H,P,H,S
 ,Stevia,M,M,M,H,M,M
@@ -37,89 +124,6 @@ CRP0039,Amaranth,M,M,M,M,S,M
 ,Hybrid Napier (Summer cuts),M,H,H,H,H,M
 ,Guinea Grass (Summer cuts),M,M,M,M,M,M
 ,Fodder Maize (Summer),M,H,H,H,M,S
-CRP0017,Cowpea,M,M,M,M,M,S
+,Cowpea (Fodder Summer),M,M,M,M,M,S
 ,Berseem (Last cuts),S,S,S,S,S,M
 ,Lucerne (Summer cuts),M,M,M,M,M,H
-CRP0003,Jowar (Sorghum),T,H,H,T,T,T
-CRP0004,Bajra (Pearl Millet),S,S,H,P,U,M
-CRP0005,Ragi (Finger Millet),P,S,H,H,U,S
-CRP0006,Wheat,T,U,S,T,U,H
-CRP0007,Foxtail Millet (Korralu),U,P,P,T,T,S
-CRP0008,Little Millet (Samalu),P,S,T,M,H,S
-CRP0009,Barnyard Millet (Udalu),U,S,T,T,S,P
-CRP0010,Proso Millet (Varigalu),S,S,M,H,P,H
-CRP0011,Kodo Millet (Paspalum scrobiculatum),P,P,T,H,S,M
-CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),P,U,H,S,U,U
-CRP0013,Red Gram (Pigeon Pea),T,U,U,U,P,M
-CRP0016,Horse Gram,M,T,T,U,T,M
-CRP0018,Broad Beans (Faba Beans) (Vicia faba),T,P,P,P,U,U
-CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),U,T,H,S,U,T
-CRP0020,Lentils (Lens culinaris),T,P,P,H,M,U
-CRP0021,Cluster Bean,M,U,S,P,T,T
-CRP0022,Field Bean,S,U,S,H,H,M
-CRP0025,Castor,P,S,T,S,T,H
-CRP0026,Mustard,T,U,T,P,U,H
-CRP0027,Oil Palm,P,H,U,S,M,U
-CRP0029,Cotton,T,U,H,H,U,M
-CRP0030,Sugarcane,M,M,M,P,U,S
-CRP0031,Turmeric,H,H,P,H,P,U
-CRP0032,Ginger,P,H,M,T,T,P
-CRP0033,Garlic,U,H,M,H,H,S
-CRP0034,Chilli (Commercial),P,S,P,T,T,H
-CRP0035,Napier Grass,U,H,U,P,S,H
-CRP0036,Hedge Lucerne (Desmanthus),H,T,M,T,S,U
-CRP0037,Stylosanthes,U,S,M,T,U,U
-CRP0038,Spinach,U,H,P,T,S,P
-CRP0040,Fenugreek,M,P,S,H,U,P
-CRP0041,Lettuce,S,H,H,U,T,U
-CRP0042,Cabbage,H,U,T,H,M,U
-CRP0043,Cauliflower,U,U,M,M,T,P
-CRP0045,Curry leaf,P,S,U,S,P,P
-CRP0046,Gogu,P,T,S,U,U,T
-CRP0047,Drumstick (Moringa),T,T,U,H,S,P
-CRP0049,Snake Gourd,H,S,M,P,U,U
-CRP0054,Beetroot,M,H,U,M,T,T
-CRP0055,Radish,S,M,T,M,U,U
-CRP0056,Carrot,H,M,S,S,P,H
-CRP0061,Potato,H,P,U,U,S,M
-CRP0064,Elephant Yam,T,T,M,P,T,T
-CRP0065,Mango,S,T,T,S,M,H
-CRP0066,Citrus (various),T,H,P,M,H,P
-CRP0067,Guava,T,P,M,H,P,T
-CRP0068,Papaya,U,H,T,P,S,U
-CRP0069,Coconut,T,M,M,H,M,P
-CRP0070,Cashew,P,P,S,M,U,H
-CRP0071,Banana,U,U,H,M,S,M
-CRP0072,Jackfruit,S,M,U,S,T,S
-CRP0073,Custard Apple,P,P,M,H,U,S
-CRP0074,Pomegranate,H,M,U,H,M,M
-CRP0075,Amla (Indian Gooseberry),S,M,H,S,P,M
-CRP0076,Areca Nut,P,P,U,P,S,H
-CRP0077,Cocoa,P,M,U,U,T,P
-CRP0078,Coffee,U,U,S,U,H,S
-CRP0079,Tea,P,S,M,P,U,M
-CRP0080,Pepper,H,M,U,P,H,S
-CRP0081,cloves,H,U,U,T,H,H
-CRP0082,Betel Leaf,H,S,P,P,H,T
-CRP0083,Cardamom,M,M,H,S,M,M
-CRP0084,Ashwagandha,P,M,P,M,M,H
-CRP0098,Neem,U,U,T,T,P,U
-CRP0087,Vetiver,T,H,P,H,U,H
-CRP0088,Marigold(African/French),U,T,P,S,S,U
-CRP0089,Chrysanthemum,U,M,S,P,T,U
-CRP0090,Rose,U,P,S,U,M,M
-CRP0091,Crossandra (Kanakambaram),T,U,T,S,P,S
-CRP0092,Tuberose (Sugandhiraja),M,M,T,T,U,U
-CRP0094,Cock's Comb (Celosia),P,S,H,T,U,U
-CRP0095,China Aster,H,U,P,U,M,M
-CRP0096,Lotus,P,S,H,T,U,T
-CRP0097,Teak,T,P,T,H,P,P
-CRP0099,Pongamia (Kanuga),T,M,M,P,U,S
-CRP0100,Tamarind,P,P,P,U,M,U
-CRP0101,Indian Rosewood (Sheesham),P,S,P,U,T,T
-CRP0102,Gliricidia,P,P,T,U,H,M
-CRP0103,Silver Oak (Grevillea),H,T,T,T,H,U
-CRP0104,Bamboo,P,H,S,T,U,U
-CRP0105,Sesbania,T,H,U,S,T,P
-CRP0106,Calliandra,H,P,U,S,P,H
-CRP0107,Vitex (Lagundi),U,P,T,P,U,M

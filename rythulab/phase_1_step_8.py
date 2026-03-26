@@ -277,8 +277,8 @@ def check_produced_mf_deterioration_warning(crop_id: str, farm_cfs: Dict[str, An
 					"mf_code": mf_code,
 					"mf_label": mf_label,
 					"message": (
-						f"{crop_label}: produced microfeature {mf_code} ({mf_label}) has negative impact "
-						f"on {cf_code} ({cf_label}), while farm CF is already "
+						f"{crop_label}: produced microfeature {mf_label} has negative impact "
+						f"on {cf_label}, while farm CF is already "
 						f"{farm_value} (Weak/Very Weak)."
 					),
 				}

@@ -263,8 +263,8 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 				message = (
 					f"{crop_labels.get(crop_x, crop_x)} (height class: {x_class}) is taller than "
 					f"{crop_labels.get(crop_y, crop_y)} (height class: {y_class}). "
-					f"{crop_labels.get(crop_x, crop_x)} has MF2 (dense shade) while "
-					f"{crop_labels.get(crop_y, crop_y)} has MF3 (light exposure). "
+					f"{crop_labels.get(crop_x, crop_x)} produces Dense Shade while "
+					f"{crop_labels.get(crop_y, crop_y)} requires Light Exposure. "
 					"This creates a shade-light conflict."
 				)
 
