@@ -8,6 +8,28 @@ from typing import Any, Dict, List
 # ---------------- FARMER REGISTER ---------------- #
 
 @frappe.whitelist(allow_guest=True)
+def get_ief(crop_ids=None):
+    """
+    Calculate the Irrigation Efficiency Factor (IEF) for a list of crop IDs.
+    Accepts JSON body: { "crop_ids": ["CRP0001", ...] }
+    Returns: { "ok": true, "ief": float, "adjustments": [...] }
+    """
+    from rythulab.ief_calculation import calculate_ief
+
+    payload = frappe.request.get_json(silent=True) or {}
+    crop_ids = crop_ids or payload.get("crop_ids") or []
+    if isinstance(crop_ids, str):
+        crop_ids = frappe.parse_json(crop_ids)
+
+    crop_ids = [str(c).strip().upper() for c in (crop_ids or []) if c]
+    if not crop_ids:
+        frappe.throw(_("crop_ids is required"))
+
+    result = calculate_ief(crop_ids)
+    return {"ok": True, **result}
+
+
+@frappe.whitelist(allow_guest=True)
 def register_farmer(
     full_name: str | None = None,
     email: str | None = None,

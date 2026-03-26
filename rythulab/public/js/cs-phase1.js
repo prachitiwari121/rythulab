@@ -375,15 +375,27 @@ function cs_toWater(){
     var tot=CS.sel.reduce(function(a,s){return a+parseFloat(s.a||0);},0);
     if(!CS.sel.length){alert("Select at least one crop.");return;}
     if(tot<=0){alert("Enter area for each selected crop.");return;}
-    cs_calcWater();cs_next();
+    var cropIds=CS.sel.map(function(s){return s.id;});
+    fetch("/api/method/rythulab.api.get_ief",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","X-Frappe-CSRF-Token":frappe.csrf_token||"" },
+        body:JSON.stringify({crop_ids:cropIds})
+    }).then(function(r){return r.json();}).then(function(d){
+        CS.ief=(d.message&&d.message.ief!=null)?d.message.ief:0.8;
+        cs_calcWater();cs_next();
+    }).catch(function(){
+        CS.ief=0.8;
+        cs_calcWater();cs_next();
+    });
 }
 
 /* ── STEP 3 — two-line formula ───────────────────────────────── */
 function cs_calcWater(){
     var F=CS_FARM,crops=cs_full(),ta=crops.reduce(function(a,c){return a+c.a;},0),ws=0;
     crops.forEach(function(c){ws+=c.wr*(c.a/ta);});
-    var req=ws*0.8;
-    CS.wc={ok:req<=F.wa,req:Math.round(req),avl:F.wa,ws:Math.round(ws),
+    var wmf=CS.ief!=null?CS.ief:0.8;
+    var req=ws*wmf;
+    CS.wc={ok:req<=F.wa,req:Math.round(req),avl:F.wa,ws:Math.round(ws),wmf:wmf,
         bd:crops.map(function(c){return{nm:c.name,wr:c.wr,sh:+(c.a/ta*100).toFixed(1),cn:Math.round(c.wr*(c.a/ta))};})};
 }
 function cs_s3(){
@@ -395,7 +407,7 @@ function cs_s3(){
     return cs_hd(3,"Water feasibility check",
         "Verifying whether the farm's total water supply can meet the aggregate demand of all selected crops.")+
         '<div class="cs-fcrd"><div class="cs-fcht">Formula</div>'+
-        '<div class="cs-fcfm">Σ (CropWaterRequirement × AreaShare) × WMF (0.8) ≤ Farm Water Availability</div>'+
+        '<div class="cs-fcfm">Σ (CropWaterRequirement × AreaShare) × WMF ('+w.wmf.toFixed(2)+') ≤ Farm Water Availability</div>'+
         '<div class="cs-fcfm" style="margin-top:4px;font-size:12px;opacity:0.85">Farm Water Availability = (SeasonalRainfall × RainfallEfficiency) + IrrigationWater + SoilStoredWater</div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Seasonal rainfall × efficiency ('+F.rain+'mm × '+F.re+')</span><span class="cs-fcrv">'+Math.round(F.rain*F.re)+'mm</span></div>'+
         '<div class="cs-fcr"><span class="cs-fcrl">Irrigation water</span><span class="cs-fcrv">'+F.irr+'mm</span></div>'+
@@ -403,7 +415,7 @@ function cs_s3(){
         '<div class="cs-fcr"><span class="cs-fcrl"><strong>Total farm water available</strong></span><span class="cs-fcrv"><strong>'+w.avl+'mm</strong></span></div></div>'+
         '<div class="cs-fcrd"><div class="cs-fcht">Crop demand breakdown</div>'+bd+
         '<div class="cs-fcr"><span class="cs-fcrl">Weighted average water requirement</span><span class="cs-fcrv">'+w.ws+'mm</span></div>'+
-        '<div class="cs-fcr"><span class="cs-fcrl"><strong>× WMF 0.8 = system water requirement</strong></span><span class="cs-fcrv"><strong>'+w.req+'mm required</strong></span></div></div>'+
+        '<div class="cs-fcr"><span class="cs-fcrl"><strong>× WMF '+w.wmf.toFixed(2)+' (IEF) = system water requirement</strong></span><span class="cs-fcrv"><strong>'+w.req+'mm required</strong></span></div></div>'+
         '<div class="cs-vcrd '+(w.ok?"cs-vc-ok":"cs-vc-warn")+'">'+
         '<div class="cs-vci '+(w.ok?"cs-vci-ok":"cs-vci-warn")+'">'+(w.ok?"✓":"!")+'</div>'+
         '<div><div class="cs-vttl">'+(w.ok?"System is water feasible ✓":"Water demand exceeds availability")+'</div>'+
