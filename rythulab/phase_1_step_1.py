@@ -15,6 +15,52 @@ except ModuleNotFoundError:
         get_temperature_scores_from_crop_details,
     )
 
+import csv
+from pathlib import Path
+
+_BASE_DIR = Path(__file__).resolve().parent
+_CROP_LIST_CSV = _BASE_DIR / "sheets" / "crop_details" / "0.List of All crops - Sheet1.csv"
+_RESULTS_DIR = _BASE_DIR / "results"
+
+
+def _load_cropid_category_map() -> dict:
+    """Returns {crop_id: sub_category} from the master crop list CSV."""
+    result = {}
+    if not _CROP_LIST_CSV.exists():
+        return result
+    with _CROP_LIST_CSV.open("r", encoding="utf-8-sig", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            cid = str(row.get("CropID") or "").strip().upper()
+            cat = str(row.get("Sub-Category") or "").strip()
+            if cid:
+                result[cid] = cat
+    return result
+
+
+_CROPID_CATEGORY_MAP: dict = _load_cropid_category_map()
+
+_CANOPY_TREES_LABEL = "canopy trees"
+
+
+def _save_step1_results(crops: list) -> None:
+    """Persist step-1 feasibility results to results/phase_1_step_1_results.csv."""
+    _RESULTS_DIR.mkdir(exist_ok=True)
+    out_path = _RESULTS_DIR / "phase_1_step_1_results.csv"
+    with out_path.open("w", encoding="utf-8", newline="") as fh:
+        writer = csv.DictWriter(
+            fh,
+            fieldnames=["crop_id", "crop_name", "crop_category", "weighted_score"],
+        )
+        writer.writeheader()
+        for c in crops:
+            writer.writerow({
+                "crop_id": c["crop_id"],
+                "crop_name": c["crop"],
+                "crop_category": c.get("crop_category", ""),
+                "weighted_score": round(c["weighted_score"], 4),
+            })
+
 SOIL_SCORE_MAP = {
     "P": 5,
     "H": 4,
@@ -198,6 +244,7 @@ def get_suitable_crops_by_conditions(
             {
                 "crop_id": crop,
                 "crop": CROPID_TO_NAME.get(crop, crop),
+                "crop_category": _CROPID_CATEGORY_MAP.get(crop.upper(), ""),
                 "season_score": season_scores[crop],
                 "water_score": water_scores[crop],
                 "soil_score": soil_scores[crop],
@@ -206,7 +253,13 @@ def get_suitable_crops_by_conditions(
             }
         )
 
-    return _sort_scored_crops(filtered_crops, ALL_CROPS, len(ALL_CROPS))
+    all_scored = _sort_scored_crops(filtered_crops, ALL_CROPS, len(ALL_CROPS))
+    _save_step1_results(all_scored)
+    # Exclude canopy trees from the returned list
+    return [
+        c for c in all_scored
+        if c.get("crop_category", "").strip().lower() != _CANOPY_TREES_LABEL
+    ]
 
 
 if __name__ == "__main__":

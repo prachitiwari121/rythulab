@@ -1,0 +1,60 @@
+crop_id,crop_name,crop_category,weighted_score
+CRP0001,Paddy/Rice,Cereals,5.0
+CRP0030,Sugarcane,Commercial,5.0
+CRP0071,Banana,Fruit Crops,4.75
+CRP0078,Coffee,Plantation,4.5
+CRP0002,Maize,Cereals,4.25
+CRP0060,Chilli,Solanaceae,4.25
+CRP0084,Ashwagandha,Medicinal,4.25
+CRP0028,Sesame,Oilseeds,4.0
+CRP0031,Turmeric,Commercial,4.0
+CRP0017,Cowpea,Pulses,4.0
+CRP0018,Broad Beans (Faba Beans) (Vicia faba),Pulses,4.0
+CRP0020,Lentils (Lens culinaris),Pulses,4.0
+CRP0022,Field Bean,Pulses,4.0
+CRP0067,Guava,Fruit Crops,4.0
+CRP0070,Cashew,Fruit Crops,4.0
+CRP0076,Areca Nut,Plantation,4.0
+CRP0029,Cotton,Commercial,3.75
+CRP0013,Red Gram (Pigeon Pea),Pulses,3.75
+CRP0015,Green Gram (Moong),Pulses,3.75
+CRP0014,Black Gram (Urad),Pulses,3.75
+CRP0024,Sunflower,Oilseeds,3.75
+CRP0021,Cluster Bean,Pulses,3.75
+CRP0016,Horse Gram,Pulses,3.75
+CRP0035,Napier Grass,Fodder,3.75
+CRP0036,Hedge Lucerne (Desmanthus),Fodder,3.75
+CRP0039,Amaranth,GLV,3.75
+CRP0042,Cabbage,GLV,3.75
+CRP0046,Gogu,GLV,3.75
+CRP0049,Snake Gourd,Creepers,3.75
+CRP0053,Watermelon,Melons,3.75
+CRP0061,Potato,Solanaceae,3.75
+CRP0072,Jackfruit,Fruit Crops,3.75
+CRP0075,Amla (Indian Gooseberry),Fruit Crops,3.75
+CRP0003,Jowar (Sorghum),Cereals,3.5
+CRP0004,Bajra (Pearl Millet),Cereals,3.5
+CRP0058,Tomato,Solanaceae,3.5
+CRP0059,Brinjal (Eggplant),Solanaceae,3.5
+CRP0048,Bitter Gourd,Creepers,3.5
+CRP0006,Wheat,Cereals,3.5
+CRP0026,Mustard,Oilseeds,3.5
+CRP0052,Pumpkin,Gourds,3.5
+CRP0069,Coconut,Fruit Crops,3.5
+CRP0073,Custard Apple,Fruit Crops,3.5
+CRP0087,Vetiver,Medicinal,3.5
+CRP0025,Castor,Oilseeds,3.25
+CRP0085,Tulsi (Holy Basil),Medicinal,3.25
+CRP0040,Fenugreek,GLV,3.25
+CRP0005,Ragi (Finger Millet),Cereals,3.25
+CRP0041,Lettuce,GLV,3.25
+CRP0044,Coriander,GLV,3.0
+CRP0054,Beetroot,Melons,3.0
+CRP0063,Onion,Vegetables,3.0
+CRP0066,Citrus (various),Fruit Crops,3.0
+CRP0079,Tea,Plantation,3.0
+CRP0082,Betel Leaf,Spices,3.0
+CRP0037,Stylosanthes,Fodder,2.75
+CRP0074,Pomegranate,Fruit Crops,2.75
+CRP0083,Cardamom,Spices,2.5
+CRP0038,Spinach,GLV,2.25

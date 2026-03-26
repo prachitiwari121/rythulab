@@ -195,15 +195,6 @@ def build_all_crops(
     canonical_to_cropid = get_canonical_crop_to_cropid_map(crop_details_dir)
 
     excluded_ids: set = set()
-    if isMainCrop:
-        list_df = _load_crop_list_df(crop_details_dir)
-        if "Sub-Category" in list_df.columns:
-            excluded_ids = set(
-                list_df.loc[
-                    list_df["Sub-Category"].astype(str).str.strip().str.lower() == "canopy trees",
-                    "CropID",
-                ].apply(_safe_str)
-            )
 
     for file_name in {
         STEP1_FILES["soil"],
