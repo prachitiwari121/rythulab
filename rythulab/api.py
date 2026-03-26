@@ -8,7 +8,7 @@ from typing import Any, Dict, List
 # ---------------- FARMER REGISTER ---------------- #
 
 @frappe.whitelist(allow_guest=True)
-def get_ief(crop_ids=None):
+def get_ief(crop_ids: Any = None):
     """
     Calculate the Irrigation Efficiency Factor (IEF) for a list of crop IDs.
     Accepts JSON body: { "crop_ids": ["CRP0001", ...] }
