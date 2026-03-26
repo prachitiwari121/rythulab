@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import csv
-import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -34,6 +33,17 @@ SHEETS_DIR = BASE_DIR / "sheets"
 CROP_LIST_PATH = SHEETS_DIR / "crop_details" / "0.List of All crops - Sheet1.csv"
 CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 
+# Ordinal rank for height class comparison (higher = taller)
+HEIGHT_CLASS_ORDER: Dict[str, int] = {
+	"EXTRA LOW": 1,
+	"LOW": 2,
+	"MEDIUM LOW": 3,
+	"MEDIUM": 4,
+	"TALL": 5,
+	"VERY TALL": 6,
+}
+HEIGHT_CLASS_LABEL: Dict[int, str] = {v: k.title() for k, v in HEIGHT_CLASS_ORDER.items()}
+
 
 def _sorted_unique(values: List[str]) -> List[str]:
 	return sorted(set(values))
@@ -53,8 +63,9 @@ def _load_crop_label_map() -> Dict[str, str]:
 	return label_map
 
 
-def _load_crop_height_map() -> Dict[str, float]:
-	height_map: Dict[str, float] = {}
+def _load_crop_height_map() -> Dict[str, int]:
+	"""Returns ordinal height class per crop ID (1=Extra Low … 6=Very Tall)."""
+	height_map: Dict[str, int] = {}
 	if not CROP_DETAILS_DIR.exists():
 		return height_map
 
@@ -66,7 +77,7 @@ def _load_crop_height_map() -> Dict[str, float]:
 			continue
 
 		cropid_row = None
-		height_row = None
+		height_class_row = None
 
 		for row in rows:
 			if not row:
@@ -74,33 +85,30 @@ def _load_crop_height_map() -> Dict[str, float]:
 			first_cell = str(row[0]).strip().upper()
 			if first_cell == "CROPID":
 				cropid_row = row
-			elif first_cell == "CROP HEIGHT METERS (VALUE)":
-				height_row = row
+			elif first_cell.startswith("CROP HEIGHT CLASS"):
+				height_class_row = row
 
-		if not cropid_row or not height_row:
+		if not cropid_row or not height_class_row:
 			continue
 
-		max_len = min(len(cropid_row), len(height_row))
+		max_len = min(len(cropid_row), len(height_class_row))
 		for idx in range(1, max_len):
 			cid = str(cropid_row[idx]).strip().upper()
-			raw_height = str(height_row[idx]).strip()
-			if not cid or not raw_height:
+			raw_class = str(height_class_row[idx]).strip().upper()
+			if not cid or not raw_class:
 				continue
-
-			numbers = [float(m) for m in re.findall(r"\d+(?:\.\d+)?", raw_height)]
-			if not numbers:
+			ordinal = HEIGHT_CLASS_ORDER.get(raw_class)
+			if ordinal is None:
 				continue
-
-			numeric_height = sum(numbers[:2]) / 2 if len(numbers) >= 2 else numbers[0]
-			height_map[cid] = max(height_map.get(cid, numeric_height), numeric_height)
+			height_map[cid] = max(height_map.get(cid, ordinal), ordinal)
 
 	return height_map
 
 
-_CROP_HEIGHTS: Optional[Dict[str, float]] = None
+_CROP_HEIGHTS: Optional[Dict[str, int]] = None
 
 
-def _get_crop_heights() -> Dict[str, float]:
+def _get_crop_heights() -> Dict[str, int]:
 	global _CROP_HEIGHTS
 	if _CROP_HEIGHTS is None:
 		_CROP_HEIGHTS = _load_crop_height_map()
@@ -206,9 +214,12 @@ def find_missing_mfs_and_producers(crop_ids: List[str]) -> Dict[str, Any]:
 
 			candidate_name = crop_label_map.get(candidate_id, candidate_id)
 			mf_codes = sorted(mf1_or_mf2_present)
+			x_class = HEIGHT_CLASS_LABEL.get(height_x, str(height_x))
+			y_class = HEIGHT_CLASS_LABEL.get(height_y, str(height_y))
 			reason = (
 				f"{crop_x_name} requires {', '.join(mf_codes)} — "
-				f"{candidate_name} is taller ({height_y}m) and produces MF4"
+				f"{candidate_name} (height class: {y_class}) is taller than "
+				f"{crop_x_name} (height class: {x_class}) and produces MF4"
 			)
 
 			rec = recommended.setdefault(

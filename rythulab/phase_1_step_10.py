@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import csv
-import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -39,6 +38,17 @@ SHEETS_DIR = BASE_DIR / "sheets"
 CROP_LIST_PATH = SHEETS_DIR / "crop_details" / "0.List of All crops - Sheet1.csv"
 CROP_DETAILS_DIR = SHEETS_DIR / "crop_details"
 
+# Ordinal rank for height class comparison (higher = taller)
+HEIGHT_CLASS_ORDER: Dict[str, int] = {
+	"EXTRA LOW": 1,
+	"LOW": 2,
+	"MEDIUM LOW": 3,
+	"MEDIUM": 4,
+	"TALL": 5,
+	"VERY TALL": 6,
+}
+HEIGHT_CLASS_LABEL: Dict[int, str] = {v: k.title() for k, v in HEIGHT_CLASS_ORDER.items()}
+
 
 def _load_crop_label_map() -> Dict[str, str]:
 	label_map: Dict[str, str] = {}
@@ -54,8 +64,9 @@ def _load_crop_label_map() -> Dict[str, str]:
 	return label_map
 
 
-def _load_crop_height_map() -> Dict[str, float]:
-	height_map: Dict[str, float] = {}
+def _load_crop_height_map() -> Dict[str, int]:
+	"""Returns ordinal height class per crop ID (1=Extra Low … 6=Very Tall)."""
+	height_map: Dict[str, int] = {}
 	if not CROP_DETAILS_DIR.exists():
 		return height_map
 
@@ -69,7 +80,7 @@ def _load_crop_height_map() -> Dict[str, float]:
 			continue
 
 		cropid_row: Optional[List[str]] = None
-		height_row: Optional[List[str]] = None
+		height_class_row: Optional[List[str]] = None
 
 		for row in rows:
 			if not row:
@@ -77,28 +88,23 @@ def _load_crop_height_map() -> Dict[str, float]:
 			first_cell = str(row[0]).strip().upper()
 			if first_cell == "CROPID":
 				cropid_row = row
-			elif first_cell == "CROP HEIGHT METERS (VALUE)":
-				height_row = row
+			elif first_cell.startswith("CROP HEIGHT CLASS"):
+				height_class_row = row
 
-		if not cropid_row or not height_row:
+		if not cropid_row or not height_class_row:
 			continue
 
-		max_len = min(len(cropid_row), len(height_row))
+		max_len = min(len(cropid_row), len(height_class_row))
 		for idx in range(1, max_len):
 			cid = str(cropid_row[idx]).strip().upper()
-			raw_height = str(height_row[idx]).strip()
-			if not cid or not raw_height:
+			raw_class = str(height_class_row[idx]).strip().upper()
+			if not cid or not raw_class:
 				continue
-
-			numbers = [float(match) for match in re.findall(r"\d+(?:\.\d+)?", raw_height)]
-			if not numbers:
+			ordinal = HEIGHT_CLASS_ORDER.get(raw_class)
+			if ordinal is None:
 				continue
-
-			# Use midpoint for ranges; single value as-is.
-			numeric_height = sum(numbers[:2]) / 2 if len(numbers) >= 2 else numbers[0]
-
-			# Keep maximum seen height if crop appears in multiple sheets.
-			height_map[cid] = max(height_map.get(cid, numeric_height), numeric_height)
+			# Keep highest class seen if crop appears in multiple sheets.
+			height_map[cid] = max(height_map.get(cid, ordinal), ordinal)
 
 	return height_map
 
@@ -150,7 +156,7 @@ def _crop_label(crop_id: str) -> str:
 	return _get_crop_labels().get(crop_id.upper(), crop_id)
 
 
-def _crop_height(crop_id: str) -> Optional[float]:
+def _crop_height(crop_id: str) -> Optional[int]:
 	return _get_crop_heights().get(crop_id.upper())
 
 
@@ -252,9 +258,11 @@ def check_microfeature_conflicts(crop_ids: List[str]) -> List[Dict[str, Any]]:
 			y_has_mf3_light_exposure = any(code.startswith("MF3") for code in y_required)
 
 			if x_has_mf2_dense_shade and y_has_mf3_light_exposure:
+				x_class = HEIGHT_CLASS_LABEL.get(height_x, str(height_x))
+				y_class = HEIGHT_CLASS_LABEL.get(height_y, str(height_y))
 				message = (
-					f"{crop_labels.get(crop_x, crop_x)} (height={height_x}) is taller than "
-					f"{crop_labels.get(crop_y, crop_y)} (height={height_y}). "
+					f"{crop_labels.get(crop_x, crop_x)} (height class: {x_class}) is taller than "
+					f"{crop_labels.get(crop_y, crop_y)} (height class: {y_class}). "
 					f"{crop_labels.get(crop_x, crop_x)} has MF2 (dense shade) while "
 					f"{crop_labels.get(crop_y, crop_y)} has MF3 (light exposure). "
 					"This creates a shade-light conflict."
