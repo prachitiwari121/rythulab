@@ -8,23 +8,23 @@ CRP0007,Foxtail Millet (Korralu),Minor Millets,4.5
 CRP0010,Proso Millet (Varigalu),Minor Millets,4.5
 CRP0016,Horse Gram,Pulses,4.5
 CRP0023,Groundnut,Oilseeds,4.25
-CRP0024,Sunflower,Oilseeds,4.25
-CRP0015,Green Gram (Moong),Pulses,4.25
-CRP0013,Red Gram (Pigeon Pea),Pulses,4.25
 CRP0029,Cotton,Commercial,4.25
-CRP0017,Cowpea,Pulses,4.25
-CRP0021,Cluster Bean,Pulses,4.25
-CRP0048,Bitter Gourd,Creepers,4.25
+CRP0013,Red Gram (Pigeon Pea),Pulses,4.25
+CRP0015,Green Gram (Moong),Pulses,4.25
+CRP0024,Sunflower,Oilseeds,4.25
 CRP0062,Okra,Vegetables,4.25
+CRP0048,Bitter Gourd,Creepers,4.25
+CRP0021,Cluster Bean,Pulses,4.25
 CRP0085,Tulsi (Holy Basil),Medicinal,4.25
+CRP0017,Cowpea,Pulses,4.25
 CRP0035,Napier Grass,Fodder,4.25
 CRP0025,Castor,Oilseeds,4.0
 CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),Minor Millets,4.0
 CRP0037,Stylosanthes,Fodder,4.0
 CRP0067,Guava,Fruit Crops,4.0
 CRP0072,Jackfruit,Fruit Crops,4.0
-CRP0028,Sesame,Oilseeds,3.75
 CRP0014,Black Gram (Urad),Pulses,3.75
+CRP0028,Sesame,Oilseeds,3.75
 CRP0033,Garlic,Commercial,3.75
 CRP0005,Ragi (Finger Millet),Cereals,3.75
 CRP0011,Kodo Millet (Paspalum scrobiculatum),Minor Millets,3.75
@@ -32,12 +32,12 @@ CRP0020,Lentils (Lens culinaris),Pulses,3.75
 CRP0045,Curry leaf,GLV,3.75
 CRP0052,Pumpkin,Gourds,3.75
 CRP0068,Papaya,Fruit Crops,3.75
-CRP0063,Onion,Vegetables,3.5
 CRP0059,Brinjal (Eggplant),Solanaceae,3.5
-CRP0018,Broad Beans (Faba Beans) (Vicia faba),Pulses,3.5
 CRP0032,Ginger,Commercial,3.5
+CRP0018,Broad Beans (Faba Beans) (Vicia faba),Pulses,3.5
 CRP0046,Gogu,GLV,3.5
 CRP0049,Snake Gourd,Creepers,3.5
+CRP0063,Onion,Vegetables,3.5
 CRP0060,Chilli,Solanaceae,3.25
 CRP0058,Tomato,Solanaceae,3.25
 CRP0036,Hedge Lucerne (Desmanthus),Fodder,3.25
@@ -49,8 +49,8 @@ CRP0019,Chickpeas (Garbanzo Beans) (Cicer arietinum),Pulses,3.0
 CRP0077,Cocoa,Plantation,3.0
 CRP0079,Tea,Plantation,3.0
 CRP0054,Beetroot,Melons,2.75
-CRP0056,Carrot,Melons,2.5
-CRP0055,Radish,Melons,2.5
 CRP0040,Fenugreek,GLV,2.5
+CRP0055,Radish,Melons,2.5
+CRP0056,Carrot,Melons,2.5
 CRP0066,Citrus (various),Fruit Crops,2.25
 CRP0082,Betel Leaf,Spices,2.25

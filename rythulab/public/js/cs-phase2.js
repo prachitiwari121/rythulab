@@ -767,6 +767,9 @@ function p2_cropCard(entry, selArr, prefix){
     var ac=entry.crop, sel=selArr.indexOf(ac.id)>=0;
     var tags=(ac.mfp||[]).slice(0,4).map(function(m){return'<span class="cs-t cs-t-p">'+cs_mfl(m)+'</span>';}).join("");
     var reasons=entry.reasons.map(function(r){return'<li style="margin-bottom:3px">'+r+'</li>';}).join("");
+    var sc2=ac.step1_score!=null?Math.min(100,Math.max(0,Math.round(Number(ac.step1_score)*20))):null;
+    var pc2=sc2!=null?(sc2>=85?'cs-p-hi':sc2<70?'cs-p-lo':'cs-p-md'):'';
+    var fc2=sc2!=null?(sc2>=85?'cs-sf-hi':sc2<70?'cs-sf-lo':'cs-sf-md'):'';
     return'<div style="background:var(--green-bg);border:1.5px solid '+(sel?"var(--green-mid)":"var(--border)")+';border-radius:10px;padding:12px;margin-bottom:8px">'+
         '<div style="display:flex;align-items:flex-start;gap:10px">'+
         '<input type="checkbox" id="'+prefix+'_'+ac.id+'" '+(sel?"checked":"")+
@@ -775,7 +778,7 @@ function p2_cropCard(entry, selArr, prefix){
         '<div style="flex:1">'+
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">'+
         '<div style="font-size:13px;font-weight:700;color:var(--text-dark)">'+ac.name+'</div>'+
-        (ac.step1_score!=null?'<span style="font-size:10px;font-weight:700;background:#d4edda;color:#155724;padding:2px 7px;border-radius:8px">'+Number(ac.step1_score).toFixed(1)+'</span>':'')+
+        (sc2!=null?'<span class="cs-pill '+pc2+'">'+sc2+'</span>':'')+
         '</div>'+
         '<div style="font-size:11px;color:#3a4a2a;margin-bottom:5px">'+ac.type+' · '+ac.family+' · '+ac.desc+'</div>'+
         '<div style="margin-bottom:6px">'+tags+'</div>'+
