@@ -183,7 +183,6 @@ def get_my_models() -> List[Dict[str, Any]]:
 @frappe.whitelist()
 def save_crop_model(
     model_name: str | None = None,
-    season: str | None = None,
     date: str | None = None,
     comment: str | None = None,
     version: str | None = None,
@@ -198,8 +197,6 @@ def save_crop_model(
 
     if not model_name:
         frappe.throw(_("Model name is required."))
-    if not season:
-        frappe.throw(_("Season is required."))
     if not date:
         frappe.throw(_("Date is required."))
 
@@ -210,7 +207,6 @@ def save_crop_model(
         "model_name":             model_name,
         "farmer":                 user,
         "version":                version_int,
-        "season":                 season,
         "date":                   date,
         "comment":                comment or "",
         "model_data":             model_data or "{}",
