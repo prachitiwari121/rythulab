@@ -1,50 +1,70 @@
 crop_id,crop_name,crop_category,weighted_score
-CRP0087,Vetiver,Medicinal,5.0
-CRP0008,Little Millet (Samalu),Minor Millets,4.75
-CRP0009,Barnyard Millet (Udalu),Minor Millets,4.75
-CRP0010,Proso Millet (Varigalu),Minor Millets,4.75
-CRP0011,Kodo Millet (Paspalum scrobiculatum),Minor Millets,4.75
-CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),Minor Millets,4.75
-CRP0016,Horse Gram,Pulses,4.75
-CRP0025,Castor,Oilseeds,4.5
-CRP0047,Drumstick (Moringa),GLV,4.5
-CRP0073,Custard Apple,Fruit Crops,4.5
-CRP0075,Amla (Indian Gooseberry),Fruit Crops,4.5
-CRP0002,Maize,Cereals,4.25
-CRP0024,Sunflower,Oilseeds,4.25
-CRP0028,Sesame,Oilseeds,4.25
-CRP0036,Hedge Lucerne (Desmanthus),Fodder,4.25
-CRP0037,Stylosanthes,Fodder,4.25
-CRP0017,Cowpea,Pulses,4.0
-CRP0022,Field Bean,Pulses,4.0
-CRP0023,Groundnut,Oilseeds,4.0
-CRP0063,Onion,Vegetables,4.0
-CRP0065,Mango,Fruit Crops,4.0
+CRP0070,Cashew,Fruit Crops,4.75
+CRP0061,Potato,Solanaceae,4.5
+CRP0065,Mango,Fruit Crops,4.5
+CRP0076,Areca Nut,Plantation,4.5
+CRP0077,Cocoa,Plantation,4.5
+CRP0078,Coffee,Plantation,4.5
+CRP0079,Tea,Plantation,4.5
+CRP0080,Pepper,Spices,4.5
+CRP0082,Betel Leaf,Spices,4.5
+CRP0083,Cardamom,Spices,4.5
+CRP0026,Mustard,Oilseeds,4.25
+CRP0047,Drumstick (Moringa),GLV,4.25
+CRP0055,Radish,Melons,4.25
+CRP0067,Guava,Fruit Crops,4.25
+CRP0069,Coconut,Fruit Crops,4.25
+CRP0072,Jackfruit,Fruit Crops,4.25
+CRP0073,Custard Apple,Fruit Crops,4.25
+CRP0074,Pomegranate,Fruit Crops,4.25
+CRP0075,Amla (Indian Gooseberry),Fruit Crops,4.25
+CRP0087,Vetiver,Medicinal,4.25
+CRP0006,Wheat,Cereals,4.0
+CRP0008,Little Millet (Samalu),Minor Millets,4.0
+CRP0009,Barnyard Millet (Udalu),Minor Millets,4.0
+CRP0010,Proso Millet (Varigalu),Minor Millets,4.0
+CRP0011,Kodo Millet (Paspalum scrobiculatum),Minor Millets,4.0
+CRP0012,Browntop Millet (Urochloa ramosa / Brachiaria ramosa),Minor Millets,4.0
+CRP0016,Horse Gram,Pulses,4.0
+CRP0032,Ginger,Commercial,4.0
+CRP0035,Napier Grass,Fodder,4.0
+CRP0036,Hedge Lucerne (Desmanthus),Fodder,4.0
+CRP0037,Stylosanthes,Fodder,4.0
+CRP0042,Cabbage,GLV,4.0
+CRP0043,Cauliflower,GLV,4.0
+CRP0044,Coriander,GLV,4.0
+CRP0045,Curry leaf,GLV,4.0
+CRP0046,Gogu,GLV,4.0
+CRP0048,Bitter Gourd,Creepers,4.0
+CRP0049,Snake Gourd,Creepers,4.0
+CRP0050,Bottle Gourd,Gourds,4.0
+CRP0051,Ridge Gourd,Gourds,4.0
+CRP0052,Pumpkin,Gourds,4.0
+CRP0053,Watermelon,Melons,4.0
+CRP0054,Beetroot,Melons,4.0
+CRP0056,Carrot,Melons,4.0
+CRP0057,Muskmelon,Melons,4.0
+CRP0058,Tomato,Solanaceae,4.0
+CRP0062,Okra,Vegetables,4.0
 CRP0068,Papaya,Fruit Crops,4.0
-CRP0070,Cashew,Fruit Crops,4.0
 CRP0084,Ashwagandha,Medicinal,4.0
 CRP0085,Tulsi (Holy Basil),Medicinal,4.0
+CRP0007,Foxtail Millet (Korralu),Minor Millets,4.0
+CRP0017,Cowpea,Pulses,3.75
 CRP0018,Broad Beans (Faba Beans) (Vicia faba),Pulses,3.75
-CRP0044,Coriander,GLV,3.75
-CRP0045,Curry leaf,GLV,3.75
-CRP0046,Gogu,GLV,3.75
-CRP0049,Snake Gourd,Creepers,3.75
-CRP0050,Bottle Gourd,Gourds,3.75
-CRP0052,Pumpkin,Gourds,3.75
-CRP0053,Watermelon,Melons,3.75
-CRP0057,Muskmelon,Melons,3.75
-CRP0058,Tomato,Solanaceae,3.75
-CRP0062,Okra,Vegetables,3.75
-CRP0067,Guava,Fruit Crops,3.75
-CRP0072,Jackfruit,Fruit Crops,3.75
-CRP0074,Pomegranate,Fruit Crops,3.75
-CRP0029,Cotton,Commercial,3.5
-CRP0051,Ridge Gourd,Gourds,3.5
-CRP0069,Coconut,Fruit Crops,3.5
-CRP0031,Turmeric,Commercial,3.25
-CRP0048,Bitter Gourd,Creepers,3.25
-CRP0060,Chilli,Solanaceae,3.25
-CRP0054,Beetroot,Melons,3.0
-CRP0055,Radish,Melons,3.0
-CRP0056,Carrot,Melons,3.0
-CRP0061,Potato,Solanaceae,3.0
+CRP0020,Lentils (Lens culinaris),Pulses,3.75
+CRP0022,Field Bean,Pulses,3.75
+CRP0028,Sesame,Oilseeds,3.75
+CRP0033,Garlic,Commercial,3.75
+CRP0038,Spinach,GLV,3.75
+CRP0039,Amaranth,GLV,3.75
+CRP0041,Lettuce,GLV,3.75
+CRP0063,Onion,Vegetables,3.75
+CRP0064,Elephant Yam,Vegetables,3.75
+CRP0021,Cluster Bean,Pulses,3.75
+CRP0001,Paddy/Rice,Cereals,3.5
+CRP0002,Maize,Cereals,3.5
+CRP0040,Fenugreek,GLV,3.5
+CRP0024,Sunflower,Oilseeds,3.25
+CRP0025,Castor,Oilseeds,3.25
+CRP0023,Groundnut,Oilseeds,3.0

@@ -701,7 +701,7 @@ function _ck10(cr){
         if(r.m===s.m&&r.cn!==s.cn)
             cf.push({nc:r.cn,sc:s.cn,mf:r.m,
                 msg:r.cn+' requires MF "'+cs_mfl(r.m)+'", but '+s.cn+' suppresses this same MF. '+
-                    'Required MF ∩ Suppress MF is not empty — conflict between '+r.cn+' (requires) and '+s.cn+' (suppresses). Note the warning with reason.'});
+                    'Required MF ∩ Suppress MF is not empty — conflict between '+r.cn+' (requires) and '+s.cn+' (suppresses).'});
     });});
     return cf;
 }
@@ -1071,7 +1071,7 @@ function cs_s10(){
         '<div class="cs-empty">No microfeature conflicts detected.</div>';
     return cs_hd(10,"Microfeature conflict check",
         'Checks for other conflicts that may arise between the Microfeatures of the main crops.<br><br>'+
-        '<strong>Rule:</strong> Required MF ∩ Suppress MF not empty → flag conflicts between Crop X (required MF) and Crop Y (suppress the same MF). Note the warning with reason.')+
+        '<strong>Rule:</strong> Required MF ∩ Suppress MF not empty → flag conflicts between Crop X (required MF) and Crop Y (suppress the same MF).')+
         bd+
         '<div class="cs-sf"><span class="cs-fn">'+cf.length+' conflict(s) found.</span>'+
         (cf.length?'<button class="cs-btn rev" onclick="cs_goto(2)">← Revise selection</button>':"")+
